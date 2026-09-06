@@ -6,6 +6,7 @@
   var LEAGUE='73086';
   var BASE='https://www42.myfantasyleague.com/'+YEAR;
   var CORE='https://lalaunch.github.io/big-league-mfl/bigleague-core-v10.js?v=1';
+  var PUGS_LOGO='https://lalaunch.github.io/big-league-mfl/assets/killer-pugs-official.webp?v=1';
 
   function clean(v){return String(v||'').replace(/\s+/g,' ').trim();}
 
@@ -13,8 +14,16 @@
     var nav=document.querySelector('.bl-mainnav');
     if(!nav) return false;
 
-    var rulesLink=null;
-    var messageBoardLink=null;
+    var links=Array.from(nav.querySelectorAll('a'));
+    var rulesIndex=links.findIndex(function(a){return clean(a.textContent).toLowerCase()==='rules';});
+    var messageLink=links.find(function(a){return /^(messages|message board)$/i.test(clean(a.textContent));});
+    if(messageLink){
+      messageLink.textContent='MESSAGE BOARD';
+      messageLink.href=BASE+'/options?L='+LEAGUE+'&O=17';
+      if(rulesIndex>=0 && links[rulesIndex].nextElementSibling!==messageLink){
+        links[rulesIndex].insertAdjacentElement('afterend',messageLink);
+      }
+    }
 
     Array.from(nav.querySelectorAll('a')).forEach(function(a){
       var label=clean(a.textContent).toLowerCase();
@@ -36,7 +45,6 @@
       }
 
       if(label==='rules'){
-        rulesLink=a;
         a.href=BASE+'/options?L='+LEAGUE+'&O=09';
         if(a.getAttribute('data-bl-tab-fix')!=='1'){
           a.setAttribute('data-bl-tab-fix','1');
@@ -51,25 +59,7 @@
           });
         }
       }
-
-      if(label==='messages' || label==='message board'){
-        messageBoardLink=a;
-        a.textContent='Message Board';
-        a.href=BASE+'/options?L='+LEAGUE+'&O=17';
-      }
     });
-
-    if(!messageBoardLink){
-      messageBoardLink=document.createElement('a');
-      messageBoardLink.textContent='Message Board';
-      messageBoardLink.href=BASE+'/options?L='+LEAGUE+'&O=17';
-      nav.appendChild(messageBoardLink);
-    }
-
-    /* Keep Message Board immediately to the right of Rules. */
-    if(rulesLink && messageBoardLink && rulesLink.nextSibling!==messageBoardLink){
-      nav.insertBefore(messageBoardLink,rulesLink.nextSibling);
-    }
 
     return true;
   }
@@ -82,15 +72,43 @@
     });
   }
 
+  function patchPugsLogo(){
+    var selectors=[
+      'img[src*="franchise_logo0010"]',
+      'img[src*="franchise_icon0010"]',
+      'img[src*="0010.jpg"]',
+      'img[src*="0010.png"]'
+    ];
+    document.querySelectorAll(selectors.join(',')).forEach(function(img){
+      if(img.getAttribute('data-bl-pugs-logo')==='1') return;
+      img.src=PUGS_LOGO;
+      img.setAttribute('data-bl-pugs-logo','1');
+    });
+
+    Array.from(document.querySelectorAll('a[class*="franchise_0010"]')).forEach(function(a){
+      a.style.setProperty('--bl-pugs-logo','url("'+PUGS_LOGO+'")');
+    });
+
+    var style=document.getElementById('bl-pugs-logo-override');
+    if(!style){
+      style=document.createElement('style');
+      style.id='bl-pugs-logo-override';
+      style.textContent='\n#body_home a.franchise_0010:before{background-image:url("'+PUGS_LOGO+'") !important;background-size:contain !important;background-repeat:no-repeat !important;background-position:center !important;}\n';
+      document.head.appendChild(style);
+    }
+  }
+
   function watch(){
     patchNav();
     patchDashboardLinks();
+    patchPugsLogo();
     var tries=0;
     var timer=setInterval(function(){
       tries++;
       patchNav();
       patchDashboardLinks();
-      if(tries>=30) clearInterval(timer);
+      patchPugsLogo();
+      if(tries>=40) clearInterval(timer);
     },300);
   }
 
