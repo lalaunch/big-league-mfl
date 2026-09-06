@@ -1,0 +1,87 @@
+/* The Big League — direct 2026 team logo pack */
+(function(){
+  'use strict';
+
+  var HOST='https://lalaunch.github.io/big-league-mfl/assets/logos/';
+  var LOGOS={
+    '0001':HOST+'tampa-bay-roxx-gang.png?v=3',
+    '0002':HOST+'la-launch.png?v=3',
+    '0003':HOST+'reno-gamblers.png?v=3',
+    '0004':HOST+'bristol-steampunks.png?v=3',
+    '0005':HOST+'delafield-draft-attics.png?v=3',
+    '0006':HOST+'kansas-city-killers.png?v=3',
+    '0007':HOST+'brooklyn-brawlers.png?v=3',
+    '0008':HOST+'winnebago-campers.png?v=3',
+    '0009':HOST+'jersey-jackhammers.png?v=3',
+    '0010':HOST+'milwaukee-killer-pugs.png?v=3'
+  };
+
+  function getId(el){
+    var n=el;
+    for(var i=0;n&&i<6;i++,n=n.parentElement){
+      var c=String(n.className||'').match(/franchise_(000[1-9]|0010)/i);
+      if(c) return c[1];
+    }
+    var src=String(el.getAttribute&&el.getAttribute('src')||'');
+    var m=src.match(/franchise_(?:logo|icon)(000[1-9]|0010)/i);
+    if(m) return m[1];
+    m=src.match(/(?:^|[_\/-])(000[1-9]|0010)(?=\.(?:jpg|jpeg|png|gif|webp)|[_\/-]|$)/i);
+    return m?m[1]:null;
+  }
+
+  function patchImages(){
+    document.querySelectorAll('img').forEach(function(img){
+      var id=getId(img);
+      if(!id||!LOGOS[id]) return;
+      if(img.src!==LOGOS[id]){
+        img.src=LOGOS[id];
+        img.removeAttribute('srcset');
+      }
+      img.style.backgroundImage='none';
+      img.style.backgroundColor='transparent';
+      img.style.objectFit='contain';
+      img.setAttribute('data-bl-team-logo',id);
+    });
+  }
+
+  function patchPseudo(){
+    var style=document.getElementById('bl-team-crest-pack-v2');
+    if(!style){
+      style=document.createElement('style');
+      style.id='bl-team-crest-pack-v2';
+      document.head.appendChild(style);
+    }
+    var css='';
+    Object.keys(LOGOS).forEach(function(id){
+      css+='#body_home a.franchise_'+id+':before,#body_home a[class*="franchise_'+id+'"]:before{'+
+        'content:""!important;'+
+        'background-image:url("'+LOGOS[id]+'")!important;'+
+        'background-size:contain!important;'+
+        'background-position:center!important;'+
+        'background-repeat:no-repeat!important;'+
+        'background-color:transparent!important;}\n';
+    });
+    style.textContent=css;
+  }
+
+  function patch(){patchPseudo();patchImages();}
+
+  function start(){
+    patch();
+    var n=0;
+    var timer=setInterval(function(){patch();if(++n>=80)clearInterval(timer);},250);
+    if(window.MutationObserver){
+      var pending=false;
+      var mo=new MutationObserver(function(){
+        if(pending)return;
+        pending=true;
+        setTimeout(function(){pending=false;patch();},60);
+      });
+      mo.observe(document.documentElement,{childList:true,subtree:true});
+      setTimeout(function(){try{mo.disconnect();}catch(e){}},30000);
+    }
+  }
+
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);
+  else start();
+})();
