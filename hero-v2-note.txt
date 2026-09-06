@@ -1,0 +1,1 @@
+Hero V2 uses /assets/hero-go-time-v2.webp for the concept-style right-side panel.
