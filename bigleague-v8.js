@@ -1,4 +1,4 @@
-/* The Big League — Sports Network V9.3
+/* The Big League — Sports Network V10
    MFL stays the league engine. GitHub controls presentation and layout.
 */
 (function(){
@@ -24,6 +24,36 @@
       l.setAttribute('data-'+x[0],'1');
       document.head.appendChild(l);
     });
+  }
+
+  function upgradeNav(){
+    var nav=document.querySelector('.bl-mainnav');
+    if(!nav || nav.getAttribute('data-blsn-upgraded')==='1') return;
+
+    var tabLinks=Array.from(document.querySelectorAll('#homepagetabs a'));
+    function hrefFor(rx,fallback){
+      var a=tabLinks.find(function(x){return rx.test(clean(x.textContent));});
+      return a&&a.href?a.href:fallback;
+    }
+
+    var extras=[
+      {label:'Messages',href:BASE+'/options?L='+LEAGUE+'&O=17'},
+      {label:'History',href:hrefFor(/history/i,BASE+'/home/'+LEAGUE+'#3')},
+      {label:'Rules',href:hrefFor(/league rules/i,BASE+'/home/'+LEAGUE+'#1')}
+    ];
+
+    var existing=Array.from(nav.querySelectorAll('a')).map(function(a){return clean(a.textContent).toLowerCase();});
+    extras.forEach(function(x){
+      if(existing.indexOf(x.label.toLowerCase())>=0) return;
+      var a=document.createElement('a');
+      a.href=x.href;
+      a.textContent=x.label;
+      nav.appendChild(a);
+    });
+
+    nav.setAttribute('data-blsn-upgraded','1');
+    var tabs=document.querySelector('.main_tabmenu');
+    if(tabs) tabs.style.setProperty('display','none','important');
   }
 
   function getLatestTransaction(){
@@ -270,6 +300,73 @@
     return true;
   }
 
+  function decorateHero(){
+    var hero=document.querySelector('.blsn-hero-main');
+    if(!hero || hero.getAttribute('data-blsn-decorated')==='1') return;
+    hero.setAttribute('data-blsn-decorated','1');
+    hero.style.minHeight='318px';
+    hero.style.background='radial-gradient(circle at 63% 45%,rgba(28,75,103,.28),transparent 34%),linear-gradient(115deg,#071821 0%,#06141d 48%,#02080d 100%)';
+    hero.style.boxShadow='inset 0 0 0 1px rgba(31,145,193,.35),0 8px 24px rgba(0,0,0,.3)';
+
+    var child=hero.firstElementChild;
+    if(child){
+      child.style.setProperty('min-height','318px','important');
+      child.style.setProperty('height','318px','important');
+    }
+
+    var art=document.createElement('img');
+    art.src='https://lalaunch.github.io/big-league-mfl/assets/hero-player.svg?v=1';
+    art.alt='';
+    art.setAttribute('aria-hidden','true');
+    art.style.cssText='position:absolute;right:25%;bottom:-7%;width:34%;max-height:108%;object-fit:contain;opacity:.88;pointer-events:none;z-index:5;filter:drop-shadow(0 10px 12px rgba(0,0,0,.65));';
+    hero.appendChild(art);
+
+    var shade=document.createElement('div');
+    shade.style.cssText='position:absolute;z-index:6;right:0;top:0;width:31%;height:100%;background:linear-gradient(90deg,rgba(2,8,13,.45),rgba(2,8,13,.93) 24%,rgba(3,12,18,.98));border-left:1px solid rgba(33,121,160,.28);pointer-events:none;';
+    hero.appendChild(shade);
+
+    var quote=document.createElement('div');
+    quote.innerHTML='<div style="font-size:21px;line-height:1.16;font-weight:900;font-style:italic;color:#f4f8fb;text-shadow:0 3px 4px #000;">“SAME LEAGUE.<br>DIFFERENT YEAR.<br>BIGGER STORIES.”</div><div style="margin-top:8px;color:#57cfff;font-size:11px;font-weight:900;letter-spacing:.08em;">— THE BIG LEAGUE</div>';
+    quote.style.cssText='position:absolute;z-index:8;right:2.3%;top:14%;width:26%;text-align:left;pointer-events:none;';
+    hero.appendChild(quote);
+
+    var go=document.createElement('div');
+    go.textContent="IT'S GO TIME.";
+    go.style.cssText='position:absolute;z-index:8;right:5.5%;bottom:10%;padding:0 8px 7px;color:#fff;font-size:34px;line-height:1;font-weight:900;font-style:italic;letter-spacing:-.025em;text-shadow:0 4px 5px #000;border-bottom:6px solid #e2b719;transform:rotate(-2deg);pointer-events:none;';
+    hero.appendChild(go);
+  }
+
+  function decorateMatchups(){
+    var span=document.querySelector('#next_weeks_fantasy_schedule caption span');
+    if(span && span.getAttribute('data-blsn-caption')!=='1'){
+      span.setAttribute('data-blsn-caption','1');
+      span.textContent='';
+      span.style.setProperty('display','flex','important');
+      span.style.setProperty('align-items','center','important');
+      span.style.setProperty('justify-content','space-between','important');
+      span.style.setProperty('gap','12px','important');
+      var left=document.createElement('strong');
+      left.textContent='WEEK 1 MATCHUPS';
+      left.style.cssText='font-size:22px;color:#fff;letter-spacing:.02em;';
+      var right=document.createElement('strong');
+      right.textContent='SEP 10 – SEP 14';
+      right.style.cssText='font-size:13px;color:#eef8ff;letter-spacing:.04em;white-space:nowrap;';
+      span.appendChild(left);
+      span.appendChild(right);
+    }
+  }
+
+  function swapStandings(){
+    var rows=Array.from(document.querySelectorAll('#standings tbody > tr'));
+    if(rows.length<14) return;
+    rows.forEach(function(row,i){
+      var left=i>=7;
+      var pos=(i%7)+1;
+      row.style.setProperty('grid-column',left?'1':'2','important');
+      row.style.setProperty('grid-row',String(pos),'important');
+    });
+  }
+
   function refreshLatest(){
     var main=document.querySelector('[data-blx-latest-main]');
     var sub=document.querySelector('[data-blx-latest-sub]');
@@ -282,12 +379,18 @@
 
   function boot(){
     loadStyles();
+    upgradeNav();
     var tries=0;
     (function wait(){
       tries++;
       var built=buildLowerDashboard();
       if(built && applySportsNetworkLayout()){
+        upgradeNav();
+        decorateHero();
+        decorateMatchups();
+        swapStandings();
         [250,900,1800,3500].forEach(function(ms){setTimeout(refreshLatest,ms);});
+        [500,1500].forEach(function(ms){setTimeout(function(){decorateHero();decorateMatchups();swapStandings();upgradeNav();},ms);});
         return;
       }
       if(tries<40) setTimeout(wait,200);
