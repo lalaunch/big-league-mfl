@@ -123,6 +123,43 @@
   word-break:normal;
 }
 
+/* Strongly scope recent champion typography so it cannot inherit
+   the large gold champion-banner type from other MFL/custom CSS. */
+.bl-lower-dashboard .bl-champ-list .bl-champ .bl-champ-team{
+  display:block !important;
+  margin:7px 0 0 !important;
+  padding:0 !important;
+  color:#eef9fc !important;
+  background:none !important;
+  font-family:Arial,Helvetica,sans-serif !important;
+  font-size:10px !important;
+  font-style:normal !important;
+  font-weight:900 !important;
+  line-height:1.18 !important;
+  letter-spacing:0 !important;
+  text-align:center !important;
+  text-indent:0 !important;
+  text-transform:uppercase !important;
+  text-shadow:none !important;
+  white-space:normal !important;
+  word-break:normal !important;
+  overflow-wrap:break-word !important;
+  hyphens:none !important;
+  transform:none !important;
+}
+
+.bl-lower-dashboard .bl-champ-list .bl-champ .bl-champ-year{
+  color:#f4c745 !important;
+  font-family:Arial,Helvetica,sans-serif !important;
+  font-size:15px !important;
+  font-style:normal !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+  letter-spacing:0 !important;
+  text-shadow:none !important;
+  transform:none !important;
+}
+
 /* CHAMPIONSHIP COUNTS */
 .bl-trophy-grid{
   display:grid;
