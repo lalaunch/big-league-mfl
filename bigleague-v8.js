@@ -1,25 +1,13 @@
-/* The Big League — hosted loader + nav/team-logo overrides */
+/* The Big League — hosted loader + nav + complete team crest pack */
 (function(){
   'use strict';
 
   var YEAR=2026;
   var LEAGUE='73086';
   var BASE='https://www42.myfantasyleague.com/'+YEAR;
-  var CORE='https://lalaunch.github.io/big-league-mfl/bigleague-core-v10.js?v=1';
-  var LOGO_BASE='https://lalaunch.github.io/big-league-mfl/assets/logos/';
-
-  var TEAM_LOGOS={
-    '0001':LOGO_BASE+'tampa-bay-roxx-gang.png?v=1',
-    '0002':LOGO_BASE+'la-launch.png?v=1',
-    '0003':LOGO_BASE+'reno-gamblers.png?v=1',
-    '0004':LOGO_BASE+'bristol-steampunks.png?v=1',
-    '0005':LOGO_BASE+'delafield-draft-attics.png?v=1',
-    '0006':LOGO_BASE+'kansas-city-killers.png?v=1',
-    '0007':LOGO_BASE+'brooklyn-brawlers.png?v=1',
-    '0008':LOGO_BASE+'winnebago-campers.png?v=1',
-    '0009':LOGO_BASE+'jersey-jackhammers.png?v=1',
-    '0010':LOGO_BASE+'milwaukee-killer-pugs.png?v=1'
-  };
+  var HOST='https://lalaunch.github.io/big-league-mfl/';
+  var CORE=HOST+'bigleague-core-v10.js?v=1';
+  var PUGS_LOGO=HOST+'assets/killer-pugs-official.webp?v=2';
 
   function clean(v){return String(v||'').replace(/\s+/g,' ').trim();}
 
@@ -88,44 +76,53 @@
     });
   }
 
-  function patchTeamLogos(){
-    Object.keys(TEAM_LOGOS).forEach(function(id){
-      var url=TEAM_LOGOS[id];
-      var selectors=[
-        'img[src*="franchise_logo'+id+'"]',
-        'img[src*="franchise_icon'+id+'"]',
-        'img[src*="_logo'+id+'"]',
-        'img[src*="_icon'+id+'"]'
-      ];
-
-      document.querySelectorAll(selectors.join(',')).forEach(function(img){
-        if(img.getAttribute('data-bl-team-logo')===id && img.src.indexOf('/assets/logos/')!==-1) return;
-        img.src=url;
-        img.setAttribute('data-bl-team-logo',id);
-      });
+  function patchPugsLogo(){
+    var selectors=[
+      'img[src*="franchise_logo0010"]',
+      'img[src*="franchise_icon0010"]',
+      'img[src*="_logo0010"]',
+      'img[src*="_icon0010"]'
+    ];
+    document.querySelectorAll(selectors.join(',')).forEach(function(img){
+      if(img.getAttribute('data-bl-pugs-logo')==='1') return;
+      img.src=PUGS_LOGO;
+      img.removeAttribute('srcset');
+      img.setAttribute('data-bl-pugs-logo','1');
     });
+  }
 
-    var style=document.getElementById('bl-team-logo-overrides');
-    if(!style){
-      style=document.createElement('style');
-      style.id='bl-team-logo-overrides';
-      style.textContent=Object.keys(TEAM_LOGOS).map(function(id){
-        return '#body_home a.franchise_'+id+':before{background-image:url("'+TEAM_LOGOS[id]+'") !important;background-size:contain !important;background-repeat:no-repeat !important;background-position:center !important;}';
-      }).join('\n');
-      document.head.appendChild(style);
+  function loadTeamLogos(){
+    if(window.__BL_TEAM_LOGOS_LOADING) return;
+    window.__BL_TEAM_LOGOS_LOADING=true;
+    window.BL_TEAM_SPRITE='';
+
+    var urls=[];
+    for(var i=1;i<=8;i++) urls.push(HOST+'logo-sprite-part-'+i+'.js?v=1');
+    urls.push(HOST+'team-logos-v1.js?v=1');
+
+    function next(index){
+      if(index>=urls.length) return;
+      var x=document.createElement('script');
+      x.src=urls[index];
+      x.defer=true;
+      x.onload=function(){next(index+1);};
+      x.onerror=function(){next(index+1);};
+      document.head.appendChild(x);
     }
+    next(0);
   }
 
   function watch(){
     patchNav();
     patchDashboardLinks();
-    patchTeamLogos();
+    patchPugsLogo();
+    loadTeamLogos();
     var tries=0;
     var timer=setInterval(function(){
       tries++;
       patchNav();
       patchDashboardLinks();
-      patchTeamLogos();
+      patchPugsLogo();
       if(tries>=50) clearInterval(timer);
     },300);
   }
