@@ -13,6 +13,9 @@
     var nav=document.querySelector('.bl-mainnav');
     if(!nav) return false;
 
+    var rulesLink=null;
+    var messageBoardLink=null;
+
     Array.from(nav.querySelectorAll('a')).forEach(function(a){
       var label=clean(a.textContent).toLowerCase();
 
@@ -33,6 +36,7 @@
       }
 
       if(label==='rules'){
+        rulesLink=a;
         a.href=BASE+'/options?L='+LEAGUE+'&O=09';
         if(a.getAttribute('data-bl-tab-fix')!=='1'){
           a.setAttribute('data-bl-tab-fix','1');
@@ -47,7 +51,25 @@
           });
         }
       }
+
+      if(label==='messages' || label==='message board'){
+        messageBoardLink=a;
+        a.textContent='Message Board';
+        a.href=BASE+'/options?L='+LEAGUE+'&O=17';
+      }
     });
+
+    if(!messageBoardLink){
+      messageBoardLink=document.createElement('a');
+      messageBoardLink.textContent='Message Board';
+      messageBoardLink.href=BASE+'/options?L='+LEAGUE+'&O=17';
+      nav.appendChild(messageBoardLink);
+    }
+
+    /* Keep Message Board immediately to the right of Rules. */
+    if(rulesLink && messageBoardLink && rulesLink.nextSibling!==messageBoardLink){
+      nav.insertBefore(messageBoardLink,rulesLink.nextSibling);
+    }
 
     return true;
   }
