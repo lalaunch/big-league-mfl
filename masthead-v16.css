@@ -1,0 +1,66 @@
+/* THE BIG LEAGUE — MASTHEAD V16
+   Direct hosted artwork. No data-URI loader, no CSS wordmark fallback. */
+
+#body_home.blsn-mode .bl-masthead{
+  position:relative!important;
+  min-height:0!important;
+  height:auto!important;
+  overflow:hidden!important;
+  border:0!important;
+  border-bottom:2px solid #19afe5!important;
+  background:#02070d!important;
+  box-shadow:0 12px 38px rgba(0,0,0,.58)!important;
+}
+
+#body_home.blsn-mode .bl-masthead:before{
+  content:""!important;
+  display:block!important;
+  position:relative!important;
+  z-index:2!important;
+  width:100%!important;
+  aspect-ratio:3/1!important;
+  height:auto!important;
+  background-image:url("https://lalaunch.github.io/big-league-mfl/assets/big-league-masthead-v16.webp?v=1")!important;
+  background-repeat:no-repeat!important;
+  background-position:center center!important;
+  background-size:100% 100%!important;
+  background-color:#03111b!important;
+  pointer-events:none!important;
+}
+
+#body_home.blsn-mode .bl-masthead:after{display:none!important;content:none!important;}
+
+#body_home.blsn-mode .bl-title,
+#body_home.blsn-mode .bl-tagline,
+#body_home.blsn-mode .bl-subline,
+#body_home.blsn-mode .bl-topline{
+  display:none!important;
+}
+
+#body_home.blsn-mode .bl-mainnav{
+  position:relative!important;
+  z-index:8!important;
+  margin-top:0!important;
+  border-top:1px solid #174b67!important;
+  border-bottom:2px solid #1bb2e8!important;
+  background:linear-gradient(180deg,#0a2d45,#061722)!important;
+}
+
+#body_home.blsn-mode .bl-mainnav a{
+  padding:13px 8px!important;
+}
+
+@media(max-width:760px){
+  #body_home.blsn-mode .bl-masthead:before{
+    aspect-ratio:2.45/1!important;
+    background-size:cover!important;
+    background-position:center center!important;
+  }
+  #body_home.blsn-mode .bl-mainnav{
+    overflow-x:auto!important;
+  }
+  #body_home.blsn-mode .bl-mainnav a{
+    min-width:88px!important;
+    padding:11px 7px!important;
+  }
+}
