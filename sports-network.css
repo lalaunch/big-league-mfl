@@ -1,0 +1,299 @@
+/* =========================================================
+   THE BIG LEAGUE — SPORTS NETWORK LAYOUT
+   Visual layer inspired by a premium broadcast / league hub.
+   ========================================================= */
+
+#body_home.blsn-mode .pagebody{
+  max-width:1320px !important;
+  width:calc(100% - 22px) !important;
+}
+
+/* ----- Masthead ----- */
+#body_home.blsn-mode .bl-masthead{
+  max-width:1320px;
+  margin-top:5px;
+  border-radius:0;
+  border:0;
+  border-bottom:2px solid #1aa4df;
+  background:
+    radial-gradient(circle at 7% -30%,rgba(255,255,255,.88) 0 1px,rgba(170,225,255,.36) 2px 4px,transparent 10px),
+    radial-gradient(circle at 93% -30%,rgba(255,255,255,.88) 0 1px,rgba(170,225,255,.36) 2px 4px,transparent 10px),
+    radial-gradient(ellipse at 50% -30%,rgba(20,136,220,.28),transparent 56%),
+    linear-gradient(180deg,#07131f,#020910 78%);
+  box-shadow:0 10px 35px rgba(0,0,0,.46),inset 0 -1px 0 rgba(255,255,255,.03);
+}
+#body_home.blsn-mode .bl-masthead:before{
+  height:2px;
+  background:linear-gradient(90deg,transparent,#5de0ff 12%,#d8f4ff 50%,#5de0ff 88%,transparent);
+}
+#body_home.blsn-mode .bl-title{
+  font-size:66px;
+  letter-spacing:.015em;
+  filter:drop-shadow(0 4px 0 #010306) drop-shadow(0 0 14px rgba(160,220,255,.25));
+}
+#body_home.blsn-mode .bl-tagline{
+  color:#f3c84b;
+  font-size:15px;
+  letter-spacing:.13em;
+  margin-top:8px;
+}
+#body_home.blsn-mode .bl-subline{display:none;}
+#body_home.blsn-mode .bl-topline{
+  position:absolute;
+  inset:18px 20px auto 20px;
+  z-index:2;
+  pointer-events:none;
+  padding:0;
+}
+#body_home.blsn-mode .bl-topline-side,
+#body_home.blsn-mode .bl-est{
+  color:#eef8ff;
+  font-size:10px;
+  letter-spacing:.1em;
+}
+#body_home.blsn-mode .bl-mainnav{
+  margin-top:15px;
+  border-top:1px solid #17465f;
+  border-bottom:1px solid #17465f;
+  background:linear-gradient(180deg,#0a2539,#061521);
+}
+#body_home.blsn-mode .bl-mainnav a{
+  padding:13px 22px;
+  font-size:12px;
+  color:#eef8ff;
+}
+#body_home.blsn-mode .bl-mainnav a:first-child{
+  color:#03121b;
+  background:linear-gradient(180deg,#4bc9ff,#1599d9);
+}
+#body_home.blsn-mode .bl-iconbar{display:none !important;}
+
+/* ----- MFL tabs ----- */
+#body_home.blsn-mode .main_tabmenu{
+  margin:8px 0 10px !important;
+  border:0 !important;
+  border-bottom:1px solid #0f6d98 !important;
+  background:#030b12 !important;
+}
+
+/* ----- Hero + Quick Links ----- */
+.blsn-hero-grid{
+  display:grid;
+  grid-template-columns:minmax(0,3.1fr) minmax(235px,.9fr);
+  gap:10px;
+  margin:0 4px 12px;
+  align-items:stretch;
+}
+.blsn-hero-main{
+  min-width:0;
+  position:relative;
+}
+.blsn-hero-main > *{height:100%;box-sizing:border-box;}
+.blsn-quicklinks{
+  border:1px solid #155b80;
+  border-radius:7px;
+  background:linear-gradient(180deg,#071720,#031018);
+  box-shadow:0 6px 20px rgba(0,0,0,.34);
+  overflow:hidden;
+}
+.blsn-panel-title{
+  padding:10px 12px;
+  color:#f4c745;
+  font-size:17px;
+  font-weight:900;
+  letter-spacing:.045em;
+  text-transform:uppercase;
+  border-bottom:1px solid #19506b;
+  background:linear-gradient(180deg,#0a2030,#07141e);
+}
+.blsn-quicklinks-body{padding:9px;display:grid;gap:7px;}
+.blsn-quicklink{
+  display:grid;
+  grid-template-columns:34px 1fr;
+  align-items:center;
+  min-height:38px;
+  padding:0 10px 0 4px;
+  border:1px solid #14567e;
+  border-radius:5px;
+  color:#f1f8fb !important;
+  background:linear-gradient(180deg,#0b3659,#082944);
+  text-decoration:none !important;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.035em;
+  text-transform:uppercase;
+  transition:.15s ease;
+}
+.blsn-quicklink i{
+  color:#dff7ff;
+  font-size:17px;
+  text-align:center;
+  filter:drop-shadow(0 0 4px rgba(80,210,255,.35));
+}
+.blsn-quicklink:hover{
+  color:#041018 !important;
+  border-color:#f4c745;
+  background:#f4c745;
+  transform:translateX(2px);
+}
+.blsn-quicklink:hover i{color:#041018;filter:none;}
+
+/* ----- Matchups + Deadline ----- */
+.blsn-matchups-row{
+  display:grid;
+  grid-template-columns:minmax(0,3fr) minmax(245px,1fr);
+  gap:10px;
+  margin:0 4px 8px;
+  align-items:stretch;
+}
+.blsn-matchups-main{min-width:0;}
+.blsn-matchups-main #next_weeks_fantasy_schedule{margin:0 !important;height:100%;}
+#body_home.blsn-mode #next_weeks_fantasy_schedule caption{
+  background:linear-gradient(180deg,#0a2b42,#071a27) !important;
+  border-bottom:1px solid #1a6488 !important;
+}
+#body_home.blsn-mode #next_weeks_fantasy_schedule caption span{
+  text-align:left;
+  padding:11px 14px !important;
+  font-size:20px !important;
+}
+#body_home.blsn-mode #next_weeks_fantasy_schedule tbody{
+  padding:8px !important;
+  gap:0 8px;
+  background:linear-gradient(180deg,#07151f,#031019) !important;
+}
+#body_home.blsn-mode #next_weeks_fantasy_schedule tbody > tr:not(:first-child):not(.reportfooter){
+  padding:10px 7px !important;
+  background:linear-gradient(180deg,#081b28,#04111a) !important;
+  border-color:#145e84 !important;
+}
+#body_home.blsn-mode #next_weeks_fantasy_schedule td:first-child a:before{
+  width:68px;
+  height:68px;
+}
+#body_home.blsn-mode #next_weeks_fantasy_schedule td:first-child a{
+  font-size:12px !important;
+}
+#body_home.blsn-mode #next_weeks_fantasy_schedule td.points{
+  color:#f4c745 !important;
+  font-size:17px !important;
+}
+.blsn-deadlines{
+  border:1px solid #155b80;
+  border-radius:7px;
+  background:linear-gradient(180deg,#071720,#031018);
+  box-shadow:0 5px 18px rgba(0,0,0,.30);
+  overflow:hidden;
+}
+.blsn-deadline-body{padding:5px 12px 11px;}
+.blsn-deadline-row{
+  display:grid;
+  grid-template-columns:54px 1fr;
+  gap:8px;
+  align-items:center;
+  min-height:48px;
+  border-bottom:1px solid #153646;
+  color:#e8f5fa;
+  font-size:11px;
+}
+.blsn-deadline-row:last-of-type{border-bottom:0;}
+.blsn-deadline-when{font-weight:900;color:#fff;}
+.blsn-deadline-what{color:#c6dce5;}
+.blsn-calendar-btn{
+  display:block;
+  margin-top:10px;
+  padding:9px 10px;
+  text-align:center;
+  border:1px solid #2bb4ec;
+  border-radius:5px;
+  background:linear-gradient(180deg,#0c5682,#073653);
+  color:#fff !important;
+  text-decoration:none !important;
+  font-size:10px;
+  font-weight:900;
+  text-transform:uppercase;
+}
+.blsn-calendar-btn:hover{background:#f4c745;color:#041018 !important;border-color:#f4c745;}
+.blsn-playoff-quote{
+  margin:4px 4px 10px;
+  color:#f4c745;
+  text-align:center;
+  font-size:18px;
+  font-weight:900;
+  font-style:italic;
+  letter-spacing:.025em;
+  text-transform:uppercase;
+  text-shadow:0 2px 3px #000;
+}
+
+/* ----- Standings + Power Five ----- */
+.blsn-standings-power{
+  display:grid;
+  grid-template-columns:minmax(0,2.2fr) minmax(250px,.8fr);
+  gap:10px;
+  margin:0 4px 10px;
+  align-items:start;
+}
+.blsn-standings-main,.blsn-power-main{min-width:0;}
+.blsn-standings-main #standings,
+.blsn-power-main #power_rank{margin:0 !important;}
+#body_home.blsn-mode #standings tbody{gap:0 10px;}
+#body_home.blsn-mode #standings tbody > tr:nth-child(1),
+#body_home.blsn-mode #standings tbody > tr:nth-child(8){
+  background:linear-gradient(180deg,#0a2d45,#071a28) !important;
+  border-color:#186c94 !important;
+}
+#body_home.blsn-mode #standings #division00:after,
+#body_home.blsn-mode #standings #division01:after{font-size:16px;}
+#body_home.blsn-mode #power_rank caption span:before{font-size:16px !important;}
+#body_home.blsn-mode #power_rank td.franchisename{font-size:12px !important;}
+#body_home.blsn-mode #power_rank td.power_rank{font-size:16px !important;}
+
+/* ----- Transactions + Around + Injury ----- */
+.blsn-news-row{
+  display:grid;
+  grid-template-columns:1.25fr 1fr 1fr;
+  gap:10px;
+  margin:0 4px 10px;
+  align-items:stretch;
+}
+.blsn-news-row > *{min-width:0;}
+.blsn-news-row .mobile-wrap:has(> #transactions){width:100% !important;}
+.blsn-news-row #transactions{margin:0 !important;height:100%;}
+.blsn-news-row .blx-card{margin:0;height:100%;}
+.blsn-news-row .blx-title{font-size:14px;}
+.blsn-news-row .blx-body{padding:9px 11px;}
+
+/* Hide the lower-dashboard duplicate deadline card after it is moved to the matchup row */
+#body_home.blsn-mode .blx-grid.blx-three > .blx-card:nth-child(3){display:none !important;}
+#body_home.blsn-mode .blx-grid.blx-three{display:contents !important;}
+
+/* Hall / count retain their own premium theme but get more breathing room */
+#body_home.blsn-mode .blx-hof-feature,
+#body_home.blsn-mode .blx-count-feature{margin-left:4px;margin-right:4px;}
+#body_home.blsn-mode .blx-hof-title{font-size:27px !important;}
+#body_home.blsn-mode .blx-hof-card{min-height:174px;}
+
+/* General broadcast-card polish */
+#body_home.blsn-mode .homepagemodule.report,
+#body_home.blsn-mode .blx-card,
+.blsn-quicklinks,.blsn-deadlines{
+  box-shadow:0 8px 22px rgba(0,0,0,.28),inset 0 0 0 1px rgba(255,255,255,.01) !important;
+}
+
+@media(max-width:950px){
+  #body_home.blsn-mode .bl-title{font-size:50px;}
+  .blsn-hero-grid,.blsn-matchups-row,.blsn-standings-power{grid-template-columns:1fr;}
+  .blsn-news-row{grid-template-columns:1fr;}
+  #body_home.blsn-mode .bl-mainnav a{padding:11px 13px;}
+}
+
+@media(max-width:620px){
+  #body_home.blsn-mode .bl-title{font-size:36px;}
+  #body_home.blsn-mode .bl-tagline{font-size:10px;}
+  #body_home.blsn-mode .bl-topline{display:none;}
+  .blsn-quicklinks-body{grid-template-columns:1fr 1fr;}
+  .blsn-panel-title{font-size:14px;}
+  .blsn-playoff-quote{font-size:14px;}
+  .blsn-deadline-row{grid-template-columns:48px 1fr;}
+}
