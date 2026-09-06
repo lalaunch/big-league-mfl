@@ -1,64 +1,675 @@
-/* The Big League — GitHub Pages preview shell
-   The proven MFL production CSS will be migrated here next, without changing the live MFL page first.
-*/
+@import url("https://mflscripts.com/font-awesome/css/all.min.css");
 
-:root {
-  color-scheme: dark;
-  font-family: Arial, Helvetica, sans-serif;
+/* =========================================================
+   THE BIG LEAGUE
+   HOSTED MFL MASTER THEME — 2026
+   Stable production baseline migrated from MFL Message #1.
+   ========================================================= */
+
+/* =========================================================
+   GLOBAL BACKGROUND
+   ========================================================= */
+body{
+  background-color:#030811 !important;
+  background-image:
+    radial-gradient(ellipse 75% 50% at 15% 0%,rgba(0,105,180,.28),transparent 60%),
+    radial-gradient(ellipse 75% 50% at 85% 5%,rgba(60,0,140,.24),transparent 60%),
+    repeating-linear-gradient(60deg,rgba(40,160,220,.10) 0 1px,transparent 1px 34px),
+    repeating-linear-gradient(-60deg,rgba(100,50,180,.09) 0 1px,transparent 1px 34px) !important;
+  background-attachment:fixed;
 }
 
-* { box-sizing: border-box; }
+#body_home .pagebody{
+  width:calc(100% - 24px) !important;
+  max-width:1180px !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+}
 
-body {
-  margin: 0;
-  min-height: 100vh;
+#body_home img.leaguelogo{display:none !important;}
+
+/* =========================================================
+   BIG LEAGUE MASTHEAD
+   ========================================================= */
+.bl-masthead{
+  max-width:1180px;
+  margin:8px auto 0;
+  border:1px solid #12628d;
+  border-bottom:3px solid #00a7e8;
+  border-radius:8px 8px 0 0;
+  overflow:hidden;
+  position:relative;
+  text-align:center;
+  font-family:Arial,Helvetica,sans-serif;
   background:
-    radial-gradient(ellipse 75% 50% at 15% 0%, rgba(0,105,180,.28), transparent 60%),
-    radial-gradient(ellipse 75% 50% at 85% 5%, rgba(60,0,140,.24), transparent 60%),
-    repeating-linear-gradient(60deg, rgba(40,160,220,.10) 0 1px, transparent 1px 34px),
-    #030811;
-  color: #e8f4f8;
+    radial-gradient(circle at 50% 0%,rgba(0,174,255,.22),transparent 45%),
+    linear-gradient(180deg,#0a1927 0%,#030a11 100%);
+  box-shadow:0 0 30px rgba(0,160,230,.16),inset 0 0 40px rgba(0,80,140,.12);
 }
 
-.preview-shell {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  padding: 24px;
+.bl-masthead:before{
+  content:"";
+  position:absolute;
+  left:0;right:0;top:0;
+  height:4px;
+  background:linear-gradient(90deg,transparent,#29c9ff,#f3c74f,#29c9ff,transparent);
 }
 
-.preview-card {
-  width: min(760px, 100%);
-  padding: 36px;
-  border: 1px solid #12628d;
-  border-top: 4px solid #29c9ff;
-  border-radius: 10px;
-  background: linear-gradient(180deg, #0a1927, #030a11);
-  box-shadow: 0 0 36px rgba(0,160,230,.18);
-  text-align: center;
+.bl-topline{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 22px 0;
+  color:#f0c54e;
+  font-size:11px;
+  font-weight:bold;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+}
+.bl-topline-side{width:210px;}
+.bl-topline-left{text-align:left;}
+.bl-topline-right{text-align:right;}
+.bl-est{color:#f2c94c;}
+
+.bl-title{
+  margin:2px auto 0;
+  padding:0 15px;
+  font-size:58px;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:.025em;
+  text-transform:uppercase;
+  background:linear-gradient(180deg,#fff 0%,#dce2e6 32%,#7f8c96 54%,#f4f6f7 74%,#8f9da8 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 4px 0 #010306) drop-shadow(0 0 8px rgba(170,220,255,.25));
 }
 
-.eyebrow {
-  color: #f2c94c;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: .22em;
+.bl-tagline{
+  margin:5px 0 9px;
+  color:#d9edf5;
+  font-size:13px;
+  font-weight:bold;
+  letter-spacing:.30em;
+  text-transform:uppercase;
 }
 
-h1 {
-  margin: 12px 0 8px;
-  font-size: clamp(36px, 7vw, 70px);
-  line-height: .95;
-  text-transform: uppercase;
+.bl-subline{
+  margin-bottom:13px;
+  color:#71dbff;
+  font-size:10px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
 }
 
-p {
-  color: #a8cfdf;
-  line-height: 1.6;
+/* =========================================================
+   MAIN NAVIGATION
+   ========================================================= */
+.bl-mainnav{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  border-top:1px solid #17465f;
+  background:linear-gradient(180deg,#08233a,#04131f);
 }
 
-.status {
-  margin-top: 22px;
-  color: #71dbff;
-  font-weight: 700;
+.bl-mainnav a{
+  color:#dbeaf1;
+  text-decoration:none;
+  padding:11px 17px;
+  border-right:1px solid rgba(70,150,195,.15);
+  font-size:11px;
+  font-weight:bold;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  transition:.15s ease;
 }
+.bl-mainnav a:hover{color:#071018;background:#f4c947;}
+
+/* =========================================================
+   QUICK ACTION BAR
+   ========================================================= */
+.bl-iconbar{
+  display:flex;
+  justify-content:center;
+  align-items:flex-end;
+  flex-wrap:wrap;
+  gap:5px;
+  padding:11px 8px 13px;
+  background:linear-gradient(180deg,rgba(3,16,27,.96),rgba(3,10,17,.96));
+  border-bottom:1px solid #0877a8;
+}
+
+.bl-iconbar a{
+  min-width:100px;
+  color:#76dffc;
+  text-decoration:none;
+  text-align:center;
+  font:10px/1 Arial,sans-serif;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  padding:7px 8px;
+  border-radius:5px;
+  transition:.15s ease;
+}
+
+.bl-iconbar a i{
+  display:block;
+  margin:0 auto 7px;
+  font-size:21px;
+  filter:drop-shadow(0 0 5px rgba(0,218,255,.75));
+}
+
+.bl-iconbar a:hover{
+  color:#fff;
+  background:linear-gradient(180deg,#0b4970,#07304b);
+  box-shadow:inset 0 0 0 1px #197ba9;
+}
+
+/* =========================================================
+   GENERIC MFL MODULE STYLE
+   ========================================================= */
+#body_home .homepagemodule.report{
+  border:1px solid #0e6794 !important;
+  border-radius:6px !important;
+  overflow:hidden;
+  background:#06111a !important;
+  box-shadow:0 4px 15px rgba(0,0,0,.30) !important;
+}
+
+#body_home .homepagemodule.report caption{
+  padding:0 !important;
+  background:linear-gradient(180deg,#0c5a91,#063658) !important;
+  border-bottom:1px solid #1896ce !important;
+}
+
+#body_home .homepagemodule.report caption span{
+  display:block;
+  padding:8px 10px !important;
+  color:#fff !important;
+  font-size:14px !important;
+  font-weight:900 !important;
+  letter-spacing:.04em !important;
+  text-transform:uppercase !important;
+  text-shadow:0 1px 2px #000 !important;
+}
+
+#body_home .homepagemodule.report th{
+  background:#09202e !important;
+  color:#8bdffc !important;
+  border-color:#153c50 !important;
+  font-size:10px !important;
+  text-transform:uppercase;
+}
+
+#body_home .homepagemodule.report td{
+  background:#06131c !important;
+  color:#dce9ef !important;
+  border-color:#123445 !important;
+}
+
+#body_home .homepagemodule.report tr.oddtablerow td{background:#081822 !important;}
+#body_home .homepagemodule.report tr.eventablerow td{background:#06131c !important;}
+#body_home .homepagemodule.report a{color:#75dcff !important;text-decoration:none !important;}
+#body_home .homepagemodule.report a:hover{color:#f5c84b !important;}
+#body_home .homepagemodule.report .reportfooter td{background:#092238 !important;color:#7bdfff !important;}
+#body_home #homepagecolumns{width:100% !important;}
+#body_home .homepagecolumn{padding:4px !important;}
+
+/* =========================================================
+   HOMEPAGE TABS
+   ========================================================= */
+#body_home .main_tabmenu{
+  margin-top:5px !important;
+  margin-bottom:8px !important;
+  background:#04121d !important;
+  border-top:1px solid #107dac !important;
+  border-bottom:2px solid #09a3df !important;
+}
+
+#body_home #homepagetabs li a{
+  color:#bdeeff !important;
+  font-size:10px !important;
+  font-weight:bold !important;
+  text-transform:uppercase;
+}
+#body_home #homepagetabs li.currenttab a{color:#061019 !important;background:#f3c84b !important;}
+#body_home #homepagetabs li a:hover{color:#fff !important;}
+
+/* =========================================================
+   MAIN HOMEPAGE LAYOUT / CLEANUP
+   ========================================================= */
+#body_home #homepagecolumn3,
+#body_home #homepagecolumn4{
+  display:block !important;
+  width:100% !important;
+  box-sizing:border-box !important;
+}
+
+#body_home #livescoring_summary,
+#body_home #roster,
+#body_home #message_board_summary,
+#body_home #monthly_calendar,
+#body_home #weekly_mvp_starters,
+#body_home #franchise_schedule,
+#body_home #news_articles,
+#body_home #owner_activity,
+#body_home #top_performers,
+#body_home #top_fa,
+#body_home #championship_plaque,
+#body_home #player_records,
+#body_home #livescoring,
+#body_home #poll,
+#body_home #fantasy_recap{display:none !important;}
+
+#body_home .mobile-wrap:has(> #livescoring_summary),
+#body_home .mobile-wrap:has(> #roster),
+#body_home .mobile-wrap:has(> #message_board_summary),
+#body_home .mobile-wrap:has(> #monthly_calendar),
+#body_home .mobile-wrap:has(> #weekly_mvp_starters),
+#body_home .mobile-wrap:has(> #franchise_schedule),
+#body_home .mobile-wrap:has(> #news_articles),
+#body_home .mobile-wrap:has(> #owner_activity),
+#body_home .mobile-wrap:has(> #top_performers),
+#body_home .mobile-wrap:has(> #top_fa),
+#body_home .mobile-wrap:has(> #championship_plaque),
+#body_home .mobile-wrap:has(> #player_records),
+#body_home .mobile-wrap:has(> #livescoring),
+#body_home .mobile-wrap:has(> #poll),
+#body_home .mobile-wrap:has(> #fantasy_recap){display:none !important;}
+
+/* =========================================================
+   WEEK 1 MATCHUPS
+   ========================================================= */
+#body_home #next_weeks_fantasy_schedule{width:100% !important;margin:8px 0 10px !important;}
+
+#body_home #next_weeks_fantasy_schedule caption{
+  background:linear-gradient(180deg,#1068a5,#073d66) !important;
+  border-bottom:2px solid #19a6e3 !important;
+}
+
+#body_home #next_weeks_fantasy_schedule caption span{
+  padding:10px 14px !important;
+  font-size:19px !important;
+  font-weight:900 !important;
+  letter-spacing:.04em !important;
+}
+
+#body_home #next_weeks_fantasy_schedule tbody{
+  display:grid !important;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  grid-template-rows:auto auto;
+  background:#04101a !important;
+  padding:8px !important;
+  gap:0 6px;
+}
+
+#body_home #next_weeks_fantasy_schedule tbody > tr:first-child{display:none !important;}
+#body_home #next_weeks_fantasy_schedule tr.reportfooter{display:none !important;}
+
+#body_home #next_weeks_fantasy_schedule tbody > tr:not(:first-child):not(.reportfooter){
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  text-align:center !important;
+  padding:8px 5px !important;
+  box-sizing:border-box !important;
+  background:linear-gradient(180deg,#081b29,#05121c) !important;
+  border-left:1px solid #174e6c !important;
+  border-right:1px solid #174e6c !important;
+}
+
+#body_home #next_weeks_fantasy_schedule tbody > tr:nth-child(2),
+#body_home #next_weeks_fantasy_schedule tbody > tr:nth-child(4),
+#body_home #next_weeks_fantasy_schedule tbody > tr:nth-child(6),
+#body_home #next_weeks_fantasy_schedule tbody > tr:nth-child(8),
+#body_home #next_weeks_fantasy_schedule tbody > tr:nth-child(10){
+  border-top:1px solid #2385b3 !important;
+  border-radius:7px 7px 0 0 !important;
+}
+
+#body_home #next_weeks_fantasy_schedule tbody > tr:nth-child(3),
+#body_home #next_weeks_fantasy_schedule tbody > tr:nth-child(5),
+#body_home #next_weeks_fantasy_schedule tbody > tr:nth-child(7),
+#body_home #next_weeks_fantasy_schedule tbody > tr:nth-child(9),
+#body_home #next_weeks_fantasy_schedule tbody > tr:nth-child(11){
+  border-bottom:1px solid #2385b3 !important;
+  border-radius:0 0 7px 7px !important;
+  padding-top:3px !important;
+}
+
+#body_home #next_weeks_fantasy_schedule tbody > tr:nth-child(2){grid-column:1;grid-row:1;}
+#body_home #next_weeks_fantasy_schedule tbody > tr:nth-child(3){grid-column:1;grid-row:2;}
+#body_home #next_weeks_fantasy_schedule tbody > tr:nth-child(4){grid-column:2;grid-row:1;}
+#body_home #next_weeks_fantasy_schedule tbody > tr:nth-child(5){grid-column:2;grid-row:2;}
+#body_home #next_weeks_fantasy_schedule tbody > tr:nth-child(6){grid-column:3;grid-row:1;}
+#body_home #next_weeks_fantasy_schedule tbody > tr:nth-child(7){grid-column:3;grid-row:2;}
+#body_home #next_weeks_fantasy_schedule tbody > tr:nth-child(8){grid-column:4;grid-row:1;}
+#body_home #next_weeks_fantasy_schedule tbody > tr:nth-child(9){grid-column:4;grid-row:2;}
+#body_home #next_weeks_fantasy_schedule tbody > tr:nth-child(10){grid-column:5;grid-row:1;}
+#body_home #next_weeks_fantasy_schedule tbody > tr:nth-child(11){grid-column:5;grid-row:2;}
+
+#body_home #next_weeks_fantasy_schedule td{
+  display:block !important;
+  border:0 !important;
+  background:transparent !important;
+  padding:2px !important;
+}
+
+#body_home #next_weeks_fantasy_schedule td:first-child a{
+  display:block !important;
+  color:#fff !important;
+  font-size:11px !important;
+  font-weight:900 !important;
+  line-height:1.15 !important;
+  text-transform:uppercase !important;
+}
+
+#body_home #next_weeks_fantasy_schedule td:first-child a:before{
+  content:"";
+  display:block;
+  width:58px;
+  height:58px;
+  margin:0 auto 5px;
+  background-repeat:no-repeat;
+  background-position:center;
+  background-size:contain;
+  filter:drop-shadow(0 3px 4px #000);
+}
+
+#next_weeks_fantasy_schedule a.franchise_0001:before{background-image:url("https://www42.myfantasyleague.com/fflnetdynamic2024/73086_franchise_icon0001.jpg");}
+#next_weeks_fantasy_schedule a.franchise_0002:before{background-image:url("https://www42.myfantasyleague.com/fflnetdynamic2025/73086_franchise_icon0002.png");}
+#next_weeks_fantasy_schedule a.franchise_0003:before{background-image:url("https://www42.myfantasyleague.com/fflnetdynamic2024/73086_franchise_icon0003.jpg");}
+#next_weeks_fantasy_schedule a.franchise_0004:before{background-image:url("https://www42.myfantasyleague.com/fflnetdynamic2024/73086_franchise_icon0004.jpg");}
+#next_weeks_fantasy_schedule a.franchise_0005:before{background-image:url("https://www42.myfantasyleague.com/fflnetdynamic2024/73086_franchise_icon0005.jpg");}
+#next_weeks_fantasy_schedule a.franchise_0006:before{background-image:url("https://www42.myfantasyleague.com/fflnetdynamic2024/73086_franchise_icon0006.jpg");}
+#next_weeks_fantasy_schedule a.franchise_0007:before{background-image:url("https://www42.myfantasyleague.com/fflnetdynamic2024/73086_franchise_icon0007.jpg");}
+#next_weeks_fantasy_schedule a.franchise_0008:before{background-image:url("https://www42.myfantasyleague.com/fflnetdynamic2024/73086_franchise_icon0008.jpg");}
+#next_weeks_fantasy_schedule a.franchise_0009:before{background-image:url("https://www42.myfantasyleague.com/fflnetdynamic2024/73086_franchise_icon0009.jpg");}
+#next_weeks_fantasy_schedule a.franchise_0010:before{background-image:url("https://www42.myfantasyleague.com/fflnetdynamic2024/73086_franchise_icon0010.jpg");}
+
+#body_home #next_weeks_fantasy_schedule tbody > tr:nth-child(3) td:first-child:before,
+#body_home #next_weeks_fantasy_schedule tbody > tr:nth-child(5) td:first-child:before,
+#body_home #next_weeks_fantasy_schedule tbody > tr:nth-child(7) td:first-child:before,
+#body_home #next_weeks_fantasy_schedule tbody > tr:nth-child(9) td:first-child:before,
+#body_home #next_weeks_fantasy_schedule tbody > tr:nth-child(11) td:first-child:before{
+  content:"VS";
+  display:block;
+  color:#8097a2;
+  font-size:9px;
+  font-weight:bold;
+  margin:0 0 3px;
+}
+
+#body_home #next_weeks_fantasy_schedule td.points{
+  color:#f4c644 !important;
+  font-size:15px !important;
+  font-weight:900 !important;
+  padding:5px 0 2px !important;
+}
+
+/* =========================================================
+   NFC / AFC STANDINGS
+   ========================================================= */
+#body_home #standings{width:100% !important;margin:5px 0 8px !important;}
+#body_home #standings > caption{display:none !important;}
+#body_home #standings .standingslogo{display:none !important;}
+
+#body_home #standings tbody{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  grid-template-rows:auto auto auto auto auto auto auto;
+  gap:0 10px;
+  padding:0 !important;
+  background:transparent !important;
+}
+
+#body_home #standings tbody > tr{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) 58px 58px;
+  align-items:center;
+  width:100% !important;
+  box-sizing:border-box !important;
+  margin:0 !important;
+}
+
+#body_home #standings tbody > tr:nth-child(1){grid-column:1;grid-row:1;}
+#body_home #standings tbody > tr:nth-child(2){grid-column:1;grid-row:2;}
+#body_home #standings tbody > tr:nth-child(3){grid-column:1;grid-row:3;}
+#body_home #standings tbody > tr:nth-child(4){grid-column:1;grid-row:4;}
+#body_home #standings tbody > tr:nth-child(5){grid-column:1;grid-row:5;}
+#body_home #standings tbody > tr:nth-child(6){grid-column:1;grid-row:6;}
+#body_home #standings tbody > tr:nth-child(7){grid-column:1;grid-row:7;}
+#body_home #standings tbody > tr:nth-child(8){grid-column:2;grid-row:1;}
+#body_home #standings tbody > tr:nth-child(9){grid-column:2;grid-row:2;}
+#body_home #standings tbody > tr:nth-child(10){grid-column:2;grid-row:3;}
+#body_home #standings tbody > tr:nth-child(11){grid-column:2;grid-row:4;}
+#body_home #standings tbody > tr:nth-child(12){grid-column:2;grid-row:5;}
+#body_home #standings tbody > tr:nth-child(13){grid-column:2;grid-row:6;}
+#body_home #standings tbody > tr:nth-child(14){grid-column:2;grid-row:7;}
+
+#body_home #standings tbody > tr:nth-child(1),
+#body_home #standings tbody > tr:nth-child(8){
+  grid-template-columns:1fr !important;
+  background:linear-gradient(180deg,#0d659e,#073d64) !important;
+  border:1px solid #1884b8 !important;
+  border-radius:6px 6px 0 0 !important;
+}
+
+#body_home #standings tbody > tr:nth-child(1) td,
+#body_home #standings tbody > tr:nth-child(8) td{
+  grid-column:1/-1 !important;
+  width:100% !important;
+  box-sizing:border-box !important;
+  padding:9px 11px !important;
+}
+
+#body_home #standings #division00:after{
+  content:"NFC STANDINGS";
+  color:#fff;
+  font-size:15px;
+  font-weight:900;
+  letter-spacing:.06em;
+}
+#body_home #standings #division01:after{
+  content:"AFC STANDINGS";
+  color:#fff;
+  font-size:15px;
+  font-weight:900;
+  letter-spacing:.06em;
+}
+
+#body_home #standings tbody > tr:nth-child(2),
+#body_home #standings tbody > tr:nth-child(9){
+  background:#091d2a !important;
+  border-left:1px solid #155677 !important;
+  border-right:1px solid #155677 !important;
+}
+
+#body_home #standings tbody > tr:nth-child(n+3):nth-child(-n+7),
+#body_home #standings tbody > tr:nth-child(n+10):nth-child(-n+14){
+  min-height:46px;
+  background:#06141e !important;
+  border-left:1px solid #155677 !important;
+  border-right:1px solid #155677 !important;
+  border-bottom:1px solid #102f40 !important;
+}
+
+#body_home #standings tbody > tr:nth-child(7),
+#body_home #standings tbody > tr:nth-child(14){
+  border-bottom:1px solid #1884b8 !important;
+  border-radius:0 0 6px 6px !important;
+}
+
+#body_home #standings .h2hpct,
+#body_home #standings .gb,
+#body_home #standings .strk,
+#body_home #standings .avgpf,
+#body_home #standings .pa,
+#body_home #standings .avgpa,
+#body_home #standings .divwlt{display:none !important;}
+
+#body_home #standings td.ficonname{
+  display:flex !important;
+  align-items:center;
+  min-width:0;
+  padding:5px 7px !important;
+  font-weight:bold !important;
+}
+
+#body_home #standings img.franchiseicon{
+  width:36px !important;
+  max-width:36px !important;
+  height:auto !important;
+  margin-right:7px !important;
+}
+
+#body_home #standings td.ficonname a{
+  font-size:10px !important;
+  line-height:1.15 !important;
+  font-weight:900 !important;
+  text-transform:uppercase !important;
+}
+
+#body_home #standings td.h2hwlt,
+#body_home #standings td.pf{
+  text-align:center !important;
+  color:#fff !important;
+  font-weight:900 !important;
+  font-size:12px !important;
+}
+
+/* =========================================================
+   TRANSACTIONS + POWER 5
+   ========================================================= */
+#body_home #homepagecolumn4 > div{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  align-items:flex-start !important;
+  gap:8px !important;
+}
+
+#body_home #homepagecolumn4 > div > .mobile-wrap{width:100%;box-sizing:border-box;}
+#body_home #homepagecolumn4 > div > .mobile-wrap:has(> #transactions){width:59% !important;}
+#body_home #homepagecolumn4 > div > .mobile-wrap:has(> #power_rank){width:39% !important;}
+
+/* =========================================================
+   RECENT TRANSACTIONS
+   ========================================================= */
+#body_home #transactions{width:100% !important;margin:0 0 8px !important;min-height:145px;}
+#body_home #transactions caption span{font-size:0 !important;}
+#body_home #transactions caption span:before{
+  content:"↔  RECENT TRANSACTIONS";
+  font-size:14px !important;
+  line-height:1.2;
+  font-weight:900;
+  letter-spacing:.04em;
+  color:#fff;
+}
+#body_home #transactions .rank,
+#body_home #transactions .transactiontype{display:none !important;}
+#body_home #transactions th,
+#body_home #transactions td{padding:6px 8px !important;}
+#body_home #transactions .franchisename{width:23%;}
+#body_home #transactions .transaction{width:55%;}
+#body_home #transactions .timestamp{width:22%;font-size:9px !important;}
+#body_home #transactions td.transaction ul,
+#body_home #transactions td ul{margin:0 !important;padding:0 !important;list-style:none !important;}
+#body_home #transactions tbody > tr:nth-child(n+7):not(.reportfooter){display:none !important;}
+#body_home #transactions .reportfooter td{text-align:right !important;padding:6px 10px !important;}
+
+/* =========================================================
+   BIG LEAGUE POWER 5
+   ========================================================= */
+#body_home #power_rank{
+  width:100% !important;
+  margin:0 0 8px !important;
+  min-height:145px;
+  table-layout:fixed !important;
+}
+#body_home #power_rank caption span{font-size:0 !important;}
+#body_home #power_rank caption span:before{
+  content:"⚡ BIG LEAGUE POWER 5 — PRESEASON";
+  font-size:14px !important;
+  line-height:1.2;
+  font-weight:900;
+  letter-spacing:.04em;
+  color:#fff;
+}
+#body_home #power_rank tbody > tr:first-child{display:none !important;}
+#body_home #power_rank th:not(.franchisename):not(.power_rank),
+#body_home #power_rank td:not(.franchisename):not(.power_rank){display:none !important;}
+#body_home #power_rank tbody > tr:nth-child(n+8){display:none !important;}
+#body_home #power_rank .franchisename{width:74% !important;text-align:left !important;}
+#body_home #power_rank .power_rank{width:26% !important;text-align:center !important;}
+#body_home #power_rank td{min-height:34px !important;padding:7px !important;}
+#body_home #power_rank td.franchisename{font-size:11px !important;font-weight:900 !important;text-transform:uppercase !important;}
+#body_home #power_rank td.power_rank{color:#f4c745 !important;font-size:15px !important;font-weight:900 !important;}
+
+#body_home #power_rank tbody > tr:nth-child(3) td.franchisename:before{content:"1";}
+#body_home #power_rank tbody > tr:nth-child(4) td.franchisename:before{content:"2";}
+#body_home #power_rank tbody > tr:nth-child(5) td.franchisename:before{content:"3";}
+#body_home #power_rank tbody > tr:nth-child(6) td.franchisename:before{content:"4";}
+#body_home #power_rank tbody > tr:nth-child(7) td.franchisename:before{content:"5";}
+#body_home #power_rank td.franchisename:before{
+  display:inline-block;
+  width:22px;
+  margin-right:7px;
+  color:#f6c942;
+  font-size:19px;
+  font-weight:900;
+  text-align:center;
+}
+
+/* =========================================================
+   REMOVE LEGACY LOWER MAIN-TAB ROWS
+   ========================================================= */
+#body_home #tabcontent0 > table#homepagecolumns:has(#homepagecolumn4) ~ table#homepagecolumns{
+  display:none !important;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+@media(max-width:700px){
+  #body_home .pagebody{width:98% !important;}
+  .bl-title{font-size:37px;}
+  .bl-tagline{font-size:10px;letter-spacing:.16em;}
+  .bl-topline{padding-left:10px;padding-right:10px;}
+  .bl-topline-side{width:auto;font-size:8px;}
+  .bl-mainnav a{padding:9px;font-size:9px;}
+  .bl-iconbar a{min-width:72px;width:auto;font-size:8px;}
+  #body_home #next_weeks_fantasy_schedule tbody{grid-template-columns:repeat(2,minmax(0,1fr)) !important;display:grid !important;}
+  #body_home #standings tbody{display:block !important;}
+  #body_home #standings tbody > tr{display:grid !important;grid-template-columns:minmax(0,1fr) 52px 52px !important;}
+  #body_home #standings tbody > tr:nth-child(8){margin-top:10px !important;}
+  #body_home #homepagecolumn4 > div > .mobile-wrap:has(> #transactions),
+  #body_home #homepagecolumn4 > div > .mobile-wrap:has(> #power_rank){width:100% !important;}
+  #body_home #transactions .timestamp{display:none !important;}
+}
+
+/* =========================================================
+   GITHUB PAGES PREVIEW SHELL ONLY
+   Harmless when this CSS is loaded by MFL.
+   ========================================================= */
+.preview-shell{
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:24px;
+  font-family:Arial,Helvetica,sans-serif;
+}
+.preview-card{
+  width:min(760px,100%);
+  padding:36px;
+  border:1px solid #12628d;
+  border-top:4px solid #29c9ff;
+  border-radius:10px;
+  background:linear-gradient(180deg,#0a1927,#030a11);
+  box-shadow:0 0 36px rgba(0,160,230,.18);
+  text-align:center;
+  color:#e8f4f8;
+}
+.preview-card .eyebrow{color:#f2c94c;font-size:12px;font-weight:800;letter-spacing:.22em;}
+.preview-card h1{margin:12px 0 8px;font-size:clamp(36px,7vw,70px);line-height:.95;text-transform:uppercase;}
+.preview-card p{color:#a8cfdf;line-height:1.6;}
+.preview-card .status{margin-top:22px;color:#71dbff;font-weight:700;}
