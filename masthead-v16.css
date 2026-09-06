@@ -1,5 +1,5 @@
-/* THE BIG LEAGUE — MASTHEAD V16
-   Direct hosted artwork. No data-URI loader, no CSS wordmark fallback. */
+/* THE BIG LEAGUE — MASTHEAD V16.1
+   Uses the new high-resolution uploaded PNG from the repository root. */
 
 #body_home.blsn-mode .bl-masthead{
   position:relative!important;
@@ -18,12 +18,12 @@
   position:relative!important;
   z-index:2!important;
   width:100%!important;
-  aspect-ratio:3/1!important;
+  aspect-ratio:3.5/1!important;
   height:auto!important;
-  background-image:url("https://lalaunch.github.io/big-league-mfl/assets/big-league-masthead-v16.webp?v=1")!important;
+  background-image:url("https://lalaunch.github.io/big-league-mfl/the_big_league_same_crew_bigger_legends.png?v=2")!important;
   background-repeat:no-repeat!important;
-  background-position:center center!important;
-  background-size:100% 100%!important;
+  background-position:center top!important;
+  background-size:cover!important;
   background-color:#03111b!important;
   pointer-events:none!important;
 }
@@ -50,10 +50,16 @@
   padding:13px 8px!important;
 }
 
+@media(max-width:1100px){
+  #body_home.blsn-mode .bl-masthead:before{
+    aspect-ratio:3.25/1!important;
+  }
+}
+
 @media(max-width:760px){
   #body_home.blsn-mode .bl-masthead:before{
-    aspect-ratio:2.45/1!important;
-    background-size:cover!important;
+    aspect-ratio:3/1!important;
+    background-size:contain!important;
     background-position:center center!important;
   }
   #body_home.blsn-mode .bl-mainnav{
