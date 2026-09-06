@@ -8,8 +8,18 @@
   var HOST='https://lalaunch.github.io/big-league-mfl/';
   var CORE=HOST+'bigleague-core-v10.js?v=1';
   var PUGS_LOGO=HOST+'assets/killer-pugs-official.webp?v=2';
+  var MASTHEAD_CSS=HOST+'masthead-v12.css?v=1';
 
   function clean(v){return String(v||'').replace(/\s+/g,' ').trim();}
+
+  function loadMastheadCss(){
+    if(document.getElementById('bl-masthead-v12-css')) return;
+    var link=document.createElement('link');
+    link.id='bl-masthead-v12-css';
+    link.rel='stylesheet';
+    link.href=MASTHEAD_CSS;
+    document.head.appendChild(link);
+  }
 
   function patchNav(){
     var nav=document.querySelector('.bl-mainnav');
@@ -113,6 +123,7 @@
   }
 
   function watch(){
+    loadMastheadCss();
     patchNav();
     patchDashboardLinks();
     patchPugsLogo();
@@ -120,12 +131,15 @@
     var tries=0;
     var timer=setInterval(function(){
       tries++;
+      loadMastheadCss();
       patchNav();
       patchDashboardLinks();
       patchPugsLogo();
       if(tries>=50) clearInterval(timer);
     },300);
   }
+
+  loadMastheadCss();
 
   var s=document.createElement('script');
   s.src=CORE;
