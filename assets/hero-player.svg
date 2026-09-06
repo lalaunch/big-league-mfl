@@ -1,74 +1,88 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 520">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 520">
   <defs>
-    <radialGradient id="bg" cx="50%" cy="40%" r="65%">
-      <stop offset="0" stop-color="#233744" stop-opacity=".82"/>
-      <stop offset=".52" stop-color="#0d1720" stop-opacity=".74"/>
-      <stop offset="1" stop-color="#02070b" stop-opacity="0"/>
-    </radialGradient>
-    <linearGradient id="steel" x1="0" x2="1">
-      <stop offset="0" stop-color="#71818c"/>
-      <stop offset=".48" stop-color="#dfe7eb"/>
-      <stop offset="1" stop-color="#53616b"/>
+    <linearGradient id="armor" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#dbe8ef"/>
+      <stop offset=".18" stop-color="#6e8898"/>
+      <stop offset=".42" stop-color="#162733"/>
+      <stop offset=".72" stop-color="#081119"/>
+      <stop offset="1" stop-color="#223844"/>
+    </linearGradient>
+    <linearGradient id="visor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6fe2ff" stop-opacity=".55"/>
+      <stop offset=".25" stop-color="#16232c" stop-opacity=".92"/>
+      <stop offset="1" stop-color="#020507"/>
     </linearGradient>
     <linearGradient id="jersey" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#111820"/>
-      <stop offset="1" stop-color="#05090d"/>
+      <stop offset="0" stop-color="#172633"/>
+      <stop offset=".35" stop-color="#0b141c"/>
+      <stop offset="1" stop-color="#03070b"/>
     </linearGradient>
+    <radialGradient id="blueGlow" cx="50%" cy="50%" r="55%">
+      <stop offset="0" stop-color="#39bfff" stop-opacity=".7"/>
+      <stop offset=".5" stop-color="#0f6ca3" stop-opacity=".2"/>
+      <stop offset="1" stop-color="#00111d" stop-opacity="0"/>
+    </radialGradient>
     <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="7" result="b"/>
+      <feGaussianBlur stdDeviation="8" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3"/>
     </filter>
   </defs>
 
-  <rect width="640" height="520" fill="url(#bg)"/>
+  <ellipse cx="448" cy="268" rx="310" ry="255" fill="url(#blueGlow)"/>
 
-  <g opacity=".65" filter="url(#glow)" fill="#dff7ff">
-    <circle cx="84" cy="62" r="5"/><circle cx="106" cy="49" r="4"/><circle cx="126" cy="64" r="5"/>
-    <circle cx="514" cy="64" r="5"/><circle cx="536" cy="49" r="4"/><circle cx="556" cy="62" r="5"/>
+  <!-- stadium light banks -->
+  <g fill="#e9fbff" opacity=".95" filter="url(#glow)">
+    <circle cx="560" cy="70" r="7"/><circle cx="585" cy="58" r="6"/><circle cx="610" cy="72" r="7"/>
+    <circle cx="635" cy="60" r="6"/><circle cx="660" cy="74" r="7"/>
+  </g>
+  <g stroke="#55cfff" opacity=".25" stroke-width="3">
+    <path d="M572 78 L492 238"/><path d="M620 82 L530 248"/><path d="M660 86 L566 262"/>
   </g>
 
-  <g opacity=".25" stroke="#6fd7ff" stroke-width="3">
-    <path d="M80 68 L146 202"/><path d="M558 68 L494 202"/>
-  </g>
+  <!-- torso -->
+  <path d="M250 520 C278 400 349 340 430 323 C519 342 588 402 626 520 Z" fill="url(#jersey)" stroke="#294553" stroke-width="5"/>
+  <path d="M318 518 C337 426 369 384 430 366 C493 384 530 428 545 518" fill="none" stroke="#233c49" stroke-width="18" opacity=".7"/>
+  <path d="M298 410 C351 376 390 364 430 363 C477 367 518 379 568 411" fill="none" stroke="#5acfff" stroke-width="3" opacity=".28"/>
 
-  <!-- shoulder silhouette -->
-  <path d="M107 520 C124 411 183 347 256 326 C273 321 287 318 300 317 C313 318 328 321 345 326 C418 347 477 411 494 520 Z" fill="url(#jersey)" stroke="#22323d" stroke-width="4"/>
-  <path d="M171 520 C188 424 229 378 300 367 C371 378 412 424 429 520" fill="none" stroke="#1e2d37" stroke-width="16" opacity=".72"/>
+  <!-- helmet shell -->
+  <path d="M300 195 C305 91 361 34 440 34 C524 34 576 96 574 190 C574 236 560 278 533 306 L472 305 C484 267 480 235 462 209 C436 171 385 169 345 190 C323 202 306 220 296 244 C298 228 299 211 300 195 Z" fill="url(#armor)" stroke="#d5edf8" stroke-width="5"/>
+  <path d="M321 156 C357 94 421 69 486 82 C528 90 558 113 570 146" fill="none" stroke="#7fdcff" stroke-width="8" opacity=".65"/>
+  <path d="M332 176 C387 143 456 145 524 174" fill="none" stroke="#202f39" stroke-width="16" opacity=".75"/>
+
+  <!-- visor -->
+  <path d="M344 179 C382 159 442 159 480 186 C470 229 446 250 412 250 C378 250 354 227 344 179 Z" fill="url(#visor)" stroke="#7bdcff" stroke-width="3"/>
+  <path d="M357 187 C393 173 439 175 466 192" fill="none" stroke="#c7f5ff" stroke-width="4" opacity=".45"/>
+
+  <!-- facemask -->
+  <g fill="none" stroke="#b9cad2" stroke-width="6" opacity=".92">
+    <path d="M315 222 C372 206 459 209 538 236"/>
+    <path d="M327 248 C390 230 472 236 547 262"/>
+    <path d="M352 210 L350 282"/>
+    <path d="M519 224 L541 287"/>
+  </g>
 
   <!-- neck -->
-  <path d="M250 318 L260 279 L340 279 L350 318 C337 339 321 350 300 350 C279 350 263 339 250 318 Z" fill="#0a1015" stroke="#2a3943" stroke-width="3"/>
+  <path d="M370 316 L385 272 L470 272 L488 319 C474 343 455 357 430 357 C406 357 386 344 370 316 Z" fill="#091016" stroke="#314855" stroke-width="4"/>
 
-  <!-- helmet -->
-  <path d="M202 190 C208 96 257 48 324 48 C396 48 441 100 440 183 C439 225 427 258 404 282 L361 282 C367 251 363 224 351 205 C330 173 287 167 254 184 C234 194 218 210 209 230 C204 218 201 203 202 190 Z" fill="#070c10" stroke="url(#steel)" stroke-width="6"/>
-  <path d="M214 167 C241 118 289 91 348 97 C386 101 416 118 431 145" fill="none" stroke="#54636e" stroke-width="8" opacity=".55"/>
-  <path d="M221 208 C253 187 293 180 333 190" fill="none" stroke="#222f38" stroke-width="8"/>
+  <!-- pointing arm -->
+  <path d="M384 368 C332 370 280 390 236 422 C205 445 174 469 135 494 L190 520 C225 496 251 478 278 458 C309 435 347 420 386 417 Z" fill="url(#jersey)" stroke="#2b4654" stroke-width="5"/>
+  <path d="M211 420 C179 408 144 413 114 431 C86 447 68 469 58 495 C85 505 111 514 138 520 C157 494 178 476 203 463 Z" fill="url(#armor)" stroke="#c6dce7" stroke-width="4"/>
+  <!-- pointing glove/finger -->
+  <path d="M118 429 C96 420 77 420 62 430 C48 439 41 453 44 467 C47 478 59 483 74 478 L109 465 L153 475 C170 479 184 471 186 459 C189 447 177 437 159 434 Z" fill="#0b1319" stroke="#8fb8ca" stroke-width="4"/>
+  <path d="M42 461 C22 455 9 458 3 469 C-4 483 9 495 29 494 L91 483 L86 463 Z" fill="#0d151b" stroke="#c4d9e2" stroke-width="4"/>
+  <path d="M18 469 L85 469" stroke="#5ed8ff" stroke-width="3" opacity=".45"/>
 
-  <!-- face mask -->
-  <g fill="none" stroke="#9aa7af" stroke-width="5" opacity=".78">
-    <path d="M211 225 C251 213 321 214 384 233"/>
-    <path d="M225 245 C270 232 337 236 393 252"/>
-    <path d="M248 213 L246 270"/>
-    <path d="M382 227 L395 276"/>
-  </g>
+  <!-- shoulder rim highlights -->
+  <path d="M265 433 C305 387 350 368 393 363" fill="none" stroke="#d8eef8" stroke-width="5" opacity=".58"/>
+  <path d="M479 366 C525 375 566 400 596 438" fill="none" stroke="#4bc8ff" stroke-width="5" opacity=".46"/>
 
-  <!-- faceless visor -->
-  <path d="M251 187 C278 173 321 174 349 195 C340 228 322 244 299 245 C274 245 257 228 251 187 Z" fill="#020507" stroke="#18252d" stroke-width="3"/>
-  <path d="M262 192 C286 181 318 183 337 198" fill="none" stroke="#6ebde2" stroke-width="3" opacity=".22"/>
-
-  <!-- jersey details -->
-  <path d="M206 397 C246 374 268 368 300 367 C333 369 356 375 395 398" fill="none" stroke="#263742" stroke-width="5" opacity=".65"/>
-  <text x="300" y="478" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-size="96" font-weight="900" fill="#dce4e8" opacity=".13">36</text>
-
-  <!-- football tucked at left -->
-  <g transform="translate(90 356) rotate(-22)">
-    <ellipse cx="78" cy="54" rx="82" ry="46" fill="#080d11" stroke="#53616b" stroke-width="4"/>
-    <path d="M41 54 H116" stroke="#83939d" stroke-width="4" opacity=".75"/>
-    <g stroke="#a8b5bc" stroke-width="3">
-      <path d="M63 42 V66"/><path d="M75 40 V68"/><path d="M87 40 V68"/><path d="M99 42 V66"/>
-    </g>
-  </g>
+  <!-- subtle jersey number -->
+  <text x="451" y="490" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-size="118" font-weight="900" fill="#d9eef7" opacity=".10">37</text>
 
   <!-- gold motion slash -->
-  <path d="M362 448 C420 430 477 423 552 426" stroke="#f4c745" stroke-width="7" fill="none" opacity=".92"/>
-  <path d="M377 460 C433 447 491 443 568 445" stroke="#8a6819" stroke-width="3" fill="none" opacity=".7"/>
+  <path d="M430 474 C512 451 591 446 710 449" stroke="#f4c11f" stroke-width="11" fill="none"/>
+  <path d="M445 490 C530 470 610 466 730 470" stroke="#ffdf4f" stroke-width="4" fill="none" opacity=".8"/>
 </svg>
