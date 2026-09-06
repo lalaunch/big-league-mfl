@@ -7,37 +7,19 @@
   var BASE='https://www42.myfantasyleague.com/'+YEAR;
   var HOST='https://lalaunch.github.io/big-league-mfl/';
   var CORE=HOST+'bigleague-core-v10.js?v=1';
-  var MASTHEAD_CSS=HOST+'masthead-v15.css?v=2';
-  var MASTHEAD_DATA=HOST+'assets/masthead-v15-data.js?v=1';
+  var MASTHEAD_CSS=HOST+'masthead-v16.css?v=1';
   var TEAM_LOGOS=HOST+'team-logos-v2.js?v=3';
 
   function clean(v){return String(v||'').replace(/\s+/g,' ').trim();}
 
-  function applyMastheadData(){
-    if(!window.BL_MASTHEAD_V15) return false;
-    document.documentElement.style.setProperty('--bl-masthead-v15','url("'+window.BL_MASTHEAD_V15+'")');
-    return true;
-  }
-
-  function loadMastheadData(){
-    if(window.BL_MASTHEAD_V15){applyMastheadData();return;}
-    if(document.getElementById('bl-masthead-v15-data')) return;
-    var s=document.createElement('script');
-    s.id='bl-masthead-v15-data';
-    s.src=MASTHEAD_DATA;
-    s.defer=true;
-    s.onload=applyMastheadData;
-    document.head.appendChild(s);
-  }
-
   function loadStyle(){
-    ['bl-masthead-v13-css','bl-masthead-v14-css'].forEach(function(id){
+    ['bl-masthead-v13-css','bl-masthead-v14-css','bl-masthead-v15-css'].forEach(function(id){
       var old=document.getElementById(id);
       if(old) old.remove();
     });
-    if(document.getElementById('bl-masthead-v15-css')) return;
+    if(document.getElementById('bl-masthead-v16-css')) return;
     var link=document.createElement('link');
-    link.id='bl-masthead-v15-css';
+    link.id='bl-masthead-v16-css';
     link.rel='stylesheet';
     link.href=MASTHEAD_CSS;
     document.head.appendChild(link);
@@ -118,25 +100,20 @@
   }
 
   function watch(){
-    loadMastheadData();
     loadStyle();
     loadTeamLogos();
-    applyMastheadData();
     patchNav();
     patchDashboardLinks();
     var tries=0;
     var timer=setInterval(function(){
-      loadMastheadData();
       loadStyle();
       loadTeamLogos();
-      applyMastheadData();
       patchNav();
       patchDashboardLinks();
       if(++tries>=50) clearInterval(timer);
     },300);
   }
 
-  loadMastheadData();
   loadStyle();
   loadTeamLogos();
 
