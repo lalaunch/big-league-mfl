@@ -1,0 +1,56 @@
+/* THE BIG LEAGUE — HERO V2
+   Uses the concept artwork directly for the right side of the defending-champion hero. */
+
+#body_home.blsn-mode .blsn-hero-main{
+  position:relative!important;
+  overflow:hidden!important;
+  background:linear-gradient(115deg,#071821 0%,#06141d 48%,#02080d 100%)!important;
+  box-shadow:inset 0 0 0 1px rgba(31,145,193,.42),0 10px 30px rgba(0,0,0,.38)!important;
+}
+
+/* Hide the old CSS-built player / shade / quote / go-time layers. */
+#body_home.blsn-mode .blsn-hero-main > img[aria-hidden="true"],
+#body_home.blsn-mode .blsn-hero-main > div:nth-last-child(3),
+#body_home.blsn-mode .blsn-hero-main > div:nth-last-child(2),
+#body_home.blsn-mode .blsn-hero-main > div:nth-last-child(1){
+  display:none!important;
+}
+
+/* Concept-style right hero panel. */
+#body_home.blsn-mode .blsn-hero-main:after{
+  content:""!important;
+  position:absolute!important;
+  z-index:12!important;
+  top:0!important;
+  right:0!important;
+  width:44%!important;
+  height:100%!important;
+  pointer-events:none!important;
+  background-image:url("https://lalaunch.github.io/big-league-mfl/assets/hero-go-time-v2.webp?v=1")!important;
+  background-repeat:no-repeat!important;
+  background-position:center center!important;
+  background-size:cover!important;
+  border-left:1px solid rgba(59,164,214,.35)!important;
+  box-shadow:inset 22px 0 30px rgba(2,8,13,.32)!important;
+}
+
+/* Make sure the champion content stays above the left-side background only. */
+#body_home.blsn-mode .blsn-hero-main > *:not(:last-child){
+  position:relative;
+  z-index:2;
+}
+
+@media(max-width:980px){
+  #body_home.blsn-mode .blsn-hero-main:after{
+    width:46%!important;
+    background-position:56% center!important;
+  }
+}
+
+@media(max-width:760px){
+  #body_home.blsn-mode .blsn-hero-main:after{
+    width:50%!important;
+    opacity:.82!important;
+    background-position:60% center!important;
+  }
+}
