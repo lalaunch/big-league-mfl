@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 190" role="img" aria-label="The Big League">
+  <defs>
+    <linearGradient id="steel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d8e7f3"/>
+      <stop offset="0.18" stop-color="#8fb2cc"/>
+      <stop offset="0.42" stop-color="#4d6e89"/>
+      <stop offset="0.62" stop-color="#9fb8ca"/>
+      <stop offset="0.82" stop-color="#4d6780"/>
+      <stop offset="1" stop-color="#24384d"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d7f1ff"/>
+      <stop offset="0.5" stop-color="#5a8eb3"/>
+      <stop offset="1" stop-color="#152536"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-30%" width="140%" height="180%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="blur"/>
+      <feOffset dy="10" result="off"/>
+      <feColorMatrix in="off" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .85 0"/>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="rough" x="-5%" y="-15%" width="110%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035 0.12" numOctaves="2" seed="9" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <mask id="grit">
+      <rect width="1200" height="190" fill="white"/>
+      <g fill="black" opacity=".5">
+        <rect x="120" y="58" width="25" height="3"/><rect x="205" y="34" width="14" height="2"/><rect x="325" y="84" width="28" height="3"/>
+        <rect x="470" y="48" width="18" height="2"/><rect x="590" y="72" width="32" height="3"/><rect x="715" y="41" width="16" height="2"/>
+        <rect x="822" y="92" width="24" height="3"/><rect x="945" y="52" width="31" height="2"/><rect x="1040" y="79" width="18" height="3"/>
+        <circle cx="265" cy="62" r="3"/><circle cx="536" cy="43" r="2.5"/><circle cx="780" cy="73" r="3"/><circle cx="1010" cy="47" r="2.5"/>
+      </g>
+    </mask>
+  </defs>
+
+  <g transform="translate(54 10) rotate(-5 120 80)" opacity=".62">
+    <ellipse cx="120" cy="80" rx="77" ry="35" fill="#071522" stroke="#6ca3c9" stroke-width="5"/>
+    <path d="M55 80c37-26 93-29 130 0M55 80c37 26 93 29 130 0" fill="none" stroke="#31556f" stroke-width="3" opacity=".8"/>
+    <g stroke="#b8d7ea" stroke-width="4" stroke-linecap="round">
+      <path d="M95 72l50 16"/><path d="M110 71l-5 16"/><path d="M124 76l-5 16"/><path d="M138 80l-5 16"/>
+    </g>
+  </g>
+
+  <g filter="url(#shadow)">
+    <text x="160" y="134" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif" font-size="118" font-weight="900" font-style="italic" letter-spacing="3" fill="#06111d" stroke="#02070c" stroke-width="13" opacity=".95">THE BIG LEAGUE</text>
+    <text x="160" y="126" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif" font-size="118" font-weight="900" font-style="italic" letter-spacing="3" fill="url(#steel)" stroke="url(#edge)" stroke-width="4" paint-order="stroke fill" mask="url(#grit)" filter="url(#rough)">THE BIG LEAGUE</text>
+    <text x="160" y="121" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif" font-size="118" font-weight="900" font-style="italic" letter-spacing="3" fill="none" stroke="#d9effc" stroke-width="1.3" opacity=".55">THE BIG LEAGUE</text>
+  </g>
+
+  <path d="M185 149 C390 164 795 162 1042 148" fill="none" stroke="#1b76aa" stroke-width="3" opacity=".32"/>
+</svg>
