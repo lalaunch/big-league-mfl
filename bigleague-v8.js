@@ -176,9 +176,9 @@
     var div=document.createElement('aside');
     div.className='blsn-deadlines';
     div.innerHTML='<div class="blsn-panel-title">▣ Big League Deadlines</div><div class="blsn-deadline-body">'+
-      '<div class="blsn-deadline-row"><div class="blsn-deadline-when">Wed</div><div class="blsn-deadline-date">Sep 10</div><div class="blsn-deadline-what">Waivers Process</div></div>'+
-      '<div class="blsn-deadline-row"><div class="blsn-deadline-when">Thu</div><div class="blsn-deadline-date">Sep 11</div><div class="blsn-deadline-what">TNF Lineup Deadline</div></div>'+
-      '<div class="blsn-deadline-row"><div class="blsn-deadline-when">Sun</div><div class="blsn-deadline-date">Sep 14</div><div class="blsn-deadline-what">All Lineups Due</div></div>'+
+      '<div class="blsn-deadline-row"><div class="blsn-deadline-when">Wed</div><div class="blsn-deadline-date">Sep 9</div><div class="blsn-deadline-what">Waivers Process</div></div>'+
+      '<div class="blsn-deadline-row"><div class="blsn-deadline-when">Thu</div><div class="blsn-deadline-date">Sep 10</div><div class="blsn-deadline-what">TNF Lineup Deadline</div></div>'+
+      '<div class="blsn-deadline-row"><div class="blsn-deadline-when">Sun</div><div class="blsn-deadline-date">Sep 13</div><div class="blsn-deadline-what">All Lineups Due</div></div>'+
       '<div class="blsn-deadline-row"><div class="blsn-deadline-when">Week 11</div><div class="blsn-deadline-date">—</div><div class="blsn-deadline-what">Trade Deadline</div></div>'+
       '<a class="blsn-calendar-btn" href="'+BASE+'/options?L='+LEAGUE+'&O=123">View Full Calendar</a></div>';
     return div;
