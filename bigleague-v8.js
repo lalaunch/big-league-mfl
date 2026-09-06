@@ -1,4 +1,4 @@
-/* The Big League — Sports Network V9
+/* The Big League — Sports Network V9.2
    MFL stays the league engine. GitHub controls presentation and layout.
 */
 (function(){
@@ -15,7 +15,7 @@
   function loadStyles(){
     [
       ['blx-dashboard','https://lalaunch.github.io/big-league-mfl/dashboard-v8.css?v=3'],
-      ['blsn-network','https://lalaunch.github.io/big-league-mfl/sports-network.css?v=1']
+      ['blsn-network','https://lalaunch.github.io/big-league-mfl/sports-network.css?v=2']
     ].forEach(function(x){
       if(document.querySelector('link[data-'+x[0]+']')) return;
       var l=document.createElement('link');
@@ -162,9 +162,9 @@
     var div=document.createElement('aside');
     div.className='blsn-quicklinks';
     div.innerHTML='<div class="blsn-panel-title">League Quick Links</div><div class="blsn-quicklinks-body">'+
-      '<a class="blsn-quicklink" href="'+BASE+'/options?L='+LEAGUE+'&O=02"><i class="fas fa-helmet-safety"></i><span>Submit Lineup</span></a>'+
+      '<a class="blsn-quicklink" href="'+BASE+'/options?L='+LEAGUE+'&O=02"><i class="fas fa-football-ball"></i><span>Submit Lineup</span></a>'+
       '<a class="blsn-quicklink" href="'+BASE+'/options?L='+LEAGUE+'&O=07"><i class="fas fa-users"></i><span>View Rosters</span></a>'+
-      '<a class="blsn-quicklink" href="'+BASE+'/options?L='+LEAGUE+'&O=05"><i class="fas fa-right-left"></i><span>Make a Trade</span></a>'+
+      '<a class="blsn-quicklink" href="'+BASE+'/options?L='+LEAGUE+'&O=05"><i class="fas fa-exchange-alt"></i><span>Make a Trade</span></a>'+
       '<a class="blsn-quicklink" href="'+BASE+'/add_drop?L='+LEAGUE+'"><i class="fas fa-clipboard-list"></i><span>Waivers</span></a>'+
       '<a class="blsn-quicklink" href="'+BASE+'/ajax_ls?L='+LEAGUE+'"><i class="fas fa-trophy"></i><span>Scoreboard</span></a>'+
       '<a class="blsn-quicklink" href="'+BASE+'/options?L='+LEAGUE+'&O=17"><i class="fas fa-comment"></i><span>League Talk</span></a>'+
@@ -176,10 +176,10 @@
     var div=document.createElement('aside');
     div.className='blsn-deadlines';
     div.innerHTML='<div class="blsn-panel-title">▣ Big League Deadlines</div><div class="blsn-deadline-body">'+
-      '<div class="blsn-deadline-row"><div class="blsn-deadline-when">Wed</div><div class="blsn-deadline-what">Waivers Process</div></div>'+
-      '<div class="blsn-deadline-row"><div class="blsn-deadline-when">Thu</div><div class="blsn-deadline-what">TNF Lineup Deadline</div></div>'+
-      '<div class="blsn-deadline-row"><div class="blsn-deadline-when">Sun</div><div class="blsn-deadline-what">All Lineups Due</div></div>'+
-      '<div class="blsn-deadline-row"><div class="blsn-deadline-when">Week 11</div><div class="blsn-deadline-what">Trade Deadline</div></div>'+
+      '<div class="blsn-deadline-row"><div class="blsn-deadline-when">Wed</div><div class="blsn-deadline-date">Sep 10</div><div class="blsn-deadline-what">Waivers Process</div></div>'+
+      '<div class="blsn-deadline-row"><div class="blsn-deadline-when">Thu</div><div class="blsn-deadline-date">Sep 11</div><div class="blsn-deadline-what">TNF Lineup Deadline</div></div>'+
+      '<div class="blsn-deadline-row"><div class="blsn-deadline-when">Sun</div><div class="blsn-deadline-date">Sep 14</div><div class="blsn-deadline-what">All Lineups Due</div></div>'+
+      '<div class="blsn-deadline-row"><div class="blsn-deadline-when">Week 11</div><div class="blsn-deadline-date">—</div><div class="blsn-deadline-what">Trade Deadline</div></div>'+
       '<a class="blsn-calendar-btn" href="'+BASE+'/options?L='+LEAGUE+'&O=123">View Full Calendar</a></div>';
     return div;
   }
@@ -209,7 +209,6 @@
     var dashboard=document.querySelector('.blx-dashboard');
     if(!matchup||!standings||!power||!transactions||!dashboard) return false;
 
-    /* Hero */
     if(champ && champ.parentNode){
       var hero=document.createElement('div');
       hero.className='blsn-hero-grid';
@@ -221,34 +220,51 @@
       hero.appendChild(makeQuickLinks());
     }
 
-    /* Matchups + deadlines */
     var matchWrap=matchup.closest('.mobile-wrap')||matchup;
     if(matchWrap.parentNode){
       var mr=document.createElement('div');
       mr.className='blsn-matchups-row';
       matchWrap.parentNode.insertBefore(mr,matchWrap);
-      var mm=document.createElement('div');mm.className='blsn-matchups-main';mr.appendChild(mm);mm.appendChild(matchWrap);mr.appendChild(makeDeadlines());
-      var quote=document.createElement('div');quote.className='blsn-playoff-quote';quote.textContent='“Every week feels like the playoffs.”';mr.insertAdjacentElement('afterend',quote);
+      var mm=document.createElement('div');
+      mm.className='blsn-matchups-main';
+      mr.appendChild(mm);
+      mm.appendChild(matchWrap);
+      mr.appendChild(makeDeadlines());
+      var quote=document.createElement('div');
+      quote.className='blsn-playoff-quote';
+      quote.textContent='“Every week feels like the playoffs.”';
+      mr.insertAdjacentElement('afterend',quote);
     }
 
-    /* Standings + Power 5 */
     var standWrap=standings.closest('.mobile-wrap')||standings;
     var powerWrap=power.closest('.mobile-wrap')||power;
     if(standWrap.parentNode){
-      var sp=document.createElement('div');sp.className='blsn-standings-power';standWrap.parentNode.insertBefore(sp,standWrap);
-      var sm=document.createElement('div');sm.className='blsn-standings-main';sp.appendChild(sm);sm.appendChild(standWrap);
-      var pm=document.createElement('div');pm.className='blsn-power-main';sp.appendChild(pm);pm.appendChild(powerWrap);
+      var sp=document.createElement('div');
+      sp.className='blsn-standings-power';
+      standWrap.parentNode.insertBefore(sp,standWrap);
+      var sm=document.createElement('div');
+      sm.className='blsn-standings-main';
+      sp.appendChild(sm);
+      sm.appendChild(standWrap);
+      var pm=document.createElement('div');
+      pm.className='blsn-power-main';
+      sp.appendChild(pm);
+      pm.appendChild(powerWrap);
     }
 
-    /* Transactions + Around + Injury */
     var txWrap=transactions.closest('.mobile-wrap')||transactions;
     var around=dashboard.querySelector('.blx-grid.blx-three > .blx-card:nth-child(1)');
     var injury=dashboard.querySelector('.blx-grid.blx-three > .blx-card:nth-child(2)');
     var hall=dashboard.querySelector('.blx-hof-feature');
     if(txWrap&&around&&injury&&hall){
-      var nr=document.createElement('div');nr.className='blsn-news-row';hall.parentNode.insertBefore(nr,hall);
-      nr.appendChild(txWrap);nr.appendChild(around);nr.appendChild(injury);
-      var oldGrid=dashboard.querySelector('.blx-grid.blx-three');if(oldGrid) oldGrid.remove();
+      var nr=document.createElement('div');
+      nr.className='blsn-news-row';
+      hall.parentNode.insertBefore(nr,hall);
+      nr.appendChild(txWrap);
+      nr.appendChild(around);
+      nr.appendChild(injury);
+      var oldGrid=dashboard.querySelector('.blx-grid.blx-three');
+      if(oldGrid) oldGrid.remove();
     }
 
     return true;
