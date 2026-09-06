@@ -10,12 +10,13 @@
 
   function clean(v){return String(v||'').replace(/\s+/g,' ').trim();}
   function esc(v){return clean(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
+  function teamKey(v){return clean(v).toLowerCase().replace(/[^a-z0-9]/g,'');}
 
   function loadCss(){
     if(document.querySelector('link[data-blx-dashboard]')) return;
     var l=document.createElement('link');
     l.rel='stylesheet';
-    l.href='https://lalaunch.github.io/big-league-mfl/dashboard-v8.css?v=1';
+    l.href='https://lalaunch.github.io/big-league-mfl/dashboard-v8.css?v=2';
     l.setAttribute('data-blx-dashboard','1');
     document.head.appendChild(l);
   }
@@ -109,6 +110,44 @@
     return champs.map(function(x){return '<div class="blx-trophy-row"><span class="blx-trophy-team">'+esc(x[0])+'</span><span class="blx-trophy-count">'+x[1]+'</span></div>';}).join('');
   }
 
+  function getLogoMap(){
+    var map={};
+    Array.from(document.querySelectorAll('#standings tr')).forEach(function(row){
+      var team=row.querySelector('a[class*="franchise_"]');
+      var img=row.querySelector('img');
+      if(team && img && img.src) map[teamKey(team.textContent)]=img.src;
+    });
+    return map;
+  }
+
+  function hallCards(){
+    var logos=getLogoMap();
+    var lastTen=[
+      {year:2025,champ:'Milwaukee Killer Pugs',runner:'L.A. Launch'},
+      {year:2024,champ:'Tampa Bay Roxx Gang',runner:'Bristol Steampunks'},
+      {year:2023,champ:'Brooklyn Brawlers',runner:'Bristol Steampunks'},
+      {year:2022,champ:'Reno Gamblers',runner:'L.A. Launch'},
+      {year:2021,champ:'Tampa Bay Roxx Gang',runner:'Reno Gamblers'},
+      {year:2020,champ:'L.A. Launch',runner:'Reno Gamblers'},
+      {year:2019,champ:'Reno Gamblers',runner:'Bristol Steampunks'},
+      {year:2018,champ:'Jersey Jackhammers',runner:'Milwaukee Killer Pugs'},
+      {year:2017,champ:'L.A. Launch',runner:'Reno Gamblers'},
+      {year:2016,champ:'Kansas City Killers',runner:'Tampa Bay Roxx Gang'}
+    ];
+
+    return lastTen.map(function(x,index){
+      var logo=logos[teamKey(x.champ)]||'';
+      return '<article class="blx-hof-card'+(index===0?' blx-hof-current':'')+'">'+
+        '<div class="blx-hof-year">'+x.year+'</div>'+
+        (logo?'<img class="blx-hof-logo" src="'+esc(logo)+'" alt="">':'<div class="blx-hof-logo blx-hof-logo-fallback">★</div>')+
+        '<div class="blx-hof-champ">'+esc(x.champ)+'</div>'+
+        '<div class="blx-hof-label">WORLD CHAMPION</div>'+
+        '<div class="blx-hof-over">over</div>'+
+        '<div class="blx-hof-runner">'+esc(x.runner)+'</div>'+
+      '</article>';
+    }).join('');
+  }
+
   function build(){
     if(document.querySelector('.blx-dashboard')) return true;
     var c4=document.querySelector('#homepagecolumn4');
@@ -158,26 +197,22 @@
         </section>
       </div>
 
-      <div class="blx-grid blx-two">
-        <section class="blx-card">
-          <div class="blx-title">Hall of Champions — Recent Crowns</div>
-          <div class="blx-body">
-            <div class="blx-champs">
-              <div class="blx-champ-card"><span class="blx-champ-year">2025</span><span class="blx-champ-name">Milwaukee Killer Pugs</span></div>
-              <div class="blx-champ-card"><span class="blx-champ-year">2024</span><span class="blx-champ-name">Tampa Bay Roxx Gang</span></div>
-              <div class="blx-champ-card"><span class="blx-champ-year">2023</span><span class="blx-champ-name">Brooklyn Brawlers</span></div>
-              <div class="blx-champ-card"><span class="blx-champ-year">2022</span><span class="blx-champ-name">Reno Gamblers</span></div>
-              <div class="blx-champ-card"><span class="blx-champ-year">2021</span><span class="blx-champ-name">Tampa Bay Roxx Gang</span></div>
-            </div>
-            <div class="blx-actions"><a class="blx-btn" href="${BASE}/home/${LEAGUE}#3">Full Championship History</a></div>
-          </div>
-        </section>
+      <section class="blx-card blx-hof-feature">
+        <div class="blx-hof-header">
+          <div class="blx-hof-eyebrow">★ BIG LEAGUE LEGACY ★</div>
+          <div class="blx-hof-title">HALL OF CHAMPIONS</div>
+          <div class="blx-hof-subtitle">THE LAST 10 WORLD CHAMPIONS • 2016–2025</div>
+        </div>
+        <div class="blx-body">
+          <div class="blx-hof-grid">${hallCards()}</div>
+          <div class="blx-hof-footer"><span>10 seasons. 10 stories. One Big League.</span><a class="blx-btn blx-hof-btn" href="${BASE}/home/${LEAGUE}#3">View Full Championship History</a></div>
+        </div>
+      </section>
 
-        <section class="blx-card">
-          <div class="blx-title">Championship Count — 1990 to 2025</div>
-          <div class="blx-body"><div class="blx-trophies">${trophyRows()}</div><div class="blx-note">36 completed seasons • 13 championship franchises</div></div>
-        </section>
-      </div>`;
+      <section class="blx-card blx-count-feature">
+        <div class="blx-title">Championship Count — 1990 to 2025</div>
+        <div class="blx-body"><div class="blx-trophies">${trophyRows()}</div><div class="blx-note">36 completed seasons • 13 championship franchises</div></div>
+      </section>`;
 
     anchor.insertAdjacentElement('afterend',wrap);
     return true;
