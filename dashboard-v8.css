@@ -11,7 +11,6 @@
 
 .blx-grid{display:grid;gap:8px;}
 .blx-grid.blx-three{grid-template-columns:1.35fr 1fr 1fr;}
-.blx-grid.blx-two{grid-template-columns:1.15fr 1fr;margin-top:8px;}
 
 .blx-card{
   min-width:0;
@@ -83,74 +82,225 @@
 }
 .blx-btn:hover{background:#f4c745;color:#061019 !important;}
 
-/* RECENT CHAMPIONS — UNIQUE NAMES SO MESSAGE #20 CANNOT COLLIDE */
-.blx-champs{
-  display:grid;
-  grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:6px;
+/* =========================================================
+   FEATURED HALL OF CHAMPIONS — LAST 10 WORLD CHAMPIONS
+   ========================================================= */
+
+.blx-hof-feature{
+  margin-top:10px;
+  border-color:#8b6b1f;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(244,199,69,.10),transparent 34%),
+    linear-gradient(180deg,#091821,#041019);
+  box-shadow:
+    0 0 0 1px rgba(244,199,69,.06) inset,
+    0 0 26px rgba(244,199,69,.07),
+    0 7px 18px rgba(0,0,0,.34);
 }
 
-.blx-champ-card{
-  min-width:0;
-  min-height:92px;
-  padding:9px 6px;
-  border:1px solid #143b50;
-  border-radius:5px;
-  background:linear-gradient(180deg,#071a26,#05121b);
+.blx-hof-header{
+  position:relative;
+  padding:13px 16px 12px;
   text-align:center;
-  overflow:hidden;
+  border-bottom:1px solid #a67d20;
+  background:
+    linear-gradient(90deg,rgba(244,199,69,.05),rgba(8,70,109,.95) 22%,rgba(9,88,137,.98) 50%,rgba(8,70,109,.95) 78%,rgba(244,199,69,.05));
 }
 
-.blx-champ-card:first-child{
-  border-color:#b58b28;
-  box-shadow:inset 0 0 18px rgba(244,199,69,.08);
+.blx-hof-header:before,
+.blx-hof-header:after{
+  content:"";
+  position:absolute;
+  top:0;
+  width:70px;
+  height:2px;
+  background:linear-gradient(90deg,transparent,#f4c745);
+}
+.blx-hof-header:before{left:0;}
+.blx-hof-header:after{right:0;transform:scaleX(-1);}
+
+.blx-hof-eyebrow{
+  color:#f4c745;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.19em;
+  text-transform:uppercase;
 }
 
-.blx-champ-year{
-  display:block !important;
-  margin:0 !important;
-  padding:0 !important;
-  color:#f4c745 !important;
-  background:none !important;
+.blx-hof-title{
+  margin-top:2px;
+  color:#fff;
   font-family:Arial,Helvetica,sans-serif !important;
-  font-size:14px !important;
+  font-size:22px !important;
   font-style:normal !important;
   font-weight:900 !important;
-  line-height:1 !important;
-  letter-spacing:0 !important;
+  line-height:1.05 !important;
+  letter-spacing:.07em !important;
   text-align:center !important;
-  text-shadow:none !important;
-  text-transform:none !important;
+  text-shadow:0 2px 4px #000,0 0 10px rgba(255,255,255,.08) !important;
+  text-transform:uppercase !important;
   transform:none !important;
 }
 
-.blx-champ-name{
-  display:block !important;
-  margin:8px 0 0 !important;
-  padding:0 2px !important;
-  color:#eef9fc !important;
-  background:none !important;
+.blx-hof-subtitle{
+  margin-top:4px;
+  color:#b9eaff;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+}
+
+.blx-hof-grid{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:8px;
+}
+
+.blx-hof-card{
+  position:relative;
+  min-width:0;
+  min-height:158px;
+  padding:10px 7px 9px;
+  border:1px solid #174d69;
+  border-radius:6px;
+  background:
+    radial-gradient(circle at 50% 20%,rgba(22,110,160,.14),transparent 48%),
+    linear-gradient(180deg,#071925,#04111a);
+  text-align:center;
+  overflow:hidden;
+  box-shadow:inset 0 0 14px rgba(0,0,0,.20);
+}
+
+.blx-hof-card:hover{
+  border-color:#d0a431;
+  box-shadow:inset 0 0 18px rgba(244,199,69,.07),0 0 12px rgba(244,199,69,.06);
+}
+
+.blx-hof-current{
+  border-color:#e0b532;
+  background:
+    radial-gradient(circle at 50% 18%,rgba(244,199,69,.15),transparent 48%),
+    linear-gradient(180deg,#111c20,#06131b);
+  box-shadow:inset 0 0 20px rgba(244,199,69,.09),0 0 12px rgba(244,199,69,.08);
+}
+
+.blx-hof-current:after{
+  content:"DEFENDING CHAMPION";
+  position:absolute;
+  left:50%;
+  bottom:0;
+  transform:translateX(-50%);
+  width:100%;
+  padding:3px 2px;
+  background:#8c6b18;
+  color:#fff6c6;
+  font-size:7px;
+  font-weight:900;
+  letter-spacing:.06em;
+}
+
+.blx-hof-year{
+  color:#f4c745 !important;
   font-family:Arial,Helvetica,sans-serif !important;
-  font-size:9px !important;
+  font-size:15px !important;
   font-style:normal !important;
   font-weight:900 !important;
-  line-height:1.2 !important;
+  line-height:1 !important;
+  text-shadow:none !important;
+  transform:none !important;
+}
+
+.blx-hof-logo{
+  display:block;
+  width:46px;
+  height:46px;
+  object-fit:contain;
+  margin:8px auto 6px;
+  filter:drop-shadow(0 3px 4px #000);
+}
+
+.blx-hof-logo-fallback{
+  color:#f4c745;
+  font-size:26px;
+  line-height:46px;
+}
+
+.blx-hof-champ{
+  color:#fff !important;
+  background:none !important;
+  font-family:Arial,Helvetica,sans-serif !important;
+  font-size:10px !important;
+  font-style:normal !important;
+  font-weight:900 !important;
+  line-height:1.18 !important;
   letter-spacing:0 !important;
   text-align:center !important;
-  text-indent:0 !important;
   text-shadow:none !important;
   text-transform:uppercase !important;
   white-space:normal !important;
   word-break:normal !important;
   overflow-wrap:normal !important;
-  hyphens:none !important;
   transform:none !important;
 }
 
-/* CHAMPIONSHIP COUNTS */
+.blx-hof-label{
+  margin-top:4px;
+  color:#74d9ff;
+  font-size:7px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.blx-hof-over{
+  margin-top:5px;
+  color:#5f8797;
+  font-size:7px;
+  font-weight:800;
+  text-transform:uppercase;
+}
+
+.blx-hof-runner{
+  margin-top:2px;
+  color:#a9c3cd;
+  font-size:8px;
+  font-weight:800;
+  line-height:1.16;
+  text-transform:uppercase;
+}
+
+.blx-hof-footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:10px;
+  padding-top:9px;
+  border-top:1px solid #153748;
+  color:#f4c745;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.blx-hof-btn{
+  border-color:#a98327;
+  background:#18180f;
+  color:#f4c745 !important;
+}
+.blx-hof-btn:hover{background:#f4c745;color:#061019 !important;}
+
+/* =========================================================
+   CHAMPIONSHIP COUNTS
+   ========================================================= */
+
+.blx-count-feature{margin-top:8px;}
+
 .blx-trophies{
   display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-columns:repeat(3,minmax(0,1fr));
   gap:6px;
 }
 
@@ -193,10 +343,12 @@
 }
 
 @media(max-width:850px){
-  .blx-grid.blx-three,.blx-grid.blx-two{grid-template-columns:1fr;}
-  .blx-champs{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .blx-grid.blx-three{grid-template-columns:1fr;}
+  .blx-hof-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .blx-trophies{grid-template-columns:repeat(2,minmax(0,1fr));}
 }
 
 @media(max-width:520px){
-  .blx-champs,.blx-trophies{grid-template-columns:1fr;}
+  .blx-hof-grid,.blx-trophies{grid-template-columns:1fr;}
+  .blx-hof-footer{align-items:flex-start;flex-direction:column;}
 }
