@@ -6,7 +6,7 @@
   var LEAGUE='73086';
   var BASE='https://www42.myfantasyleague.com/'+YEAR;
   var CORE='https://lalaunch.github.io/big-league-mfl/bigleague-core-v10.js?v=1';
-  var PUGS_LOGO='https://lalaunch.github.io/big-league-mfl/assets/killer-pugs-official.webp?v=1';
+  var PUGS_LOGO='https://lalaunch.github.io/big-league-mfl/assets/killer-pugs-official.webp?v=2';
 
   function clean(v){return String(v||'').replace(/\s+/g,' ').trim();}
 
