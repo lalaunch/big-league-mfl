@@ -1,5 +1,5 @@
 /* =========================================================
-   THE BIG LEAGUE — SPORTS NETWORK V11
+   THE BIG LEAGUE — SPORTS NETWORK V11.1
    Premium broadcast-style layout layered over live MFL data.
    ========================================================= */
 
@@ -81,12 +81,22 @@
   z-index:3;
 }
 
+/* 2026 is the league's 37th year. Keep historical completed-season counts at 36. */
 #body_home.blsn-mode .bl-tagline{
   color:var(--bl-gold);
-  font-size:18px;
+  font-size:0 !important;
   letter-spacing:.13em;
   margin:2px 0 10px;
   text-shadow:0 2px 3px #000,0 0 9px rgba(244,199,69,.12);
+}
+#body_home.blsn-mode .bl-tagline:after{
+  content:"37 YEARS. SAME CREW. BIGGER LEGENDS.";
+  display:inline-block;
+  color:var(--bl-gold);
+  font-size:18px;
+  font-weight:900;
+  letter-spacing:.13em;
+  text-transform:uppercase;
 }
 #body_home.blsn-mode .bl-subline{display:none;}
 #body_home.blsn-mode .bl-topline{
@@ -317,7 +327,7 @@
 @media(max-width:620px){
   #body_home.blsn-mode .pagebody{width:98% !important;}
   #body_home.blsn-mode .bl-title{width:96%;height:62px;margin-top:8px;}
-  #body_home.blsn-mode .bl-tagline{font-size:10px;}
+  #body_home.blsn-mode .bl-tagline:after{font-size:10px;letter-spacing:.08em;}
   #body_home.blsn-mode .bl-topline{display:none;}
   .blsn-quicklinks-body{grid-template-columns:1fr 1fr;}
   .blsn-panel-title{font-size:14px;}
