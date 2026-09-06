@@ -8,7 +8,7 @@
   var HOST='https://lalaunch.github.io/big-league-mfl/';
   var CORE=HOST+'bigleague-core-v10.js?v=1';
   var MASTHEAD_CSS=HOST+'masthead-v16.css?v=2';
-  var HERO_CSS=HOST+'hero-v2.css?v=4';
+  var HERO_CSS=HOST+'hero-v2.css?v=5';
   var TEAM_LOGOS=HOST+'team-logos-v2.js?v=3';
 
   function clean(v){return String(v||'').replace(/\s+/g,' ').trim();}
@@ -28,10 +28,11 @@
   }
 
   function loadHeroStyle(){
-    ['bl-hero-v1-css','bl-hero-v2-css'].forEach(function(id){
-      var old=document.getElementById(id);
-      if(old) old.remove();
-    });
+    var v1=document.getElementById('bl-hero-v1-css');
+    if(v1) v1.remove();
+    var current=document.getElementById('bl-hero-v2-css');
+    if(current && current.getAttribute('href')===HERO_CSS) return;
+    if(current) current.remove();
     var link=document.createElement('link');
     link.id='bl-hero-v2-css';
     link.rel='stylesheet';
