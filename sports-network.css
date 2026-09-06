@@ -1,5 +1,5 @@
 /* =========================================================
-   THE BIG LEAGUE — SPORTS NETWORK V10.1
+   THE BIG LEAGUE — SPORTS NETWORK V11
    Premium broadcast-style layout layered over live MFL data.
    ========================================================= */
 
@@ -29,18 +29,22 @@
 #body_home.blsn-mode .bl-masthead{
   max-width:1480px;
   margin:4px auto 0;
-  min-height:154px;
+  min-height:170px;
   border:0;
   border-radius:0;
   border-bottom:2px solid #1aa4df;
   overflow:hidden;
   background:
-    radial-gradient(circle at 7% 7%,rgba(255,255,255,.98) 0 2px,rgba(185,232,255,.58) 3px 5px,rgba(93,195,242,.18) 7px 16px,transparent 25px),
-    radial-gradient(circle at 11% 3%,rgba(255,255,255,.9) 0 2px,rgba(185,232,255,.45) 3px 5px,transparent 18px),
-    radial-gradient(circle at 93% 7%,rgba(255,255,255,.98) 0 2px,rgba(185,232,255,.58) 3px 5px,rgba(93,195,242,.18) 7px 16px,transparent 25px),
-    radial-gradient(circle at 89% 3%,rgba(255,255,255,.9) 0 2px,rgba(185,232,255,.45) 3px 5px,transparent 18px),
-    radial-gradient(ellipse at 50% -12%,rgba(20,136,220,.36),transparent 58%),
-    linear-gradient(180deg,#071522,#02090f 80%);
+    radial-gradient(ellipse 12% 28% at 5% 1%,rgba(255,255,255,.88),rgba(130,211,255,.24) 14%,transparent 58%),
+    radial-gradient(ellipse 12% 28% at 95% 1%,rgba(255,255,255,.88),rgba(130,211,255,.24) 14%,transparent 58%),
+    radial-gradient(circle at 3.8% 2.2%,rgba(255,255,255,1) 0 2px,rgba(188,235,255,.68) 3px 6px,transparent 20px),
+    radial-gradient(circle at 7% 5%,rgba(255,255,255,.95) 0 2px,rgba(185,232,255,.48) 3px 5px,transparent 18px),
+    radial-gradient(circle at 10.2% 1.5%,rgba(255,255,255,.9) 0 2px,rgba(185,232,255,.4) 3px 5px,transparent 17px),
+    radial-gradient(circle at 96.2% 2.2%,rgba(255,255,255,1) 0 2px,rgba(188,235,255,.68) 3px 6px,transparent 20px),
+    radial-gradient(circle at 93% 5%,rgba(255,255,255,.95) 0 2px,rgba(185,232,255,.48) 3px 5px,transparent 18px),
+    radial-gradient(circle at 89.8% 1.5%,rgba(255,255,255,.9) 0 2px,rgba(185,232,255,.4) 3px 5px,transparent 17px),
+    radial-gradient(ellipse at 50% -12%,rgba(20,136,220,.42),transparent 58%),
+    linear-gradient(180deg,#081827,#02090f 82%);
   box-shadow:0 12px 38px rgba(0,0,0,.52),inset 0 -1px 0 rgba(255,255,255,.04);
 }
 
@@ -54,34 +58,41 @@
   position:absolute;
   inset:0;
   pointer-events:none;
-  opacity:.28;
+  opacity:.34;
   background:
-    linear-gradient(112deg,transparent 0 10%,rgba(79,175,232,.14) 10.3% 10.7%,transparent 11% 89%,rgba(79,175,232,.14) 89.3% 89.7%,transparent 90%),
-    repeating-linear-gradient(90deg,transparent 0 69px,rgba(255,255,255,.025) 70px,transparent 71px);
+    linear-gradient(112deg,transparent 0 10%,rgba(79,175,232,.16) 10.3% 10.7%,transparent 11% 89%,rgba(79,175,232,.16) 89.3% 89.7%,transparent 90%),
+    repeating-linear-gradient(90deg,transparent 0 69px,rgba(255,255,255,.026) 70px,transparent 71px);
 }
 
+/* Use the hosted distressed metallic wordmark instead of plain HTML text. */
 #body_home.blsn-mode .bl-title{
-  margin-top:9px;
-  font-size:72px;
-  letter-spacing:.01em;
-  background:linear-gradient(180deg,#f9fdff 0%,#c4d3dd 28%,#738492 51%,#e9f0f4 73%,#667581 100%);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  filter:drop-shadow(0 5px 0 #010306) drop-shadow(0 0 16px rgba(160,220,255,.30));
+  display:block;
+  width:min(1120px,82%);
+  height:104px;
+  margin:-2px auto -9px;
+  padding:0;
+  font-size:0 !important;
+  line-height:0 !important;
+  color:transparent !important;
+  -webkit-text-fill-color:transparent !important;
+  background:url("https://lalaunch.github.io/big-league-mfl/assets/big-league-wordmark.svg?v=1") center/contain no-repeat !important;
+  filter:drop-shadow(0 5px 7px rgba(0,0,0,.75)) drop-shadow(0 0 12px rgba(93,173,220,.18));
+  position:relative;
+  z-index:3;
 }
 
 #body_home.blsn-mode .bl-tagline{
   color:var(--bl-gold);
-  font-size:17px;
-  letter-spacing:.12em;
-  margin:7px 0 12px;
-  text-shadow:0 2px 3px #000;
+  font-size:18px;
+  letter-spacing:.13em;
+  margin:2px 0 10px;
+  text-shadow:0 2px 3px #000,0 0 9px rgba(244,199,69,.12);
 }
 #body_home.blsn-mode .bl-subline{display:none;}
 #body_home.blsn-mode .bl-topline{
   position:absolute;
-  inset:18px 22px auto 22px;
-  z-index:3;
+  inset:20px 22px auto 22px;
+  z-index:5;
   pointer-events:none;
   padding:0;
 }
@@ -139,13 +150,11 @@
   background:#06141d !important;
 }
 
-/* V10 JS forces the old message container taller. Crop it cleanly instead. */
 .blsn-hero-main > *:first-child{
   margin:0 !important;
   box-sizing:border-box;
 }
 
-/* Player art: keep it in the right third so it never covers the champion name. */
 #body_home.blsn-mode .blsn-hero-main > img[aria-hidden="true"]{
   right:7% !important;
   bottom:-19% !important;
@@ -156,7 +165,6 @@
   filter:drop-shadow(0 10px 12px rgba(0,0,0,.7)) !important;
 }
 
-/* Opaque panel covers the old 36 treatment and becomes the quote zone. */
 #body_home.blsn-mode .blsn-hero-main > div:nth-last-child(3){
   right:0 !important;
   top:0 !important;
@@ -289,12 +297,12 @@
 #body_home.blsn-mode .homepagemodule.report,#body_home.blsn-mode .blx-card,.blsn-quicklinks,.blsn-deadlines{box-shadow:0 8px 24px rgba(0,0,0,.30),inset 0 0 0 1px rgba(255,255,255,.012) !important;}
 
 @media(max-width:1100px){
-  #body_home.blsn-mode .bl-title{font-size:58px;}
+  #body_home.blsn-mode .bl-title{width:88%;height:88px;}
   #body_home.blsn-mode .bl-mainnav a{font-size:10px;padding:12px 7px;}
 }
 
 @media(max-width:950px){
-  #body_home.blsn-mode .bl-title{font-size:50px;}
+  #body_home.blsn-mode .bl-title{width:92%;height:78px;margin-top:4px;}
   .blsn-hero-grid,.blsn-matchups-row,.blsn-standings-power{grid-template-columns:1fr;}
   .blsn-news-row{grid-template-columns:1fr;}
   #body_home.blsn-mode .blsn-hero-main{max-height:none !important;}
@@ -308,7 +316,7 @@
 
 @media(max-width:620px){
   #body_home.blsn-mode .pagebody{width:98% !important;}
-  #body_home.blsn-mode .bl-title{font-size:36px;}
+  #body_home.blsn-mode .bl-title{width:96%;height:62px;margin-top:8px;}
   #body_home.blsn-mode .bl-tagline{font-size:10px;}
   #body_home.blsn-mode .bl-topline{display:none;}
   .blsn-quicklinks-body{grid-template-columns:1fr 1fr;}
