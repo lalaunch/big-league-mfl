@@ -15,7 +15,7 @@
     if (document.querySelector('link[data-bl-dashboard]')) return;
     var link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = 'https://lalaunch.github.io/big-league-mfl/dashboard.css?v=2';
+    link.href = 'https://lalaunch.github.io/big-league-mfl/dashboard.css?v=3';
     link.setAttribute('data-bl-dashboard', '1');
     document.head.appendChild(link);
   }
@@ -34,7 +34,7 @@
   }
 
   /* ---------------------------------------------------------
-     Header injection remains as a fallback only.
+     Header injection remains a fallback only.
      If Message #1 already contains the header, nothing happens.
      --------------------------------------------------------- */
   var headerHtml = `
@@ -75,20 +75,61 @@
     tabs.parentNode.insertBefore(holder, tabs);
   }
 
+  /* ---------------------------------------------------------
+     Dynamic MFL reads
+     --------------------------------------------------------- */
   function getLatestTransaction() {
-    var rows = Array.from(document.querySelectorAll('#transactions tbody tr'));
+    var rows = Array.from(document.querySelectorAll('#transactions tr'));
+
     for (var i = 0; i < rows.length; i++) {
       var row = rows[i];
-      var transaction = row.querySelector('td.transaction');
-      if (!transaction) continue;
-      var team = row.querySelector('td.franchisename');
-      var date = row.querySelector('td.timestamp');
+      var cells = Array.from(row.querySelectorAll('td'));
+      if (!cells.length) continue;
+
+      var transactionCell = row.querySelector('td.transaction');
+
+      if (!transactionCell) {
+        for (var c = 0; c < cells.length; c++) {
+          var ct = clean(cells[c].textContent);
+          if (/\b(acquired|dropped|traded|claimed|waived|activated|signed|released)\b|gave up|picked up/i.test(ct)) {
+            transactionCell = cells[c];
+            break;
+          }
+        }
+      }
+
+      if (!transactionCell) continue;
+
+      var teamCell = row.querySelector('td.franchisename, td.franchise');
+      if (!teamCell) {
+        var txIndex = cells.indexOf(transactionCell);
+        for (var t = 0; t < txIndex; t++) {
+          var candidate = clean(cells[t].textContent);
+          if (candidate && !/^\d+$/.test(candidate) && !/franchise|rank/i.test(candidate)) {
+            teamCell = cells[t];
+            break;
+          }
+        }
+      }
+
+      var dateCell = row.querySelector('td.timestamp, td.date');
+      if (!dateCell) {
+        for (var d = cells.length - 1; d >= 0; d--) {
+          var dt = clean(cells[d].textContent);
+          if (/\b2026\b|\b(?:a\.?m\.?|p\.?m\.?)\b|\b(?:ET|CT|MT|PT)\b/i.test(dt)) {
+            dateCell = cells[d];
+            break;
+          }
+        }
+      }
+
       return {
-        team: clean(team && team.textContent),
-        text: clean(transaction.textContent),
-        date: clean(date && date.textContent)
+        team: clean(teamCell && teamCell.textContent),
+        text: clean(transactionCell.textContent),
+        date: clean(dateCell && dateCell.textContent)
       };
     }
+
     return null;
   }
 
@@ -111,6 +152,7 @@
     });
 
     var best = null;
+
     for (var i = 0; i + 1 < rows.length; i += 2) {
       var a = rows[i].querySelector('a[class*="franchise_"]');
       var b = rows[i + 1].querySelector('a[class*="franchise_"]');
@@ -139,6 +181,7 @@
         };
       }
     }
+
     return best;
   }
 
@@ -147,8 +190,13 @@
     var topic = getMessageBoardTopic();
     var game = getClosestMatchup();
 
-    var txMain = tx ? escapeHtml(tx.team + ' — ' + tx.text) : 'Transaction wire is quiet.';
-    var txSub = tx && tx.date ? escapeHtml(tx.date) : 'Updates automatically from the MFL transaction module.';
+    var txMain = tx
+      ? escapeHtml((tx.team ? tx.team + ' — ' : '') + tx.text)
+      : 'Transaction wire is quiet.';
+
+    var txSub = tx && tx.date
+      ? escapeHtml(tx.date)
+      : 'Updates automatically from the MFL transaction module.';
 
     var topicMain = topic ? escapeHtml(topic) : 'No active trade-block post found.';
 
@@ -174,9 +222,27 @@
       </div>
       <div class="bl-news-item">
         <span class="bl-kicker">Latest Move</span>
-        <div class="bl-item-main">${txMain}</div>
-        <div class="bl-item-sub">${txSub}</div>
+        <div class="bl-item-main" data-bl-latest-main>${txMain}</div>
+        <div class="bl-item-sub" data-bl-latest-sub>${txSub}</div>
       </div>`;
+  }
+
+  function refreshLatestMove() {
+    var main = document.querySelector('[data-bl-latest-main]');
+    var sub = document.querySelector('[data-bl-latest-sub]');
+    if (!main || !sub) return;
+
+    var tx = getLatestTransaction();
+    if (!tx) return;
+
+    main.textContent = (tx.team ? tx.team + ' — ' : '') + tx.text;
+    sub.textContent = tx.date || 'Latest transaction from MFL';
+  }
+
+  function scheduleDynamicRefreshes() {
+    [300, 900, 1800, 3200].forEach(function (delay) {
+      window.setTimeout(refreshLatestMove, delay);
+    });
   }
 
   function trophyRowsHtml() {
@@ -291,6 +357,7 @@
       </div>`;
 
     anchorTable.insertAdjacentElement('afterend', wrap);
+    scheduleDynamicRefreshes();
     return true;
   }
 
@@ -304,6 +371,7 @@
       if (injectLowerDashboard() || attempts >= 20) return;
       window.setTimeout(tryDashboard, 250);
     }
+
     tryDashboard();
   }
 
