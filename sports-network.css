@@ -1,5 +1,5 @@
 /* =========================================================
-   THE BIG LEAGUE — SPORTS NETWORK V9.2
+   THE BIG LEAGUE — SPORTS NETWORK V9.3
    Premium broadcast-style layout layered over live MFL data.
    ========================================================= */
 
@@ -126,7 +126,6 @@
 }
 #body_home.blsn-mode .bl-iconbar{display:none !important;}
 
-/* MFL tabs become the secondary utility nav */
 #body_home.blsn-mode .main_tabmenu{
   margin:7px 0 10px !important;
   border:0 !important;
@@ -146,7 +145,7 @@
   grid-template-columns:minmax(0,3.45fr) minmax(260px,.9fr);
   gap:11px;
   margin:0 4px 12px;
-  align-items:stretch;
+  align-items:start;
 }
 .blsn-hero-main{
   min-width:0;
@@ -155,45 +154,12 @@
   border-radius:8px;
 }
 .blsn-hero-main > *{
-  height:100%;
-  min-height:270px;
+  height:auto !important;
+  min-height:0 !important;
   box-sizing:border-box;
 }
-.blsn-hero-main:before{
-  content:"SAME LEAGUE.\A DIFFERENT YEAR.\A BIGGER STORIES.";
-  white-space:pre;
-  position:absolute;
-  z-index:8;
-  right:4.5%;
-  top:18%;
-  width:34%;
-  color:#f4f8fb;
-  font-size:20px;
-  line-height:1.18;
-  font-weight:900;
-  font-style:italic;
-  text-align:center;
-  letter-spacing:.015em;
-  text-shadow:0 3px 4px #000;
-  opacity:.94;
-  pointer-events:none;
-}
-.blsn-hero-main:after{
-  content:"IT'S GO TIME.";
-  position:absolute;
-  z-index:8;
-  right:5%;
-  bottom:12%;
-  color:#fff;
-  font-size:37px;
-  line-height:1;
-  font-weight:900;
-  font-style:italic;
-  letter-spacing:-.02em;
-  text-shadow:0 4px 5px #000;
-  transform:rotate(-2deg);
-  pointer-events:none;
-}
+.blsn-hero-main:before,
+.blsn-hero-main:after{display:none !important;}
 
 .blsn-quicklinks,
 .blsn-deadlines{
@@ -204,28 +170,28 @@
   overflow:hidden;
 }
 .blsn-panel-title{
-  padding:11px 13px;
+  padding:9px 12px;
   color:var(--bl-gold);
-  font-size:18px;
+  font-size:16px;
   font-weight:900;
   letter-spacing:.045em;
   text-transform:uppercase;
   border-bottom:1px solid #19506b;
   background:linear-gradient(180deg,#0a2030,#07141e);
 }
-.blsn-quicklinks-body{padding:9px;display:grid;gap:7px;}
+.blsn-quicklinks-body{padding:7px;display:grid;gap:5px;}
 .blsn-quicklink{
   display:grid;
-  grid-template-columns:39px 1fr;
+  grid-template-columns:34px 1fr;
   align-items:center;
-  min-height:43px;
-  padding:0 11px 0 5px;
+  min-height:34px;
+  padding:0 9px 0 4px;
   border:1px solid #14567e;
   border-radius:5px;
   color:#f1f8fb !important;
   background:linear-gradient(180deg,#0b3659,#082944);
   text-decoration:none !important;
-  font-size:12px;
+  font-size:11px;
   font-weight:900;
   letter-spacing:.035em;
   text-transform:uppercase;
@@ -233,7 +199,7 @@
 }
 .blsn-quicklink i{
   color:#e5f9ff;
-  font-size:19px;
+  font-size:17px;
   text-align:center;
   filter:drop-shadow(0 0 4px rgba(80,210,255,.35));
 }
@@ -370,13 +336,11 @@
 .blsn-news-row .blx-kicker{font-size:9px;}
 .blsn-news-row .blx-main{font-size:11px;}
 
-/* Hall + legacy remain premium */
 #body_home.blsn-mode .blx-hof-feature,
 #body_home.blsn-mode .blx-count-feature{margin-left:4px;margin-right:4px;}
 #body_home.blsn-mode .blx-hof-title{font-size:29px !important;}
 #body_home.blsn-mode .blx-hof-card{min-height:180px;}
 
-/* Broadcast-card polish */
 #body_home.blsn-mode .homepagemodule.report,
 #body_home.blsn-mode .blx-card,
 .blsn-quicklinks,.blsn-deadlines{
@@ -385,8 +349,6 @@
 
 @media(max-width:1100px){
   #body_home.blsn-mode .bl-title{font-size:58px;}
-  .blsn-hero-main:before{font-size:16px;}
-  .blsn-hero-main:after{font-size:29px;}
 }
 
 @media(max-width:950px){
@@ -394,7 +356,6 @@
   .blsn-hero-grid,.blsn-matchups-row,.blsn-standings-power{grid-template-columns:1fr;}
   .blsn-news-row{grid-template-columns:1fr;}
   #body_home.blsn-mode .bl-mainnav a{padding:11px 13px;}
-  .blsn-hero-main:before,.blsn-hero-main:after{display:none;}
 }
 
 @media(max-width:620px){
