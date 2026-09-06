@@ -16,7 +16,7 @@
     if(document.querySelector('link[data-blx-dashboard]')) return;
     var l=document.createElement('link');
     l.rel='stylesheet';
-    l.href='https://lalaunch.github.io/big-league-mfl/dashboard-v8.css?v=2';
+    l.href='https://lalaunch.github.io/big-league-mfl/dashboard-v8.css?v=3';
     l.setAttribute('data-blx-dashboard','1');
     document.head.appendChild(l);
   }
