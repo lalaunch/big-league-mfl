@@ -15,7 +15,7 @@
     if (document.querySelector('link[data-bl-dashboard]')) return;
     var link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = 'https://lalaunch.github.io/big-league-mfl/dashboard.css?v=1';
+    link.href = 'https://lalaunch.github.io/big-league-mfl/dashboard.css?v=2';
     link.setAttribute('data-bl-dashboard', '1');
     document.head.appendChild(link);
   }
@@ -79,10 +79,10 @@
     var rows = Array.from(document.querySelectorAll('#transactions tbody tr'));
     for (var i = 0; i < rows.length; i++) {
       var row = rows[i];
-      var transaction = row.querySelector('.transaction');
+      var transaction = row.querySelector('td.transaction');
       if (!transaction) continue;
-      var team = row.querySelector('.franchisename');
-      var date = row.querySelector('.timestamp');
+      var team = row.querySelector('td.franchisename');
+      var date = row.querySelector('td.timestamp');
       return {
         team: clean(team && team.textContent),
         text: clean(transaction.textContent),
