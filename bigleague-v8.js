@@ -7,15 +7,17 @@
   var BASE='https://www42.myfantasyleague.com/'+YEAR;
   var HOST='https://lalaunch.github.io/big-league-mfl/';
   var CORE=HOST+'bigleague-core-v10.js?v=1';
-  var MASTHEAD_CSS=HOST+'masthead-v13.css?v=3';
+  var MASTHEAD_CSS=HOST+'masthead-v14.css?v=1';
   var TEAM_LOGOS=HOST+'team-logos-v2.js?v=3';
 
   function clean(v){return String(v||'').replace(/\s+/g,' ').trim();}
 
   function loadStyle(){
-    if(document.getElementById('bl-masthead-v13-css')) return;
+    if(document.getElementById('bl-masthead-v14-css')) return;
+    var old13=document.getElementById('bl-masthead-v13-css');
+    if(old13) old13.remove();
     var link=document.createElement('link');
-    link.id='bl-masthead-v13-css';
+    link.id='bl-masthead-v14-css';
     link.rel='stylesheet';
     link.href=MASTHEAD_CSS;
     document.head.appendChild(link);
