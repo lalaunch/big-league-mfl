@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 520">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="65%">
+      <stop offset="0" stop-color="#233744" stop-opacity=".82"/>
+      <stop offset=".52" stop-color="#0d1720" stop-opacity=".74"/>
+      <stop offset="1" stop-color="#02070b" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="steel" x1="0" x2="1">
+      <stop offset="0" stop-color="#71818c"/>
+      <stop offset=".48" stop-color="#dfe7eb"/>
+      <stop offset="1" stop-color="#53616b"/>
+    </linearGradient>
+    <linearGradient id="jersey" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#111820"/>
+      <stop offset="1" stop-color="#05090d"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="7" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="640" height="520" fill="url(#bg)"/>
+
+  <g opacity=".65" filter="url(#glow)" fill="#dff7ff">
+    <circle cx="84" cy="62" r="5"/><circle cx="106" cy="49" r="4"/><circle cx="126" cy="64" r="5"/>
+    <circle cx="514" cy="64" r="5"/><circle cx="536" cy="49" r="4"/><circle cx="556" cy="62" r="5"/>
+  </g>
+
+  <g opacity=".25" stroke="#6fd7ff" stroke-width="3">
+    <path d="M80 68 L146 202"/><path d="M558 68 L494 202"/>
+  </g>
+
+  <!-- shoulder silhouette -->
+  <path d="M107 520 C124 411 183 347 256 326 C273 321 287 318 300 317 C313 318 328 321 345 326 C418 347 477 411 494 520 Z" fill="url(#jersey)" stroke="#22323d" stroke-width="4"/>
+  <path d="M171 520 C188 424 229 378 300 367 C371 378 412 424 429 520" fill="none" stroke="#1e2d37" stroke-width="16" opacity=".72"/>
+
+  <!-- neck -->
+  <path d="M250 318 L260 279 L340 279 L350 318 C337 339 321 350 300 350 C279 350 263 339 250 318 Z" fill="#0a1015" stroke="#2a3943" stroke-width="3"/>
+
+  <!-- helmet -->
+  <path d="M202 190 C208 96 257 48 324 48 C396 48 441 100 440 183 C439 225 427 258 404 282 L361 282 C367 251 363 224 351 205 C330 173 287 167 254 184 C234 194 218 210 209 230 C204 218 201 203 202 190 Z" fill="#070c10" stroke="url(#steel)" stroke-width="6"/>
+  <path d="M214 167 C241 118 289 91 348 97 C386 101 416 118 431 145" fill="none" stroke="#54636e" stroke-width="8" opacity=".55"/>
+  <path d="M221 208 C253 187 293 180 333 190" fill="none" stroke="#222f38" stroke-width="8"/>
+
+  <!-- face mask -->
+  <g fill="none" stroke="#9aa7af" stroke-width="5" opacity=".78">
+    <path d="M211 225 C251 213 321 214 384 233"/>
+    <path d="M225 245 C270 232 337 236 393 252"/>
+    <path d="M248 213 L246 270"/>
+    <path d="M382 227 L395 276"/>
+  </g>
+
+  <!-- faceless visor -->
+  <path d="M251 187 C278 173 321 174 349 195 C340 228 322 244 299 245 C274 245 257 228 251 187 Z" fill="#020507" stroke="#18252d" stroke-width="3"/>
+  <path d="M262 192 C286 181 318 183 337 198" fill="none" stroke="#6ebde2" stroke-width="3" opacity=".22"/>
+
+  <!-- jersey details -->
+  <path d="M206 397 C246 374 268 368 300 367 C333 369 356 375 395 398" fill="none" stroke="#263742" stroke-width="5" opacity=".65"/>
+  <text x="300" y="478" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-size="96" font-weight="900" fill="#dce4e8" opacity=".13">36</text>
+
+  <!-- football tucked at left -->
+  <g transform="translate(90 356) rotate(-22)">
+    <ellipse cx="78" cy="54" rx="82" ry="46" fill="#080d11" stroke="#53616b" stroke-width="4"/>
+    <path d="M41 54 H116" stroke="#83939d" stroke-width="4" opacity=".75"/>
+    <g stroke="#a8b5bc" stroke-width="3">
+      <path d="M63 42 V66"/><path d="M75 40 V68"/><path d="M87 40 V68"/><path d="M99 42 V66"/>
+    </g>
+  </g>
+
+  <!-- gold motion slash -->
+  <path d="M362 448 C420 430 477 423 552 426" stroke="#f4c745" stroke-width="7" fill="none" opacity=".92"/>
+  <path d="M377 460 C433 447 491 443 568 445" stroke="#8a6819" stroke-width="3" fill="none" opacity=".7"/>
+</svg>
