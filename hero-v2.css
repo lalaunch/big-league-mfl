@@ -1,6 +1,6 @@
-/* THE BIG LEAGUE — HERO V2.4 PHOTO PANEL
-   Uses a real right-side hero image so the quote/player/GO TIME treatment
-   is one clean broadcast graphic instead of layered legacy elements. */
+/* THE BIG LEAGUE — HERO V2.5 EXPLICIT PHOTO PANEL
+   The right side is now a real DOM panel inserted by the loader. This avoids
+   MFL stacking-context problems that kept bringing the old 36 panel back. */
 
 #body_home.blsn-mode .blsn-hero-main{
   position:relative!important;
@@ -12,45 +12,51 @@
   box-shadow:inset 0 0 0 1px rgba(31,145,193,.42),0 10px 30px rgba(0,0,0,.38)!important;
 }
 
-/* Remove every old right-side injected element from the legacy hero. */
-#body_home.blsn-mode .blsn-hero-main > img[aria-hidden="true"],
-#body_home.blsn-mode .blsn-hero-main > div:nth-last-child(-n+3){
+/* Keep the original champion block underneath the new right-side panel. */
+#body_home.blsn-mode .blsn-hero-main > :first-child{
+  position:relative!important;
+  z-index:1!important;
+}
+
+/* The old CSS pseudo panel is retired. */
+#body_home.blsn-mode .blsn-hero-main:after{
+  display:none!important;
+  content:none!important;
+}
+
+/* Kill any old line-art player left behind by the core script. */
+#body_home.blsn-mode .blsn-hero-main > img[aria-hidden="true"]{
   display:none!important;
   visibility:hidden!important;
   opacity:0!important;
 }
 
-/* Real concept-style photographic panel. */
-#body_home.blsn-mode .blsn-hero-main:after{
-  content:""!important;
+/* Loader-injected concept panel. */
+#body_home.blsn-mode .blsn-photo-panel{
+  display:block!important;
   position:absolute!important;
-  z-index:950!important;
+  z-index:9999!important;
   right:0!important;
   top:0!important;
-  width:42%!important;
+  width:39%!important;
   height:100%!important;
   pointer-events:none!important;
-  border-left:1px solid rgba(58,167,217,.42)!important;
-  background-image:
-    linear-gradient(90deg,#06141d 0%,rgba(6,20,29,.78) 5%,rgba(6,20,29,.16) 14%,rgba(6,20,29,0) 24%),
-    url("https://lalaunch.github.io/big-league-mfl/assets/hero-right-v4.webp?v=1")!important;
-  background-repeat:no-repeat,no-repeat!important;
-  background-position:left center,center center!important;
-  background-size:100% 100%,100% 100%!important;
-  box-shadow:inset 26px 0 34px rgba(0,0,0,.34),-8px 0 24px rgba(0,0,0,.18)!important;
+  overflow:hidden!important;
+  border-left:1px solid rgba(77,184,230,.46)!important;
+  background:
+    linear-gradient(90deg,#06141d 0%,rgba(6,20,29,.72) 5%,rgba(6,20,29,.12) 15%,rgba(6,20,29,0) 24%),
+    url("https://lalaunch.github.io/big-league-mfl/assets/hero-right-v4.webp?v=2") center center / 100% 100% no-repeat!important;
+  box-shadow:inset 24px 0 30px rgba(0,0,0,.34),-8px 0 24px rgba(0,0,0,.22)!important;
 }
 
 @media(max-width:1100px){
-  #body_home.blsn-mode .blsn-hero-main:after{width:43%!important;}
+  #body_home.blsn-mode .blsn-photo-panel{width:40%!important;}
 }
 
 @media(max-width:900px){
-  #body_home.blsn-mode .blsn-hero-main:after{width:45%!important;}
+  #body_home.blsn-mode .blsn-photo-panel{width:42%!important;}
 }
 
 @media(max-width:760px){
-  #body_home.blsn-mode .blsn-hero-main:after{
-    width:49%!important;
-    background-size:100% 100%,100% 100%!important;
-  }
+  #body_home.blsn-mode .blsn-photo-panel{width:47%!important;}
 }
