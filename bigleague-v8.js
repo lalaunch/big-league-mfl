@@ -8,7 +8,7 @@
   var HOST='https://lalaunch.github.io/big-league-mfl/';
   var CORE=HOST+'bigleague-core-v10.js?v=4';
   var MASTHEAD_CSS=HOST+'masthead-v16.css?v=3';
-  var HERO_CSS=HOST+'hero-v2.css?v=15';
+  var HERO_CSS=HOST+'hero-v2.css?v=16';
   var TEAM_LOGOS=HOST+'team-logos-v2.js?v=4';
   var PUGS_LOGO=HOST+'assets/logos/milwaukee-killer-pugs.webp?v=4';
 
@@ -34,7 +34,7 @@
       if(old && id!=='bl-hero-v2-css') old.remove();
     });
     var current=document.getElementById('bl-hero-v2-css');
-    if(current && current.href.indexOf('v=15')>=0) return;
+    if(current && current.href.indexOf('v=16')>=0) return;
     if(current) current.remove();
     var link=document.createElement('link');
     link.id='bl-hero-v2-css';
