@@ -260,17 +260,21 @@
 #body_home.blsn-mode .blsn-callout-side{
   padding:0!important;
   background:
-    linear-gradient(90deg,rgba(4,17,26,.55) 0%,rgba(4,17,26,0) 12%),
+    linear-gradient(90deg,rgba(4,17,26,.92) 0%,rgba(4,17,26,.72) 34%,rgba(4,17,26,0) 58%),
     url("https://lalaunch.github.io/big-league-mfl/assets/hero-callout.webp?v=1") right center/cover no-repeat,
     #03111a!important;
   box-shadow:inset 26px 0 34px rgba(0,0,0,.28)!important;
 }
 #body_home.blsn-mode .blsn-callout-side:before,
 #body_home.blsn-mode .blsn-callout-side:after,
-#body_home.blsn-mode .blsn-callout-quote,
-#body_home.blsn-mode .blsn-callout-by,
 #body_home.blsn-mode .blsn-year-badge,
 #body_home.blsn-mode .blsn-callout-go{display:none!important;content:none!important;}
 @media(max-width:900px){
   #body_home.blsn-mode .blsn-callout-side{min-height:0!important;aspect-ratio:705/280!important;background-size:contain!important;background-position:center!important;}
 }
+/* The page maxes at 1480px, so this panel never exceeds ~440px and the image's
+   own quote (its left third) is always cropped away by cover. Keep the quote as
+   HTML on the left, over the darkened edge. */
+#body_home.blsn-mode .blsn-callout-side .blsn-callout-quote{position:absolute!important;left:26px!important;top:30px!important;z-index:2!important;max-width:200px!important;font-size:22px!important;}
+#body_home.blsn-mode .blsn-callout-side .blsn-callout-by{position:absolute!important;left:26px!important;top:112px!important;z-index:2!important;margin:0!important;}
+@media(max-width:1200px){#body_home.blsn-mode .blsn-callout-side .blsn-callout-quote{font-size:19px!important;max-width:170px!important;}#body_home.blsn-mode .blsn-callout-side .blsn-callout-by{top:98px!important;}}
