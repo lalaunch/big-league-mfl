@@ -67,7 +67,36 @@
     style.textContent=css;
   }
 
-  function patch(){patchPseudo();patchImages();}
+  /* 2026-09-07: crest in every roster/report caption that names a franchise
+     (<caption><span><a class="franchise_0007">...</a></span></caption>). Any page. */
+  function patchCaptions(){
+    var style=document.getElementById('bl-caption-crest-css');
+    if(!style){
+      style=document.createElement('style');
+      style.id='bl-caption-crest-css';
+      style.textContent=
+        'table.report caption .bl-caption-crest{display:inline-block!important;width:34px!important;height:34px!important;'+
+        'vertical-align:middle!important;margin:-4px 10px -4px 0!important;object-fit:contain!important;'+
+        'filter:drop-shadow(0 3px 5px rgba(0,0,0,.6))!important;background:none!important;}'+
+        'table.report caption:has(.bl-caption-crest){padding:6px 10px!important;line-height:34px!important;}';
+      document.head.appendChild(style);
+    }
+    document.querySelectorAll('table.report caption a[class*="franchise_"]').forEach(function(a){
+      var m=String(a.className).match(/franchise_(000[1-9]|0010)/i);
+      if(!m||!LOGOS[m[1]]) return;
+      var cap=a.closest('caption');
+      if(!cap||cap.querySelector('.bl-caption-crest')) return;
+      var img=document.createElement('img');
+      img.className='bl-caption-crest';
+      img.src=LOGOS[m[1]];
+      img.alt='';
+      img.setAttribute('aria-hidden','true');
+      img.setAttribute('data-bl-team-logo',m[1]);
+      a.parentNode.insertBefore(img,a);
+    });
+  }
+
+  function patch(){patchPseudo();patchImages();patchCaptions();}
 
   function start(){
     patch();
