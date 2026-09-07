@@ -112,62 +112,90 @@
     return '<div class="blx-main" data-blx-latest-main>'+esc((tx.team?tx.team+' — ':'')+tx.text)+'</div><div class="blx-sub" data-blx-latest-sub>'+esc(tx.date||'Latest MFL transaction')+'</div>';
   }
 
-  /* ---------------- Championship count: live from MFL + pre-2004 supplement (2026-09-07) ----------------
-     MFL's League Champions page (options O=194) records 1st and 2nd place from 2004 on. It is the source
-     of record for those seasons. 1990-2003 are not in MFL, so the totals the league keeps are carried as a
-     supplement: PRE2004_TITLES = all-time total minus what MFL shows since 2004. Years and runner-ups for
-     those 14 seasons are unknown here. If the fetch fails, STATIC_TITLES renders the old list. */
-  var CANON=['L.A. Launch','Reno Gamblers','Orlando Vipers','Hartland Hitmen','Kansas City Killers','Tampa Bay Roxx Gang','Terminators','Orange County Mad Hatters','Cincinnati Stormtroopers','Sussex Stonemen','Jersey Jackhammers','Brooklyn Brawlers','Milwaukee Killer Pugs','Bristol Steampunks','Winnebago Campers','Delafield Draft Attics'];
-  var STATIC_TITLES=[['L.A. Launch',7],['Reno Gamblers',7],['Orlando Vipers',5],['Hartland Hitmen',4],['Kansas City Killers',4],['Tampa Bay Roxx Gang',2],['Terminators',1],['Orange County Mad Hatters',1],['Cincinnati Stormtroopers',1],['Sussex Stonemen',1],['Jersey Jackhammers',1],['Brooklyn Brawlers',1],['Milwaukee Killer Pugs',1]];
-  var PRE2004_TITLES={'L.A. Launch':1,'Reno Gamblers':2,'Orlando Vipers':4,'Hartland Hitmen':4,'Kansas City Killers':2,'Terminators':1};
-  var PRE2004_RUNNERS={}; /* 1990-2003 second-place finishes: not recorded anywhere we can read. Fill in as {'Team':n}. */
+  /* ---------------- Championship count: the league's plaques, 1990-2025 (2026-09-07) ----------------
+     Source of record: the three "BIG LEAGUE RECORD" plaque files Dan keeps (champion "over" runner-up,
+     every season since 1990). MFL's League Champions page (options O=194) only starts in 2004 and
+     disagrees with the plaques in three seasons (2011, 2020, 2022 runner-up) and is blank for 2021, so
+     it is used only to APPEND seasons newer than the last plaque row. To add a season, add a row here. */
+  var FINALS=[
+    [1990,'Hartland Hitmen','L.A. Launch'],
+    [1991,'L.A. Launch','Terminators'],
+    [1992,'Kansas City Killers','L.A. Launch'],
+    [1993,'Orlando Vipers','San Francisco Freeze'],
+    [1994,'Terminators','Orlando Vipers'],
+    [1995,'Kansas City Killers','Hartland Hitmen'],
+    [1996,'Orlando Vipers','Kansas City Killers'],
+    [1997,'Reno Gamblers','L.A. Launch'],
+    [1998,'Reno Gamblers','L.A. Launch'],
+    [1999,'Hartland Hitmen','Kansas City Killers'],
+    [2000,'Hartland Hitmen','Kansas City Killers'],
+    [2001,'Hartland Hitmen','Cincinnati Stormtroopers'],
+    [2002,'Orlando Vipers','L.A. Launch'],
+    [2003,'Orlando Vipers','L.A. Launch'],
+    [2004,'L.A. Launch','Reno Gamblers'],
+    [2005,'L.A. Launch','Jersey Jackhammers'],
+    [2006,'Orange County Mad Hatters','Brooklyn Brawlers'],
+    [2007,'Reno Gamblers','Kansas City Killers'],
+    [2008,'L.A. Launch','Cincinnati Stormtroopers'],
+    [2009,'Reno Gamblers','Orlando Vipers'],
+    [2010,'Orlando Vipers','Brooklyn Brawlers'],
+    [2011,'Kansas City Killers','L.A. Launch'],
+    [2012,'Cincinnati Stormtroopers','Kansas City Killers'],
+    [2013,'Sussex Stonemen','Reno Gamblers'],
+    [2014,'L.A. Launch','Tampa Bay Roxx Gang'],
+    [2015,'Reno Gamblers','L.A. Launch'],
+    [2016,'Kansas City Killers','Tampa Bay Roxx Gang'],
+    [2017,'L.A. Launch','Reno Gamblers'],
+    [2018,'Jersey Jackhammers','Milwaukee Killer Pugs'],
+    [2019,'Reno Gamblers','Bristol Steampunks'],
+    [2020,'L.A. Launch','Reno Gamblers'],
+    [2021,'Tampa Bay Roxx Gang','Reno Gamblers'],
+    [2022,'Reno Gamblers','L.A. Launch'],
+    [2023,'Brooklyn Brawlers','Bristol Steampunks'],
+    [2024,'Tampa Bay Roxx Gang','Bristol Steampunks'],
+    [2025,'Milwaukee Killer Pugs','L.A. Launch']
+  ];
+  var CANON=['L.A. Launch','Reno Gamblers','Orlando Vipers','Hartland Hitmen','Kansas City Killers','Tampa Bay Roxx Gang','Terminators','Orange County Mad Hatters','Cincinnati Stormtroopers','Sussex Stonemen','Jersey Jackhammers','Brooklyn Brawlers','Milwaukee Killer Pugs','Bristol Steampunks','Winnebago Campers','Delafield Draft Attics','San Francisco Freeze'];
 
   function canonName(raw){
     var k=teamKey(raw);
     for(var i=0;i<CANON.length;i++){
       var ck=teamKey(CANON[i]);
       if(ck===k) return CANON[i];
-      if((ck.indexOf(k)===0&&ck.length-k.length<=2)||(k.indexOf(ck)===0&&k.length-ck.length<=2)) return CANON[i]; /* "MILWAUKEE KILLER PUG" (2020 as typed in MFL) */
+      if((ck.indexOf(k)===0&&ck.length-k.length<=2)||(k.indexOf(ck)===0&&k.length-ck.length<=2)) return CANON[i]; /* "MILWAUKEE KILLER PUG" as typed in MFL */
     }
     return clean(raw).toLowerCase().replace(/\b\w/g,function(c){return c.toUpperCase();});
   }
 
-  function loadChampions(cb){
-    var done=false;
+  /* Seasons newer than the plaque table, read from MFL's League Champions page. Same-origin fetch. */
+  function loadNewerSeasons(cb){
+    var last=FINALS[FINALS.length-1][0],done=false;
     function finish(v){if(done)return;done=true;cb(v);}
-    setTimeout(function(){finish(null);},6000);
+    setTimeout(function(){finish([]);},6000);
     try{
       fetch(BASE+'/options?L='+LEAGUE+'&O=194',{credentials:'same-origin'}).then(function(r){return r.text();}).then(function(html){
         var doc=new DOMParser().parseFromString(html,'text/html');
-        var year=null,out=[];
+        var year=null,by={};
         Array.from(doc.querySelectorAll('table.report tr')).forEach(function(tr){
           var th=tr.querySelector('th[colspan]');
           if(th&&/^\d{4}$/.test(clean(th.textContent))){year=parseInt(clean(th.textContent),10);return;}
           var rank=tr.querySelector('td.rank'),name=tr.querySelector('td.franchisename');
-          if(year&&rank&&name){out.push({year:year,place:parseInt(rank.textContent,10),team:canonName(name.textContent)});}
+          if(year&&year>last&&rank&&name){by[year]=by[year]||{};by[year][parseInt(rank.textContent,10)]=canonName(name.textContent);}
         });
-        finish(out.length?out:null);
-      }).catch(function(){finish(null);});
-    }catch(e){finish(null);}
+        finish(Object.keys(by).filter(function(y){return by[y][1];}).sort().map(function(y){return [parseInt(y,10),by[y][1],by[y][2]||''];}));
+      }).catch(function(){finish([]);});
+    }catch(e){finish([]);}
   }
 
-  function ringRace(results){
+  function ringRace(extra){
+    var rows=FINALS.concat(extra||[]);
     var teams={};
-    function T(n){return teams[n]||(teams[n]={name:n,titles:0,runners:0,titleYears:[],runnerYears:[],pre:0});}
-    var missingRunner=[],byYear={};
-    if(results){
-      results.forEach(function(r){
-        byYear[r.year]=byYear[r.year]||{};byYear[r.year][r.place]=r.team;
-        if(r.place===1){T(r.team).titles++;T(r.team).titleYears.push(r.year);}
-        else if(r.place===2){T(r.team).runners++;T(r.team).runnerYears.push(r.year);}
-      });
-      Object.keys(byYear).forEach(function(y){if(byYear[y][1]&&!byYear[y][2])missingRunner.push(y);});
-      Object.keys(PRE2004_TITLES).forEach(function(n){T(n).titles+=PRE2004_TITLES[n];T(n).pre=PRE2004_TITLES[n];});
-      Object.keys(PRE2004_RUNNERS).forEach(function(n){T(n).runners+=PRE2004_RUNNERS[n];});
-    }else{
-      STATIC_TITLES.forEach(function(x){T(x[0]).titles=x[1];});
-    }
-    var list=Object.keys(teams).map(function(k){return teams[k];}).filter(function(t){return t.titles>0||t.runners>0;});
+    function T(n){return teams[n]||(teams[n]={name:n,titles:0,runners:0,titleYears:[],runnerYears:[]});}
+    rows.forEach(function(r){
+      T(r[1]).titles++;T(r[1]).titleYears.push(r[0]);
+      if(r[2]){T(r[2]).runners++;T(r[2]).runnerYears.push(r[0]);}
+    });
+    var list=Object.keys(teams).map(function(k){return teams[k];});
     list.sort(function(a,b){return b.titles-a.titles||b.runners-a.runners||a.name.localeCompare(b.name);});
     var rank=0;
     list.forEach(function(t,i){
@@ -175,8 +203,7 @@
       t.rank=rank;
       t.tie=list.some(function(o){return o!==t&&o.titles===t.titles&&o.runners===t.runners;});
     });
-    var years=Object.keys(byYear).map(Number);
-    return {list:list,max:list.length?Math.max(1,list[0].titles):1,live:!!results,missingRunner:missingRunner.sort(),firstYear:years.length?Math.min.apply(null,years):null};
+    return {list:list,max:Math.max(1,list[0].titles),seasons:rows.length,first:rows[0][0],last:rows[rows.length-1][0],champs:list.filter(function(t){return t.titles>0;}).length};
   }
 
   function ringCards(data){
@@ -184,46 +211,37 @@
     return data.list.map(function(t){
       var logo=logos[teamKey(t.name)];
       var crest=logo?'<img class="blx-ring-crest" src="'+esc(logo)+'" alt="" aria-hidden="true">':'<span class="blx-ring-mono">'+esc((t.name.match(/\b[A-Za-z]/g)||[t.name.charAt(0)]).slice(0,2).join('').toUpperCase())+'</span>';
-      var years=t.titleYears.slice().sort().map(function(y){return '<span>'+y+'</span>';}).join('')+(t.pre?'<span class="blx-ring-pre">+'+t.pre+' before 2004</span>':'');
+      var years=t.titleYears.slice().sort().map(function(y){return '<span>'+y+'</span>';}).join('');
       var tier=t.rank===1?'gold':t.rank===2?'silver':t.rank===3?'bronze':'';
       var bar=Math.round(100*t.titles/data.max);
       return '<div class="blx-ring-card'+(tier?' blx-tier-'+tier:'')+(t.titles===0?' blx-ring-noring':'')+'" style="--bar:'+bar+'%">'+
         '<span class="blx-ring-rank">'+(t.tie?'T-':'')+t.rank+'</span>'+crest+
         '<div class="blx-ring-body"><div class="blx-ring-name">'+esc(t.name)+'</div>'+(years?'<div class="blx-ring-years">'+years+'</div>':'')+'</div>'+
-        '<div class="blx-ring-stats"><div class="blx-ring-titles"><b>'+t.titles+'</b><small>'+(t.titles===1?'title':'titles')+'</small></div>'+
-        '<div class="blx-ring-runner"><b>'+t.runners+'</b><small>runner-up</small></div></div>'+
+        '<div class="blx-ring-stats"><div class="blx-ring-titles" title="Championships: '+esc(t.titleYears.join(', ')||'none')+'"><b>'+t.titles+'</b><small>'+(t.titles===1?'title':'titles')+'</small></div>'+
+        '<div class="blx-ring-runner" title="Runner-up: '+esc(t.runnerYears.join(', ')||'none')+'"><b>'+t.runners+'</b><small>runner-up</small></div></div>'+
         '<i class="blx-ring-bar"></i></div>';
     }).join('');
   }
 
   function ringNote(data){
-    var champs=data.list.filter(function(t){return t.titles>0;}).length;
-    var n='36 completed seasons \u2022 '+champs+' championship franchises';
-    if(data.live){
-      n+=' \u2022 runner-up finishes from MFL records, '+data.firstYear+' on';
-      if(data.missingRunner.length) n+=' ('+data.missingRunner.join(', ')+': no runner-up recorded)';
-      n+=' \u2022 1990-2003 runner-ups not recorded';
-    }else{
-      n+=' \u2022 MFL history unavailable, showing title totals only';
-    }
-    return n;
+    return data.seasons+' completed seasons \u2022 '+data.champs+' championship franchises \u2022 champions and runners-up from the league plaques, '+data.first+'-'+data.last;
   }
 
   function upgradeRingRace(){
     var box=document.querySelector('.blx-count-feature .blx-trophies');
     if(!box||box.getAttribute('data-blsn-live')==='1') return;
     box.setAttribute('data-blsn-live','1');
-    loadChampions(function(results){
-      var data=ringRace(results);
+    loadNewerSeasons(function(extra){
+      if(!extra.length) return; /* the plaque render already stands */
+      var data=ringRace(extra);
       box.innerHTML=ringCards(data);
-      box.classList.add('blx-ring-grid');
       var note=box.parentNode.querySelector('.blx-note');
       if(note) note.textContent=ringNote(data);
     });
   }
 
   function trophyRows(){
-    return ringCards(ringRace(null));
+    return ringCards(ringRace([]));
   }
 
   function getLogoMap(){
@@ -242,7 +260,7 @@
       {year:2025,champ:'Milwaukee Killer Pugs',runner:'L.A. Launch'},
       {year:2024,champ:'Tampa Bay Roxx Gang',runner:'Bristol Steampunks'},
       {year:2023,champ:'Brooklyn Brawlers',runner:'Bristol Steampunks'},
-      {year:2022,champ:'Reno Gamblers',runner:'Winnebago Campers'},
+      {year:2022,champ:'Reno Gamblers',runner:'L.A. Launch'},
       {year:2021,champ:'Tampa Bay Roxx Gang',runner:'Reno Gamblers'},
       {year:2020,champ:'L.A. Launch',runner:'Reno Gamblers'},
       {year:2019,champ:'Reno Gamblers',runner:'Bristol Steampunks'},
@@ -292,7 +310,7 @@
         </div></section>
       </div>
       <section class="blx-card blx-hof-feature"><div class="blx-hof-header"><div class="blx-hof-eyebrow">★ BIG LEAGUE LEGACY ★</div><div class="blx-hof-title">HALL OF CHAMPIONS</div><div class="blx-hof-subtitle">THE LAST 10 WORLD CHAMPIONS • 2016–2025</div></div><div class="blx-body"><div class="blx-hof-grid">${hallCards()}</div><div class="blx-hof-footer"><span>10 seasons. 10 stories. One Big League.</span><a class="blx-btn blx-hof-btn" href="${BASE}/home/${LEAGUE}#3">View Full Championship History</a></div></div></section>
-      <section class="blx-card blx-count-feature"><div class="blx-title">Championship Count — 1990 to 2025</div><div class="blx-body"><div class="blx-trophies">${trophyRows()}</div><div class="blx-note">36 completed seasons • 13 championship franchises</div></div></section>`;
+      <section class="blx-card blx-count-feature"><div class="blx-title">Championship Count — 1990 to 2025</div><div class="blx-body"><div class="blx-trophies blx-ring-grid">${trophyRows()}</div><div class="blx-note">${ringNote(ringRace([]))}</div></div></section>`;
     anchor.insertAdjacentElement('afterend',wrap);
     return true;
   }
