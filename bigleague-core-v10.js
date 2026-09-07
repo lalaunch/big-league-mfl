@@ -15,7 +15,7 @@
   function loadStyles(){
     [
       ['blx-dashboard','https://lalaunch.github.io/big-league-mfl/dashboard-v8.css?v=3'],
-      ['blsn-network','https://lalaunch.github.io/big-league-mfl/sports-network.css?v=4']
+      ['blsn-network','https://lalaunch.github.io/big-league-mfl/sports-network.css?v=5']
     ].forEach(function(x){
       if(document.querySelector('link[data-'+x[0]+']')) return;
       var l=document.createElement('link');
@@ -37,7 +37,7 @@
     }
 
     var extras=[
-      {label:'Messages',href:BASE+'/options?L='+LEAGUE+'&O=17'},
+      {label:'Messages',href:BASE+'/mb/board_show.pl?bid=202673086'},
       {label:'History',href:hrefFor(/history/i,BASE+'/home/'+LEAGUE+'#3')},
       {label:'Rules',href:hrefFor(/league rules/i,BASE+'/home/'+LEAGUE+'#1')}
     ];
@@ -197,7 +197,7 @@
       '<a class="blsn-quicklink" href="'+BASE+'/options?L='+LEAGUE+'&O=05"><i class="fas fa-exchange-alt"></i><span>Make a Trade</span></a>'+
       '<a class="blsn-quicklink" href="'+BASE+'/add_drop?L='+LEAGUE+'"><i class="fas fa-clipboard-list"></i><span>Waivers</span></a>'+
       '<a class="blsn-quicklink" href="'+BASE+'/ajax_ls?L='+LEAGUE+'"><i class="fas fa-trophy"></i><span>Scoreboard</span></a>'+
-      '<a class="blsn-quicklink" href="'+BASE+'/options?L='+LEAGUE+'&O=17"><i class="fas fa-comment"></i><span>League Talk</span></a>'+
+      '<a class="blsn-quicklink" href="'+BASE+'/mb/board_show.pl?bid=202673086'+'"><i class="fas fa-comment"></i><span>League Talk</span></a>'+
       '</div>';
     return div;
   }

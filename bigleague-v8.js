@@ -6,8 +6,8 @@
   var LEAGUE='73086';
   var BASE='https://www42.myfantasyleague.com/'+YEAR;
   var HOST='https://lalaunch.github.io/big-league-mfl/';
-  var CORE=HOST+'bigleague-core-v10.js?v=4';
-  var MASTHEAD_CSS=HOST+'masthead-v16.css?v=3';
+  var CORE=HOST+'bigleague-core-v10.js?v=5';
+  var MASTHEAD_CSS=HOST+'masthead-v16.css?v=4';
   var HERO_CSS=HOST+'hero-v2.css?v=19';
   var TEAM_LOGOS=HOST+'team-logos-v2.js?v=4';
   var PUGS_LOGO=HOST+'assets/logos/milwaukee-killer-pugs.webp?v=4';
@@ -15,6 +15,7 @@
   function clean(v){return String(v||'').replace(/\s+/g,' ').trim();}
 
   function loadStyle(){
+    if(document.body && !document.body.classList.contains('blsn-mode')) document.body.classList.add('blsn-mode'); /* every page gets the masthead, not only home */
     ['bl-masthead-v13-css','bl-masthead-v14-css','bl-masthead-v15-css'].forEach(function(id){
       var old=document.getElementById(id);
       if(old) old.remove();
@@ -94,7 +95,7 @@
     if(messageLinks.length){
       var messageLink=messageLinks[0];
       messageLink.textContent='MESSAGE BOARD';
-      messageLink.href=BASE+'/options?L='+LEAGUE+'&O=17';
+      messageLink.href=BASE+'/mb/board_show.pl?bid=202673086';
       messageLinks.slice(1).forEach(function(a){a.remove();});
       if(rulesLink && rulesLink.nextElementSibling!==messageLink){
         rulesLink.insertAdjacentElement('afterend',messageLink);
