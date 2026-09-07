@@ -300,3 +300,32 @@
 @media(max-width:900px){
   #body_home.blsn-mode .blsn-hero-shell{grid-template-columns:1fr!important;}
 }
+
+/* ------------------------- POINTING PLAYER (2026-09-06) -------------------------
+   Dan: "I like the pointing." The wide crop could not hold glove and tagline at
+   once in a 1.5:1 panel, so the photo is now the player alone (helmet to glove,
+   368x278) and "It's go time" plus the gold slash are drawn in CSS over it. */
+#body_home.blsn-mode .blsn-callout-side{
+  background:
+    linear-gradient(90deg,rgba(4,17,26,.90),rgba(4,17,26,.55) 55%,rgba(4,17,26,0)) left top/66% 58% no-repeat,
+    url("https://lalaunch.github.io/big-league-mfl/assets/hero-player-point.webp?v=1") center 42%/cover no-repeat,
+    #03111a!important;
+}
+#body_home.blsn-mode .blsn-callout-side .blsn-callout-go{
+  display:block!important;
+  right:22px!important;
+  bottom:44px!important;
+  font-size:46px!important;
+  text-shadow:0 5px 8px #000,0 0 18px rgba(0,0,0,.9)!important;
+}
+#body_home.blsn-mode .blsn-callout-side:after{
+  display:block!important;
+  content:""!important;
+  left:auto!important;
+  right:16px!important;
+  width:50%!important;
+  bottom:34px!important;
+}
+@media(max-width:1200px){
+  #body_home.blsn-mode .blsn-callout-side .blsn-callout-go{font-size:40px!important;}
+}
