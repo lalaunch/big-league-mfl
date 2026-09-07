@@ -303,6 +303,7 @@
   function decorateHero(){
     var hero=document.querySelector('.blsn-hero-main');
     if(!hero || hero.getAttribute('data-blsn-decorated')==='1') return;
+    if(hero.getAttribute('data-blsn-hero-v3')==='1') return; /* v8 loader owns the hero: no overlays, no duplicate quote or tagline */
     hero.setAttribute('data-blsn-decorated','1');
     hero.style.minHeight='318px';
     hero.style.background='radial-gradient(circle at 63% 45%,rgba(28,75,103,.28),transparent 34%),linear-gradient(115deg,#071821 0%,#06141d 48%,#02080d 100%)';

@@ -6,11 +6,11 @@
   var LEAGUE='73086';
   var BASE='https://www42.myfantasyleague.com/'+YEAR;
   var HOST='https://lalaunch.github.io/big-league-mfl/';
-  var CORE=HOST+'bigleague-core-v10.js?v=2';
+  var CORE=HOST+'bigleague-core-v10.js?v=3';
   var MASTHEAD_CSS=HOST+'masthead-v16.css?v=3';
-  var HERO_CSS=HOST+'hero-v2.css?v=12';
-  var TEAM_LOGOS=HOST+'team-logos-v2.js?v=3';
-  var PUGS_LOGO=HOST+'assets/logos/milwaukee-killer-pugs.png?v=3';
+  var HERO_CSS=HOST+'hero-v2.css?v=13';
+  var TEAM_LOGOS=HOST+'team-logos-v2.js?v=4';
+  var PUGS_LOGO=HOST+'assets/logos/milwaukee-killer-pugs.webp?v=4';
 
   function clean(v){return String(v||'').replace(/\s+/g,' ').trim();}
 
@@ -34,7 +34,7 @@
       if(old && id!=='bl-hero-v2-css') old.remove();
     });
     var current=document.getElementById('bl-hero-v2-css');
-    if(current && current.href.indexOf('v=12')>=0) return;
+    if(current && current.href.indexOf('v=13')>=0) return;
     if(current) current.remove();
     var link=document.createElement('link');
     link.id='bl-hero-v2-css';

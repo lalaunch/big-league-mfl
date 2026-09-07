@@ -252,3 +252,25 @@
   #body_home.blsn-mode .blsn-year-badge span{font-size:58px!important;}
   #body_home.blsn-mode .blsn-callout-go{right:18px!important;font-size:32px!important;}
 }
+
+/* ------------------------- V4 PHOTO PANEL (2026-09-06) -------------------------
+   The right panel is the approved artwork cropped from hero-player-full.png
+   (705x280, 41 KB). Its quote, "It's go time" and gold slash are part of the
+   image, so the CSS-drawn copies below are hidden rather than doubled. */
+#body_home.blsn-mode .blsn-callout-side{
+  padding:0!important;
+  background:
+    linear-gradient(90deg,rgba(4,17,26,.55) 0%,rgba(4,17,26,0) 12%),
+    url("https://lalaunch.github.io/big-league-mfl/assets/hero-callout.webp?v=1") right center/cover no-repeat,
+    #03111a!important;
+  box-shadow:inset 26px 0 34px rgba(0,0,0,.28)!important;
+}
+#body_home.blsn-mode .blsn-callout-side:before,
+#body_home.blsn-mode .blsn-callout-side:after,
+#body_home.blsn-mode .blsn-callout-quote,
+#body_home.blsn-mode .blsn-callout-by,
+#body_home.blsn-mode .blsn-year-badge,
+#body_home.blsn-mode .blsn-callout-go{display:none!important;content:none!important;}
+@media(max-width:900px){
+  #body_home.blsn-mode .blsn-callout-side{min-height:0!important;aspect-ratio:705/280!important;background-size:contain!important;background-position:center!important;}
+}

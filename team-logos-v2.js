@@ -4,16 +4,16 @@
 
   var HOST='https://lalaunch.github.io/big-league-mfl/assets/logos/';
   var LOGOS={
-    '0001':HOST+'tampa-bay-roxx-gang.png?v=3',
-    '0002':HOST+'la-launch.png?v=3',
-    '0003':HOST+'reno-gamblers.png?v=3',
-    '0004':HOST+'bristol-steampunks.png?v=3',
-    '0005':HOST+'delafield-draft-attics.png?v=3',
-    '0006':HOST+'kansas-city-killers.png?v=3',
-    '0007':HOST+'brooklyn-brawlers.png?v=3',
-    '0008':HOST+'winnebago-campers.png?v=3',
-    '0009':HOST+'jersey-jackhammers.png?v=3',
-    '0010':HOST+'milwaukee-killer-pugs.png?v=3'
+    '0001':HOST+'tampa-bay-roxx-gang.webp?v=4',
+    '0002':HOST+'la-launch.webp?v=4',
+    '0003':HOST+'reno-gamblers.webp?v=4',
+    '0004':HOST+'bristol-steampunks.webp?v=4',
+    '0005':HOST+'delafield-draft-attics.webp?v=4',
+    '0006':HOST+'kansas-city-killers.webp?v=4',
+    '0007':HOST+'brooklyn-brawlers.webp?v=4',
+    '0008':HOST+'winnebago-campers.webp?v=4',
+    '0009':HOST+'jersey-jackhammers.webp?v=4',
+    '0010':HOST+'milwaukee-killer-pugs.webp?v=4'
   };
 
   function getId(el){
