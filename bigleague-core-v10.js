@@ -225,9 +225,10 @@
     });
     guns.forEach(function(g){T(g[1]).topgun++;T(g[1]).topgunYears.push(g[0]);});
     var list=Object.keys(teams).map(function(k){return teams[k];});
-    list.sort(function(a,b){return b.titles-a.titles||b.runners-a.runners||b.topgun-a.topgun||a.name.localeCompare(b.name);});
+    /* Top Gun is display only (Dan, 2026-09-07): rank on titles, then runner-ups. */
+    list.sort(function(a,b){return b.titles-a.titles||b.runners-a.runners||a.name.localeCompare(b.name);});
     var rank=0;
-    function same(a,b){return a.titles===b.titles&&a.runners===b.runners&&a.topgun===b.topgun;}
+    function same(a,b){return a.titles===b.titles&&a.runners===b.runners;}
     list.forEach(function(t,i){
       if(i===0||!same(t,list[i-1])) rank=i+1;
       t.rank=rank;
