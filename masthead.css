@@ -1,12 +1,14 @@
 /* THE BIG LEAGUE — MASTHEAD + NAV
    The photographic masthead (the_big_league_same_crew_bigger_legends.png) and
-   the league nav, on every league page. Scope :is(#body_home,body[id]).blsn-mode
-   and keep it: bigleague.css (MFL header, loaded after our head links) has
-   #body_home .pagebody !important, so we need (1,2,x) to win; and Chrome only
-   restyles the header's existing nav links when the loader toggles .blsn-mode
-   on body after each sheet loads (see bigleague-v8.js restyle). The HTML text
+   the league nav, on every league page. Scope :is(#body_home,body[id]).blsn-mode:
+   bigleague.css (the MFL header's link, in the body after our head links) has
+   #body_home .pagebody !important, so ours needs (1,2,x) to win. The HTML text
    (title, taglines, subline) stays in the MFL header for rollback but is
-   hidden: the words are in the image. */
+   hidden: the words are in the image.
+   bigleague.css also puts transition:.15s ease (all properties) on nav links,
+   which animates padding and flex and left tabs stuck between states on some
+   loads (2026-09-07). The nav rule below limits the transition to color and
+   background. */
 
 :is(#body_home,body[id]).blsn-mode .bl-masthead{
   position:relative;
@@ -58,6 +60,7 @@
   font-size:11px;
   letter-spacing:.045em;
   border-right:1px solid rgba(82,171,220,.12);
+  transition:color .15s ease,background-color .15s ease;
 }
 :is(#body_home,body[id]).blsn-mode .bl-mainnav a:first-child{
   color:#02121b;

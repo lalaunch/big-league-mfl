@@ -23,7 +23,6 @@
       l.rel='stylesheet';
       l.href=x[1];
       l.setAttribute('data-'+x[0],'1');
-      l.onload=function(){if(document.body){document.body.classList.remove('blsn-mode');void document.body.offsetWidth;document.body.classList.add('blsn-mode');}}; /* restyle existing elements, see loader */
       document.head.appendChild(l);
     });
   }

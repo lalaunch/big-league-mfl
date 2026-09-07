@@ -6,7 +6,7 @@
 (function(){
   'use strict';
 
-  var V='20260907d';
+  var V='20260907e';
   var YEAR=2026;
   var LEAGUE='73086';
   var BASE='https://www42.myfantasyleague.com/'+YEAR;
@@ -18,24 +18,12 @@
 
   function clean(v){return String(v||'').replace(/\s+/g,' ').trim();}
 
-  /* Chrome does not restyle elements that already exist when one of our sheets
-     finishes loading (2026-09-07: seven of ten nav tabs kept MFL's padding, the
-     page stayed 1180px wide). Toggling the scope class on body invalidates every
-     rule keyed on it, synchronously, so nothing paints in between. */
-  function restyle(){
-    var b=document.body;
-    if(!b) return;
-    b.classList.remove('blsn-mode');
-    void b.offsetWidth;
-    b.classList.add('blsn-mode');
-  }
   function addStyle(id,file){
     if(document.getElementById(id)) return;
     var link=document.createElement('link');
     link.id=id;
     link.rel='stylesheet';
     link.href=HOST+file+'?v='+V;
-    link.onload=restyle;
     document.head.appendChild(link);
   }
   function addScript(id,file,onload){
@@ -130,10 +118,8 @@
 
   function watch(){
     pass();
-    restyle();
     var tries=0;
     var timer=setInterval(function(){pass();if(++tries>=50) clearInterval(timer);},300);
-    setTimeout(restyle,1500);
   }
 
   themeEveryPage();
