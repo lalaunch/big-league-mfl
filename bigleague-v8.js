@@ -1,67 +1,51 @@
-/* The Big League — hosted loader + nav + direct team crest pack */
+/* The Big League — loader
+   This is the one script the MFL header includes (as bigleague-v8.js?v=1; the
+   filename is fixed by MFL, so it stays). It loads every hosted file with one
+   version stamp, adds the theme class to body on every page, fixes nav links,
+   and builds the home-page hero panel. Bump V to bust every cache at once. */
 (function(){
   'use strict';
 
+  var V='20260907a';
   var YEAR=2026;
   var LEAGUE='73086';
   var BASE='https://www42.myfantasyleague.com/'+YEAR;
   var HOST='https://lalaunch.github.io/big-league-mfl/';
-  var CORE=HOST+'bigleague-core-v10.js?v=10';
-  var MASTHEAD_CSS=HOST+'masthead-v16.css?v=4';
-  var HERO_CSS=HOST+'hero-v2.css?v=20';
-  var TEAM_LOGOS=HOST+'team-logos-v2.js?v=8';
-  var PUGS_LOGO=HOST+'assets/logos/milwaukee-killer-pugs.webp?v=4';
+  var BOARD=BASE+'/mb/board_show.pl?bid=202673086';
+  var PUGS_LOGO=HOST+'assets/logos/milwaukee-killer-pugs.webp?v='+V;
+
+  window.BL_VERSION=V;
 
   function clean(v){return String(v||'').replace(/\s+/g,' ').trim();}
 
-  function loadStyle(){
-    if(document.body && !document.body.classList.contains('blsn-mode')) document.body.classList.add('blsn-mode'); /* every page gets the masthead, not only home */
-    ['bl-masthead-v13-css','bl-masthead-v14-css','bl-masthead-v15-css'].forEach(function(id){
-      var old=document.getElementById(id);
-      if(old) old.remove();
-    });
-    if(!document.getElementById('bl-masthead-v16-css')){
-      var link=document.createElement('link');
-      link.id='bl-masthead-v16-css';
-      link.rel='stylesheet';
-      link.href=MASTHEAD_CSS;
-      document.head.appendChild(link);
-    }
-  }
-
-  function loadHeroStyle(){
-    ['bl-hero-v1-css','bl-hero-v2-css'].forEach(function(id){
-      var old=document.getElementById(id);
-      if(old && id!=='bl-hero-v2-css') old.remove();
-    });
-    var current=document.getElementById('bl-hero-v2-css');
-    if(current && current.href.indexOf('v=20')>=0) return;
-    if(current) current.remove();
+  function addStyle(id,file){
+    if(document.getElementById(id)) return;
     var link=document.createElement('link');
-    link.id='bl-hero-v2-css';
+    link.id=id;
     link.rel='stylesheet';
-    link.href=HERO_CSS;
+    link.href=HOST+file+'?v='+V;
     document.head.appendChild(link);
   }
-
-  function loadTeamLogos(){
-    if(document.getElementById('bl-team-logos-v2-script')) return;
+  function addScript(id,file,onload){
+    if(document.getElementById(id)) return;
     var s=document.createElement('script');
-    s.id='bl-team-logos-v2-script';
-    s.src=TEAM_LOGOS;
+    s.id=id;
+    s.src=HOST+file+'?v='+V;
     s.defer=true;
+    if(onload){s.onload=onload;s.onerror=onload;}
     document.head.appendChild(s);
+  }
+
+  function themeEveryPage(){
+    if(document.body && !document.body.classList.contains('blsn-mode')) document.body.classList.add('blsn-mode');
   }
 
   function patchHeroPanel(){
     var hero=document.querySelector('.blsn-hero-main');
     if(!hero) return false;
-    if(hero.getAttribute('data-blsn-hero-v3')==='1') return true;
-
-    hero.setAttribute('data-blsn-hero-v3','1');
-    hero.removeAttribute('data-blsn-decorated');
+    if(hero.getAttribute('data-blsn-hero')==='1') return true;
+    hero.setAttribute('data-blsn-hero','1');
     hero.innerHTML='';
-
     var shell=document.createElement('div');
     shell.className='blsn-hero-shell';
     shell.innerHTML=''+
@@ -77,67 +61,43 @@
       '<section class="blsn-callout-side">'+
         '<div class="blsn-callout-quote">“SAME LEAGUE.<br>DIFFERENT YEAR.<br>BIGGER STORIES.”</div>'+
         '<div class="blsn-callout-by">— THE BIG LEAGUE</div>'+
-        '<div class="blsn-year-badge"><span>37</span><small>YEARS OF<br>BIG LEAGUE FOOTBALL</small></div>'+
         '<div class="blsn-callout-go">IT\'S<br>GO TIME.</div>'+
       '</section>';
     hero.appendChild(shell);
     return true;
   }
 
+  function tabClick(a,tab){
+    if(a.getAttribute('data-bl-tab-fix')==='1') return;
+    a.setAttribute('data-bl-tab-fix','1');
+    a.addEventListener('click',function(e){
+      if(document.getElementById('tab'+tab) && typeof window.show_tab==='function'){
+        e.preventDefault();
+        window.show_tab(String(tab));
+        try{history.replaceState(null,'','#'+tab);}catch(err){}
+        window.scrollTo({top:0,behavior:'smooth'});
+      }
+    });
+  }
+
   function patchNav(){
     var nav=document.querySelector('.bl-mainnav');
     if(!nav) return false;
-
     var links=Array.from(nav.querySelectorAll('a'));
     var rulesLink=links.find(function(a){return clean(a.textContent).toLowerCase()==='rules';});
     var messageLinks=links.filter(function(a){return /^(messages|message board)$/i.test(clean(a.textContent));});
-
     if(messageLinks.length){
       var messageLink=messageLinks[0];
       messageLink.textContent='MESSAGE BOARD';
-      messageLink.href=BASE+'/mb/board_show.pl?bid=202673086';
+      messageLink.href=BOARD;
       messageLinks.slice(1).forEach(function(a){a.remove();});
-      if(rulesLink && rulesLink.nextElementSibling!==messageLink){
-        rulesLink.insertAdjacentElement('afterend',messageLink);
-      }
+      if(rulesLink && rulesLink.nextElementSibling!==messageLink) rulesLink.insertAdjacentElement('afterend',messageLink);
     }
-
     Array.from(nav.querySelectorAll('a')).forEach(function(a){
       var label=clean(a.textContent).toLowerCase();
-
-      if(label==='history'){
-        a.href=BASE+'/options?L='+LEAGUE+'&O=194';
-        if(a.getAttribute('data-bl-tab-fix')!=='1'){
-          a.setAttribute('data-bl-tab-fix','1');
-          a.addEventListener('click',function(e){
-            var tab=document.getElementById('tab3');
-            if(tab && typeof window.show_tab==='function'){
-              e.preventDefault();
-              window.show_tab('3');
-              try{history.replaceState(null,'','#3');}catch(err){}
-              window.scrollTo({top:0,behavior:'smooth'});
-            }
-          });
-        }
-      }
-
-      if(label==='rules'){
-        a.href=BASE+'/options?L='+LEAGUE+'&O=09';
-        if(a.getAttribute('data-bl-tab-fix')!=='1'){
-          a.setAttribute('data-bl-tab-fix','1');
-          a.addEventListener('click',function(e){
-            var tab=document.getElementById('tab1');
-            if(tab && typeof window.show_tab==='function'){
-              e.preventDefault();
-              window.show_tab('1');
-              try{history.replaceState(null,'','#1');}catch(err){}
-              window.scrollTo({top:0,behavior:'smooth'});
-            }
-          });
-        }
-      }
+      if(label==='history'){a.href=BASE+'/options?L='+LEAGUE+'&O=194';tabClick(a,3);}
+      if(label==='rules'){a.href=BASE+'/options?L='+LEAGUE+'&O=09';tabClick(a,1);}
     });
-
     return true;
   }
 
@@ -149,35 +109,24 @@
     });
   }
 
-  function watch(){
-    loadStyle();
-    loadHeroStyle();
-    loadTeamLogos();
+  function pass(){
+    themeEveryPage();
     patchNav();
     patchDashboardLinks();
     patchHeroPanel();
-    var tries=0;
-    var timer=setInterval(function(){
-      loadStyle();
-      loadHeroStyle();
-      loadTeamLogos();
-      patchNav();
-      patchDashboardLinks();
-      patchHeroPanel();
-      if(++tries>=50) clearInterval(timer);
-    },300);
   }
 
-  loadStyle();
-  loadHeroStyle();
-  loadTeamLogos();
+  function watch(){
+    pass();
+    var tries=0;
+    var timer=setInterval(function(){pass();if(++tries>=50) clearInterval(timer);},300);
+  }
 
-  var s=document.createElement('script');
-  s.src=CORE;
-  s.defer=true;
-  s.onload=watch;
-  s.onerror=watch;
-  document.head.appendChild(s);
+  themeEveryPage();
+  addStyle('bl-masthead-css','masthead.css');
+  addStyle('bl-hero-css','hero.css');
+  addScript('bl-team-logos-script','team-logos.js');
+  addScript('bl-core-script','bigleague-core.js',watch);
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',watch);
   else watch();

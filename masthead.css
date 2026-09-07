@@ -1,0 +1,83 @@
+/* THE BIG LEAGUE — MASTHEAD + NAV
+   The photographic masthead (the_big_league_same_crew_bigger_legends.png) and
+   the league nav, on every league page. Scoped :is(#body_home,body[id]).blsn-mode
+   so the selector keeps id specificity on home and on every other page; the
+   loader adds blsn-mode to body everywhere. The HTML text (title, taglines,
+   subline) stays in the MFL header for rollback but is hidden: the words are
+   in the image. */
+
+:is(#body_home,body[id]).blsn-mode .bl-masthead{
+  position:relative;
+  max-width:1480px;
+  margin:4px auto 0;
+  min-height:0;
+  height:auto;
+  overflow:hidden;
+  border:0;
+  border-radius:0;
+  border-bottom:2px solid #19afe5;
+  background:#02070d;
+  box-shadow:0 12px 38px rgba(0,0,0,.58);
+}
+:is(#body_home,body[id]).blsn-mode .bl-masthead:before{
+  content:"";
+  display:block;
+  position:relative;
+  z-index:2;
+  width:100%;
+  height:auto;
+  aspect-ratio:3.16/1;
+  background:url("https://lalaunch.github.io/big-league-mfl/the_big_league_same_crew_bigger_legends.png?v=2") center top/cover no-repeat #03111b;
+  pointer-events:none;
+}
+:is(#body_home,body[id]).blsn-mode .bl-masthead:after{display:none;content:none;}
+:is(#body_home,body[id]).blsn-mode .bl-title,
+:is(#body_home,body[id]).blsn-mode .bl-tagline,
+:is(#body_home,body[id]).blsn-mode .bl-subline,
+:is(#body_home,body[id]).blsn-mode .bl-topline,
+:is(#body_home,body[id]).blsn-mode .bl-iconbar,
+:is(#body_home,body[id]).blsn-mode .main_tabmenu{display:none !important;}
+
+/* ---- nav ---- */
+:is(#body_home,body[id]).blsn-mode .bl-mainnav{
+  position:relative;
+  z-index:8;
+  margin-top:0;
+  border-top:1px solid #174b67;
+  border-bottom:2px solid #1bb2e8;
+  background:linear-gradient(180deg,#0a2d45,#061722);
+  flex-wrap:nowrap;
+}
+:is(#body_home,body[id]).blsn-mode .bl-mainnav a{
+  flex:1 1 0;
+  max-width:none;
+  padding:13px 8px;
+  color:#eef8ff;
+  font-size:11px;
+  letter-spacing:.045em;
+  border-right:1px solid rgba(82,171,220,.12);
+}
+:is(#body_home,body[id]).blsn-mode .bl-mainnav a:first-child{
+  color:#02121b;
+  background:linear-gradient(180deg,#4dd0ff,#1598d5);
+  box-shadow:inset 0 -2px 0 rgba(255,255,255,.28);
+}
+:is(#body_home,body[id]).blsn-mode .bl-mainnav a:hover{color:#071018;background:var(--bl-gold);}
+
+@media(max-width:1100px){
+  :is(#body_home,body[id]).blsn-mode .bl-masthead:before{aspect-ratio:3.05/1;}
+  :is(#body_home,body[id]).blsn-mode .bl-mainnav a{font-size:10px;}
+}
+@media(max-width:950px){
+  :is(#body_home,body[id]).blsn-mode .bl-mainnav{flex-wrap:wrap;}
+  :is(#body_home,body[id]).blsn-mode .bl-mainnav a{flex:1 1 20%;}
+}
+@media(max-width:760px){
+  :is(#body_home,body[id]).blsn-mode .bl-masthead:before{aspect-ratio:2.9/1;background-size:contain;background-position:center center;}
+  :is(#body_home,body[id]).blsn-mode .bl-mainnav{overflow-x:auto;}
+  :is(#body_home,body[id]).blsn-mode .bl-mainnav a{min-width:88px;padding:11px 7px;}
+}
+@media(max-width:620px){
+  :is(#body_home,body[id]).blsn-mode .pagebody{width:98% !important;}
+  :is(#body_home,body[id]).blsn-mode .bl-mainnav a{flex:1 1 33.33%;font-size:9px;}
+}

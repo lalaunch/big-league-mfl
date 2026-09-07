@@ -1,9 +1,7 @@
-/* 2026-09-06: masthead, nav and page background are scoped :is(#body_home,body[id]).blsn-mode
-   so the same header renders on every league page, not only home. Specificity unchanged (id). */
-/* =========================================================
-   THE BIG LEAGUE — SPORTS NETWORK V11.1
-   Premium broadcast-style layout layered over live MFL data.
-   ========================================================= */
+/* THE BIG LEAGUE — SPORTS NETWORK LAYOUT
+   Page background and the home-page grids (hero row, matchups, standings + power, news row),
+   quick links and deadlines panels. Masthead and nav live in masthead.css; the hero panels in
+   hero.css. Page background is scoped :is(#body_home,body[id]).blsn-mode so it applies on every page. */
 
 :is(#body_home,body[id]).blsn-mode{
   --bl-navy:#03101a;
@@ -27,126 +25,10 @@
   width:calc(100% - 28px) !important;
 }
 
-/* ------------------------- MASTHEAD ------------------------- */
-:is(#body_home,body[id]).blsn-mode .bl-masthead{
-  max-width:1480px;
-  margin:4px auto 0;
-  min-height:170px;
-  border:0;
-  border-radius:0;
-  border-bottom:2px solid #1aa4df;
-  overflow:hidden;
-  background:
-    radial-gradient(ellipse 12% 28% at 5% 1%,rgba(255,255,255,.88),rgba(130,211,255,.24) 14%,transparent 58%),
-    radial-gradient(ellipse 12% 28% at 95% 1%,rgba(255,255,255,.88),rgba(130,211,255,.24) 14%,transparent 58%),
-    radial-gradient(circle at 3.8% 2.2%,rgba(255,255,255,1) 0 2px,rgba(188,235,255,.68) 3px 6px,transparent 20px),
-    radial-gradient(circle at 7% 5%,rgba(255,255,255,.95) 0 2px,rgba(185,232,255,.48) 3px 5px,transparent 18px),
-    radial-gradient(circle at 10.2% 1.5%,rgba(255,255,255,.9) 0 2px,rgba(185,232,255,.4) 3px 5px,transparent 17px),
-    radial-gradient(circle at 96.2% 2.2%,rgba(255,255,255,1) 0 2px,rgba(188,235,255,.68) 3px 6px,transparent 20px),
-    radial-gradient(circle at 93% 5%,rgba(255,255,255,.95) 0 2px,rgba(185,232,255,.48) 3px 5px,transparent 18px),
-    radial-gradient(circle at 89.8% 1.5%,rgba(255,255,255,.9) 0 2px,rgba(185,232,255,.4) 3px 5px,transparent 17px),
-    radial-gradient(ellipse at 50% -12%,rgba(20,136,220,.42),transparent 58%),
-    linear-gradient(180deg,#081827,#02090f 82%);
-  box-shadow:0 12px 38px rgba(0,0,0,.52),inset 0 -1px 0 rgba(255,255,255,.04);
-}
-
-:is(#body_home,body[id]).blsn-mode .bl-masthead:before{
-  height:2px;
-  background:linear-gradient(90deg,transparent,#64e2ff 10%,#e9fbff 50%,#64e2ff 90%,transparent);
-}
-
-:is(#body_home,body[id]).blsn-mode .bl-masthead:after{
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  opacity:.34;
-  background:
-    linear-gradient(112deg,transparent 0 10%,rgba(79,175,232,.16) 10.3% 10.7%,transparent 11% 89%,rgba(79,175,232,.16) 89.3% 89.7%,transparent 90%),
-    repeating-linear-gradient(90deg,transparent 0 69px,rgba(255,255,255,.026) 70px,transparent 71px);
-}
-
-/* Use the hosted distressed metallic wordmark instead of plain HTML text. */
-:is(#body_home,body[id]).blsn-mode .bl-title{
-  display:block;
-  width:min(1120px,82%);
-  height:104px;
-  margin:-2px auto -9px;
-  padding:0;
-  font-size:0 !important;
-  line-height:0 !important;
-  color:transparent !important;
-  -webkit-text-fill-color:transparent !important;
-  background:url("https://lalaunch.github.io/big-league-mfl/assets/big-league-wordmark.svg?v=1") center/contain no-repeat !important;
-  filter:drop-shadow(0 5px 7px rgba(0,0,0,.75)) drop-shadow(0 0 12px rgba(93,173,220,.18));
-  position:relative;
-  z-index:3;
-}
-
-/* 2026 is the league's 37th year. Keep historical completed-season counts at 36. */
-:is(#body_home,body[id]).blsn-mode .bl-tagline{
-  color:var(--bl-gold);
-  font-size:0 !important;
-  letter-spacing:.13em;
-  margin:2px 0 10px;
-  text-shadow:0 2px 3px #000,0 0 9px rgba(244,199,69,.12);
-}
-:is(#body_home,body[id]).blsn-mode .bl-tagline:after{
-  content:"37 YEARS. SAME CREW. BIGGER LEGENDS.";
-  display:inline-block;
-  color:var(--bl-gold);
-  font-size:18px;
-  font-weight:900;
-  letter-spacing:.13em;
-  text-transform:uppercase;
-}
-:is(#body_home,body[id]).blsn-mode .bl-subline{display:none;}
-:is(#body_home,body[id]).blsn-mode .bl-topline{
-  position:absolute;
-  inset:20px 22px auto 22px;
-  z-index:5;
-  pointer-events:none;
-  padding:0;
-}
-:is(#body_home,body[id]).blsn-mode .bl-topline-side,
-:is(#body_home,body[id]).blsn-mode .bl-est{
-  color:#f5fbff;
-  font-size:11px;
-  letter-spacing:.11em;
-  text-shadow:0 2px 2px #000;
-}
-
-:is(#body_home,body[id]).blsn-mode .bl-mainnav{
-  position:relative;
-  z-index:4;
-  margin-top:12px;
-  border-top:1px solid #17465f;
-  border-bottom:1px solid #17465f;
-  background:linear-gradient(180deg,#0b2b42,#061520);
-  flex-wrap:nowrap;
-}
-:is(#body_home,body[id]).blsn-mode .bl-mainnav a{
-  flex:1 1 0;
-  max-width:none;
-  padding:14px 10px;
-  color:#eef8ff;
-  font-size:11px;
-  letter-spacing:.045em;
-  border-right:1px solid rgba(82,171,220,.12);
-}
-:is(#body_home,body[id]).blsn-mode .bl-mainnav a:first-child{
-  color:#02121b;
-  background:linear-gradient(180deg,#4dd0ff,#1598d5);
-  box-shadow:inset 0 -2px 0 rgba(255,255,255,.28);
-}
-:is(#body_home,body[id]).blsn-mode .bl-mainnav a:hover{color:#071018;background:var(--bl-gold);}
-:is(#body_home,body[id]).blsn-mode .bl-iconbar{display:none !important;}
-:is(#body_home,body[id]).blsn-mode .main_tabmenu{display:none !important;}
-
 /* ------------------------- HERO ------------------------- */
 .blsn-hero-grid{
   display:grid;
-  grid-template-columns:minmax(0,3.55fr) minmax(250px,.85fr);
+  grid-template-columns:minmax(0,3.55fr) minmax(250px,.85fr); /* collapses to one column at 1000px below */
   gap:11px;
   margin:6px 4px 12px;
   align-items:start;
@@ -154,61 +36,14 @@
 
 .blsn-hero-main{
   min-width:0;
-  min-height:0 !important;
-  max-height:248px !important;
   position:relative;
-  overflow:hidden !important;
+  overflow:hidden;
   border-radius:8px;
-  background:#06141d !important;
-}
+} /* height, background and panels: hero.css */
 
 .blsn-hero-main > *:first-child{
   margin:0 !important;
   box-sizing:border-box;
-}
-
-#body_home.blsn-mode .blsn-hero-main > img[aria-hidden="true"]{
-  right:7% !important;
-  bottom:-19% !important;
-  width:24% !important;
-  max-height:125% !important;
-  opacity:.25 !important;
-  z-index:7 !important;
-  filter:drop-shadow(0 10px 12px rgba(0,0,0,.7)) !important;
-}
-
-#body_home.blsn-mode .blsn-hero-main > div:not(.blsn-hero-shell):nth-last-child(3){
-  right:0 !important;
-  top:0 !important;
-  width:31% !important;
-  height:100% !important;
-  background:linear-gradient(90deg,rgba(3,12,18,.90),rgba(3,12,18,.98) 28%,#03101a) !important;
-  border-left:1px solid rgba(33,121,160,.34) !important;
-  z-index:6 !important;
-}
-
-#body_home.blsn-mode .blsn-hero-main > div:not(.blsn-hero-shell):nth-last-child(2){
-  right:1.7% !important;
-  top:11% !important;
-  width:27% !important;
-  z-index:9 !important;
-}
-#body_home.blsn-mode .blsn-hero-main > div:not(.blsn-hero-shell):nth-last-child(2) > div:first-child{
-  font-size:17px !important;
-  line-height:1.12 !important;
-}
-#body_home.blsn-mode .blsn-hero-main > div:not(.blsn-hero-shell):nth-last-child(2) > div:last-child{
-  font-size:9px !important;
-  margin-top:6px !important;
-}
-
-#body_home.blsn-mode .blsn-hero-main > div:not(.blsn-hero-shell):nth-last-child(1){
-  right:3.2% !important;
-  bottom:8% !important;
-  font-size:26px !important;
-  border-bottom-width:5px !important;
-  padding-bottom:5px !important;
-  z-index:10 !important;
 }
 
 /* ------------------------- QUICK LINKS ------------------------- */
@@ -308,32 +143,21 @@
 #body_home.blsn-mode .blx-hof-card{min-height:180px;}
 #body_home.blsn-mode .homepagemodule.report,#body_home.blsn-mode .blx-card,.blsn-quicklinks,.blsn-deadlines{box-shadow:0 8px 24px rgba(0,0,0,.30),inset 0 0 0 1px rgba(255,255,255,.012) !important;}
 
-@media(max-width:1100px){
-  #body_home.blsn-mode .bl-title{width:88%;height:88px;}
-  #body_home.blsn-mode .bl-mainnav a{font-size:10px;padding:12px 7px;}
+/* Phones: MFL sets no viewport meta, so an iPhone lays the page out at 980 CSS px.
+   The hero grid (hero + quick links) collapses at 1000 so phones get the two-panel hero. */
+@media(max-width:1000px){
+  .blsn-hero-grid{grid-template-columns:1fr;}
+  .blsn-quicklinks-body{grid-template-columns:repeat(3,1fr);}
 }
 
 @media(max-width:950px){
-  #body_home.blsn-mode .bl-title{width:92%;height:78px;margin-top:4px;}
-  .blsn-hero-grid,.blsn-matchups-row,.blsn-standings-power{grid-template-columns:1fr;}
+  .blsn-matchups-row,.blsn-standings-power{grid-template-columns:1fr;}
   .blsn-news-row{grid-template-columns:1fr;}
-  #body_home.blsn-mode .blsn-hero-main{max-height:none !important;}
-  #body_home.blsn-mode .blsn-hero-main > img[aria-hidden="true"],
-  #body_home.blsn-mode .blsn-hero-main > div:not(.blsn-hero-shell):nth-last-child(3),
-  #body_home.blsn-mode .blsn-hero-main > div:not(.blsn-hero-shell):nth-last-child(2),
-  #body_home.blsn-mode .blsn-hero-main > div:not(.blsn-hero-shell):nth-last-child(1){display:none !important;}
-  #body_home.blsn-mode .bl-mainnav{flex-wrap:wrap;}
-  #body_home.blsn-mode .bl-mainnav a{flex:1 1 20%;}
 }
 
 @media(max-width:620px){
-  #body_home.blsn-mode .pagebody{width:98% !important;}
-  #body_home.blsn-mode .bl-title{width:96%;height:62px;margin-top:8px;}
-  #body_home.blsn-mode .bl-tagline:after{font-size:10px;letter-spacing:.08em;}
-  #body_home.blsn-mode .bl-topline{display:none;}
   .blsn-quicklinks-body{grid-template-columns:1fr 1fr;}
   .blsn-panel-title{font-size:14px;}
   .blsn-playoff-quote{font-size:15px;}
   .blsn-deadline-row{grid-template-columns:46px 54px 1fr;}
-  #body_home.blsn-mode .bl-mainnav a{flex:1 1 33.33%;font-size:9px;}
 }
