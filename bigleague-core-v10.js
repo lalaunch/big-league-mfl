@@ -216,7 +216,9 @@
     extra=extra||{};
     var rows=FINALS.concat(extra.finals||[]),guns=TOPGUN.concat(extra.topgun||[]);
     var teams={};
-    function T(n){return teams[n]||(teams[n]={name:n,titles:0,runners:0,topgun:0,titleYears:[],runnerYears:[],topgunYears:[]});}
+    /* One franchise under two names (Dan, 2026-09-07): Hartland Hitmen became Sussex Stonemen. Counted together. */
+    var SAME={'Hartland Hitmen':'Hartland Hitmen / Sussex Stonemen','Sussex Stonemen':'Hartland Hitmen / Sussex Stonemen'};
+    function T(n){n=SAME[n]||n;return teams[n]||(teams[n]={name:n,titles:0,runners:0,topgun:0,titleYears:[],runnerYears:[],topgunYears:[]});}
     rows.forEach(function(r){
       T(r[1]).titles++;T(r[1]).titleYears.push(r[0]);
       if(r[2]){T(r[2]).runners++;T(r[2]).runnerYears.push(r[0]);}
