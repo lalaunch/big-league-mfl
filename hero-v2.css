@@ -329,3 +329,16 @@
 @media(max-width:1200px){
   #body_home.blsn-mode .blsn-callout-side .blsn-callout-go{font-size:40px!important;}
 }
+
+/* Stacked tagline like the mock: IT'S over GO TIME., right-aligned. */
+#body_home.blsn-mode .blsn-callout-side .blsn-callout-go{
+  text-align:right!important;
+  line-height:.88!important;
+  font-size:54px!important;
+  right:20px!important;
+  bottom:40px!important;
+}
+#body_home.blsn-mode .blsn-callout-side:after{bottom:30px!important;width:56%!important;}
+@media(max-width:1200px){
+  #body_home.blsn-mode .blsn-callout-side .blsn-callout-go{font-size:46px!important;}
+}
