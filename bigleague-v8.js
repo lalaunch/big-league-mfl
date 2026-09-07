@@ -6,7 +6,7 @@
   var LEAGUE='73086';
   var BASE='https://www42.myfantasyleague.com/'+YEAR;
   var HOST='https://lalaunch.github.io/big-league-mfl/';
-  var CORE=HOST+'bigleague-core-v10.js?v=7';
+  var CORE=HOST+'bigleague-core-v10.js?v=8';
   var MASTHEAD_CSS=HOST+'masthead-v16.css?v=4';
   var HERO_CSS=HOST+'hero-v2.css?v=20';
   var TEAM_LOGOS=HOST+'team-logos-v2.js?v=8';

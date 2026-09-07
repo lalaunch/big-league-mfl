@@ -14,7 +14,7 @@
 
   function loadStyles(){
     [
-      ['blx-dashboard','https://lalaunch.github.io/big-league-mfl/dashboard-v8.css?v=4'],
+      ['blx-dashboard','https://lalaunch.github.io/big-league-mfl/dashboard-v8.css?v=5'],
       ['blsn-network','https://lalaunch.github.io/big-league-mfl/sports-network.css?v=5']
     ].forEach(function(x){
       if(document.querySelector('link[data-'+x[0]+']')) return;
@@ -155,7 +155,18 @@
     [2024,'Tampa Bay Roxx Gang','Bristol Steampunks'],
     [2025,'Milwaukee Killer Pugs','L.A. Launch']
   ];
-  var CANON=['L.A. Launch','Reno Gamblers','Orlando Vipers','Hartland Hitmen','Kansas City Killers','Tampa Bay Roxx Gang','Terminators','Orange County Mad Hatters','Cincinnati Stormtroopers','Sussex Stonemen','Jersey Jackhammers','Brooklyn Brawlers','Milwaukee Killer Pugs','Bristol Steampunks','Winnebago Campers','Delafield Draft Attics','San Francisco Freeze'];
+  /* Top Gun Trophy, from MFL League Awards (options O=202), 2000-2025, as listed by Dan 2026-09-07.
+     MFL is the only record of this award. Seasons newer than the last row are appended from the awards page. */
+  var TOPGUN=[
+    [2000,'L.A. Launch'],[2001,'Cincinnati Stormtroopers'],[2002,'Orlando Vipers'],[2003,'Orlando Vipers'],
+    [2004,'L.A. Launch'],[2005,'L.A. Launch'],[2006,'Tampa Bay Roxx Gang'],[2007,'Tampa Bay Roxx Gang'],
+    [2008,'L.A. Launch'],[2009,'Tampa Bay Roxx Gang'],[2010,'Orlando Vipers'],[2011,'L.A. Launch'],
+    [2012,'L.A. Launch'],[2013,'L.A. Launch'],[2014,'Orlando Vipers'],[2015,'Phelps Phantoms'],
+    [2016,'Brooklyn Brawlers'],[2017,'Jersey Jackhammers'],[2018,'Orlando Vipers'],[2019,'Phelps Phantoms'],
+    [2020,'Reno Gamblers'],[2021,'Brooklyn Brawlers'],[2022,'Reno Gamblers'],[2023,'Brooklyn Brawlers'],
+    [2024,'Reno Gamblers'],[2025,'L.A. Launch']
+  ];
+  var CANON=['L.A. Launch','Reno Gamblers','Orlando Vipers','Hartland Hitmen','Kansas City Killers','Tampa Bay Roxx Gang','Terminators','Orange County Mad Hatters','Cincinnati Stormtroopers','Sussex Stonemen','Jersey Jackhammers','Brooklyn Brawlers','Milwaukee Killer Pugs','Bristol Steampunks','Winnebago Campers','Delafield Draft Attics','San Francisco Freeze','Phelps Phantoms'];
 
   function canonName(raw){
     var k=teamKey(raw);
@@ -167,11 +178,13 @@
     return clean(raw).toLowerCase().replace(/\b\w/g,function(c){return c.toUpperCase();});
   }
 
-  /* Seasons newer than the plaque table, read from MFL's League Champions page. Same-origin fetch. */
+  /* Seasons newer than the tables, read from MFL: League Champions (O=194) for finals, League Awards (O=202)
+     for Top Gun. Same-origin fetches; either one failing just leaves the tables as rendered. */
   function loadNewerSeasons(cb){
-    var last=FINALS[FINALS.length-1][0],done=false;
-    function finish(v){if(done)return;done=true;cb(v);}
-    setTimeout(function(){finish([]);},6000);
+    var lastF=FINALS[FINALS.length-1][0],lastT=TOPGUN[TOPGUN.length-1][0],done=false,pending=2,finals=[],topgun=[];
+    function finish(){if(done)return;done=true;cb({finals:finals,topgun:topgun});}
+    function one(){if(--pending<=0)finish();}
+    setTimeout(finish,6000);
     try{
       fetch(BASE+'/options?L='+LEAGUE+'&O=194',{credentials:'same-origin'}).then(function(r){return r.text();}).then(function(html){
         var doc=new DOMParser().parseFromString(html,'text/html');
@@ -180,30 +193,45 @@
           var th=tr.querySelector('th[colspan]');
           if(th&&/^\d{4}$/.test(clean(th.textContent))){year=parseInt(clean(th.textContent),10);return;}
           var rank=tr.querySelector('td.rank'),name=tr.querySelector('td.franchisename');
-          if(year&&year>last&&rank&&name){by[year]=by[year]||{};by[year][parseInt(rank.textContent,10)]=canonName(name.textContent);}
+          if(year&&year>lastF&&rank&&name){by[year]=by[year]||{};by[year][parseInt(rank.textContent,10)]=canonName(name.textContent);}
         });
-        finish(Object.keys(by).filter(function(y){return by[y][1];}).sort().map(function(y){return [parseInt(y,10),by[y][1],by[y][2]||''];}));
-      }).catch(function(){finish([]);});
-    }catch(e){finish([]);}
+        finals=Object.keys(by).filter(function(y){return by[y][1];}).sort().map(function(y){return [parseInt(y,10),by[y][1],by[y][2]||''];});
+        one();
+      }).catch(one);
+      fetch(BASE+'/options?L='+LEAGUE+'&O=202',{credentials:'same-origin'}).then(function(r){return r.text();}).then(function(html){
+        var doc=new DOMParser().parseFromString(html,'text/html');
+        Array.from(doc.querySelectorAll('table.report tr')).forEach(function(tr){
+          var y=tr.querySelector('td.year'),a=tr.querySelector('td.awardtitle'),n=tr.querySelector('td.franchisename');
+          if(!y||!a||!n) return;
+          var yr=parseInt(clean(y.textContent),10);
+          if(yr>lastT&&/top gun/i.test(a.textContent)) topgun.push([yr,canonName(n.textContent)]);
+        });
+        topgun.sort(function(p,q){return p[0]-q[0];});
+        one();
+      }).catch(one);
+    }catch(e){finish();}
   }
 
   function ringRace(extra){
-    var rows=FINALS.concat(extra||[]);
+    extra=extra||{};
+    var rows=FINALS.concat(extra.finals||[]),guns=TOPGUN.concat(extra.topgun||[]);
     var teams={};
-    function T(n){return teams[n]||(teams[n]={name:n,titles:0,runners:0,titleYears:[],runnerYears:[]});}
+    function T(n){return teams[n]||(teams[n]={name:n,titles:0,runners:0,topgun:0,titleYears:[],runnerYears:[],topgunYears:[]});}
     rows.forEach(function(r){
       T(r[1]).titles++;T(r[1]).titleYears.push(r[0]);
       if(r[2]){T(r[2]).runners++;T(r[2]).runnerYears.push(r[0]);}
     });
+    guns.forEach(function(g){T(g[1]).topgun++;T(g[1]).topgunYears.push(g[0]);});
     var list=Object.keys(teams).map(function(k){return teams[k];});
-    list.sort(function(a,b){return b.titles-a.titles||b.runners-a.runners||a.name.localeCompare(b.name);});
+    list.sort(function(a,b){return b.titles-a.titles||b.runners-a.runners||b.topgun-a.topgun||a.name.localeCompare(b.name);});
     var rank=0;
+    function same(a,b){return a.titles===b.titles&&a.runners===b.runners&&a.topgun===b.topgun;}
     list.forEach(function(t,i){
-      if(i===0||t.titles!==list[i-1].titles||t.runners!==list[i-1].runners) rank=i+1;
+      if(i===0||!same(t,list[i-1])) rank=i+1;
       t.rank=rank;
-      t.tie=list.some(function(o){return o!==t&&o.titles===t.titles&&o.runners===t.runners;});
+      t.tie=list.some(function(o){return o!==t&&same(o,t);});
     });
-    return {list:list,max:Math.max(1,list[0].titles),seasons:rows.length,first:rows[0][0],last:rows[rows.length-1][0],champs:list.filter(function(t){return t.titles>0;}).length};
+    return {list:list,max:Math.max(1,list[0].titles),seasons:rows.length,first:rows[0][0],last:rows[rows.length-1][0],champs:list.filter(function(t){return t.titles>0;}).length,gunFirst:guns[0][0],gunLast:guns[guns.length-1][0]};
   }
 
   function ringCards(data){
@@ -217,14 +245,17 @@
       return '<div class="blx-ring-card'+(tier?' blx-tier-'+tier:'')+(t.titles===0?' blx-ring-noring':'')+'" style="--bar:'+bar+'%">'+
         '<span class="blx-ring-rank">'+(t.tie?'T-':'')+t.rank+'</span>'+crest+
         '<div class="blx-ring-body"><div class="blx-ring-name">'+esc(t.name)+'</div>'+(years?'<div class="blx-ring-years">'+years+'</div>':'')+'</div>'+
-        '<div class="blx-ring-stats"><div class="blx-ring-titles" title="Championships: '+esc(t.titleYears.join(', ')||'none')+'"><b>'+t.titles+'</b><small>'+(t.titles===1?'title':'titles')+'</small></div>'+
-        '<div class="blx-ring-runner" title="Runner-up: '+esc(t.runnerYears.join(', ')||'none')+'"><b>'+t.runners+'</b><small>runner-up</small></div></div>'+
+        '<div class="blx-ring-stats">'+
+          '<div class="blx-ring-titles" title="Championships: '+esc(t.titleYears.join(', ')||'none')+'"><b>'+t.titles+'</b><small>'+(t.titles===1?'title':'titles')+'</small></div>'+
+          '<div class="blx-ring-runner" title="Runner-up: '+esc(t.runnerYears.join(', ')||'none')+'"><b>'+t.runners+'</b><small>runner-up</small></div>'+
+          '<div class="blx-ring-gun" title="Top Gun Trophy: '+esc(t.topgunYears.join(', ')||'none')+'"><b>'+t.topgun+'</b><small>top gun</small></div>'+
+        '</div>'+
         '<i class="blx-ring-bar"></i></div>';
     }).join('');
   }
 
   function ringNote(data){
-    return data.seasons+' completed seasons \u2022 '+data.champs+' championship franchises \u2022 champions and runners-up from the league plaques, '+data.first+'-'+data.last;
+    return data.seasons+' completed seasons \u2022 '+data.champs+' championship franchises \u2022 champions and runners-up from the league plaques, '+data.first+'-'+data.last+' \u2022 Top Gun Trophy from MFL league awards, '+data.gunFirst+'-'+data.gunLast;
   }
 
   function upgradeRingRace(){
@@ -232,7 +263,7 @@
     if(!box||box.getAttribute('data-blsn-live')==='1') return;
     box.setAttribute('data-blsn-live','1');
     loadNewerSeasons(function(extra){
-      if(!extra.length) return; /* the plaque render already stands */
+      if(!extra.finals.length&&!extra.topgun.length) return; /* the table render already stands */
       var data=ringRace(extra);
       box.innerHTML=ringCards(data);
       var note=box.parentNode.querySelector('.blx-note');
@@ -241,7 +272,7 @@
   }
 
   function trophyRows(){
-    return ringCards(ringRace([]));
+    return ringCards(ringRace(null));
   }
 
   function getLogoMap(){
@@ -310,7 +341,7 @@
         </div></section>
       </div>
       <section class="blx-card blx-hof-feature"><div class="blx-hof-header"><div class="blx-hof-eyebrow">★ BIG LEAGUE LEGACY ★</div><div class="blx-hof-title">HALL OF CHAMPIONS</div><div class="blx-hof-subtitle">THE LAST 10 WORLD CHAMPIONS • 2016–2025</div></div><div class="blx-body"><div class="blx-hof-grid">${hallCards()}</div><div class="blx-hof-footer"><span>10 seasons. 10 stories. One Big League.</span><a class="blx-btn blx-hof-btn" href="${BASE}/home/${LEAGUE}#3">View Full Championship History</a></div></div></section>
-      <section class="blx-card blx-count-feature"><div class="blx-title">Championship Count — 1990 to 2025</div><div class="blx-body"><div class="blx-trophies blx-ring-grid">${trophyRows()}</div><div class="blx-note">${ringNote(ringRace([]))}</div></div></section>`;
+      <section class="blx-card blx-count-feature"><div class="blx-title">Championship Count — 1990 to 2025</div><div class="blx-body"><div class="blx-trophies blx-ring-grid">${trophyRows()}</div><div class="blx-note">${ringNote(ringRace(null))}</div></div></section>`;
     anchor.insertAdjacentElement('afterend',wrap);
     return true;
   }

@@ -584,3 +584,7 @@
 
 @media(max-width:1000px){.blx-trophies.blx-ring-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
 @media(max-width:600px){.blx-trophies.blx-ring-grid{grid-template-columns:1fr;}}
+
+/* Top Gun Trophy stat (2026-09-07) */
+.blx-ring-gun b{font-size:15px;color:#7ad9ff;text-shadow:none;}
+.blx-ring-stats{gap:10px;}
