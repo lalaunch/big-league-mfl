@@ -19,6 +19,9 @@
   function getId(el){
     var n=el;
     for(var i=0;n&&i<6;i++,n=n.parentElement){
+      /* franchise pages: <img id="franchiselogo_0002" class="franchiselogo"> (2026-09-06) */
+      var idm=String(n.id||'').match(/franchise_?(?:logo|icon)?_?(000[1-9]|0010)/i);
+      if(idm) return idm[1];
       var c=String(n.className||'').match(/franchise_(000[1-9]|0010)/i);
       if(c) return c[1];
     }
