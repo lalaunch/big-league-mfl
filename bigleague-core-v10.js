@@ -14,7 +14,7 @@
 
   function loadStyles(){
     [
-      ['blx-dashboard','https://lalaunch.github.io/big-league-mfl/dashboard-v8.css?v=3'],
+      ['blx-dashboard','https://lalaunch.github.io/big-league-mfl/dashboard-v8.css?v=4'],
       ['blsn-network','https://lalaunch.github.io/big-league-mfl/sports-network.css?v=5']
     ].forEach(function(x){
       if(document.querySelector('link[data-'+x[0]+']')) return;
@@ -112,9 +112,118 @@
     return '<div class="blx-main" data-blx-latest-main>'+esc((tx.team?tx.team+' — ':'')+tx.text)+'</div><div class="blx-sub" data-blx-latest-sub>'+esc(tx.date||'Latest MFL transaction')+'</div>';
   }
 
+  /* ---------------- Championship count: live from MFL + pre-2004 supplement (2026-09-07) ----------------
+     MFL's League Champions page (options O=194) records 1st and 2nd place from 2004 on. It is the source
+     of record for those seasons. 1990-2003 are not in MFL, so the totals the league keeps are carried as a
+     supplement: PRE2004_TITLES = all-time total minus what MFL shows since 2004. Years and runner-ups for
+     those 14 seasons are unknown here. If the fetch fails, STATIC_TITLES renders the old list. */
+  var CANON=['L.A. Launch','Reno Gamblers','Orlando Vipers','Hartland Hitmen','Kansas City Killers','Tampa Bay Roxx Gang','Terminators','Orange County Mad Hatters','Cincinnati Stormtroopers','Sussex Stonemen','Jersey Jackhammers','Brooklyn Brawlers','Milwaukee Killer Pugs','Bristol Steampunks','Winnebago Campers','Delafield Draft Attics'];
+  var STATIC_TITLES=[['L.A. Launch',7],['Reno Gamblers',7],['Orlando Vipers',5],['Hartland Hitmen',4],['Kansas City Killers',4],['Tampa Bay Roxx Gang',2],['Terminators',1],['Orange County Mad Hatters',1],['Cincinnati Stormtroopers',1],['Sussex Stonemen',1],['Jersey Jackhammers',1],['Brooklyn Brawlers',1],['Milwaukee Killer Pugs',1]];
+  var PRE2004_TITLES={'L.A. Launch':1,'Reno Gamblers':2,'Orlando Vipers':4,'Hartland Hitmen':4,'Kansas City Killers':2,'Terminators':1};
+  var PRE2004_RUNNERS={}; /* 1990-2003 second-place finishes: not recorded anywhere we can read. Fill in as {'Team':n}. */
+
+  function canonName(raw){
+    var k=teamKey(raw);
+    for(var i=0;i<CANON.length;i++){
+      var ck=teamKey(CANON[i]);
+      if(ck===k) return CANON[i];
+      if((ck.indexOf(k)===0&&ck.length-k.length<=2)||(k.indexOf(ck)===0&&k.length-ck.length<=2)) return CANON[i]; /* "MILWAUKEE KILLER PUG" (2020 as typed in MFL) */
+    }
+    return clean(raw).toLowerCase().replace(/\b\w/g,function(c){return c.toUpperCase();});
+  }
+
+  function loadChampions(cb){
+    var done=false;
+    function finish(v){if(done)return;done=true;cb(v);}
+    setTimeout(function(){finish(null);},6000);
+    try{
+      fetch(BASE+'/options?L='+LEAGUE+'&O=194',{credentials:'same-origin'}).then(function(r){return r.text();}).then(function(html){
+        var doc=new DOMParser().parseFromString(html,'text/html');
+        var year=null,out=[];
+        Array.from(doc.querySelectorAll('table.report tr')).forEach(function(tr){
+          var th=tr.querySelector('th[colspan]');
+          if(th&&/^\d{4}$/.test(clean(th.textContent))){year=parseInt(clean(th.textContent),10);return;}
+          var rank=tr.querySelector('td.rank'),name=tr.querySelector('td.franchisename');
+          if(year&&rank&&name){out.push({year:year,place:parseInt(rank.textContent,10),team:canonName(name.textContent)});}
+        });
+        finish(out.length?out:null);
+      }).catch(function(){finish(null);});
+    }catch(e){finish(null);}
+  }
+
+  function ringRace(results){
+    var teams={};
+    function T(n){return teams[n]||(teams[n]={name:n,titles:0,runners:0,titleYears:[],runnerYears:[],pre:0});}
+    var missingRunner=[],byYear={};
+    if(results){
+      results.forEach(function(r){
+        byYear[r.year]=byYear[r.year]||{};byYear[r.year][r.place]=r.team;
+        if(r.place===1){T(r.team).titles++;T(r.team).titleYears.push(r.year);}
+        else if(r.place===2){T(r.team).runners++;T(r.team).runnerYears.push(r.year);}
+      });
+      Object.keys(byYear).forEach(function(y){if(byYear[y][1]&&!byYear[y][2])missingRunner.push(y);});
+      Object.keys(PRE2004_TITLES).forEach(function(n){T(n).titles+=PRE2004_TITLES[n];T(n).pre=PRE2004_TITLES[n];});
+      Object.keys(PRE2004_RUNNERS).forEach(function(n){T(n).runners+=PRE2004_RUNNERS[n];});
+    }else{
+      STATIC_TITLES.forEach(function(x){T(x[0]).titles=x[1];});
+    }
+    var list=Object.keys(teams).map(function(k){return teams[k];}).filter(function(t){return t.titles>0||t.runners>0;});
+    list.sort(function(a,b){return b.titles-a.titles||b.runners-a.runners||a.name.localeCompare(b.name);});
+    var rank=0;
+    list.forEach(function(t,i){
+      if(i===0||t.titles!==list[i-1].titles||t.runners!==list[i-1].runners) rank=i+1;
+      t.rank=rank;
+      t.tie=list.some(function(o){return o!==t&&o.titles===t.titles&&o.runners===t.runners;});
+    });
+    var years=Object.keys(byYear).map(Number);
+    return {list:list,max:list.length?Math.max(1,list[0].titles):1,live:!!results,missingRunner:missingRunner.sort(),firstYear:years.length?Math.min.apply(null,years):null};
+  }
+
+  function ringCards(data){
+    var logos=getLogoMap();
+    return data.list.map(function(t){
+      var logo=logos[teamKey(t.name)];
+      var crest=logo?'<img class="blx-ring-crest" src="'+esc(logo)+'" alt="" aria-hidden="true">':'<span class="blx-ring-mono">'+esc((t.name.match(/\b[A-Za-z]/g)||[t.name.charAt(0)]).slice(0,2).join('').toUpperCase())+'</span>';
+      var years=t.titleYears.slice().sort().map(function(y){return '<span>'+y+'</span>';}).join('')+(t.pre?'<span class="blx-ring-pre">+'+t.pre+' before 2004</span>':'');
+      var tier=t.rank===1?'gold':t.rank===2?'silver':t.rank===3?'bronze':'';
+      var bar=Math.round(100*t.titles/data.max);
+      return '<div class="blx-ring-card'+(tier?' blx-tier-'+tier:'')+(t.titles===0?' blx-ring-noring':'')+'" style="--bar:'+bar+'%">'+
+        '<span class="blx-ring-rank">'+(t.tie?'T-':'')+t.rank+'</span>'+crest+
+        '<div class="blx-ring-body"><div class="blx-ring-name">'+esc(t.name)+'</div>'+(years?'<div class="blx-ring-years">'+years+'</div>':'')+'</div>'+
+        '<div class="blx-ring-stats"><div class="blx-ring-titles"><b>'+t.titles+'</b><small>'+(t.titles===1?'title':'titles')+'</small></div>'+
+        '<div class="blx-ring-runner"><b>'+t.runners+'</b><small>runner-up</small></div></div>'+
+        '<i class="blx-ring-bar"></i></div>';
+    }).join('');
+  }
+
+  function ringNote(data){
+    var champs=data.list.filter(function(t){return t.titles>0;}).length;
+    var n='36 completed seasons \u2022 '+champs+' championship franchises';
+    if(data.live){
+      n+=' \u2022 runner-up finishes from MFL records, '+data.firstYear+' on';
+      if(data.missingRunner.length) n+=' ('+data.missingRunner.join(', ')+': no runner-up recorded)';
+      n+=' \u2022 1990-2003 runner-ups not recorded';
+    }else{
+      n+=' \u2022 MFL history unavailable, showing title totals only';
+    }
+    return n;
+  }
+
+  function upgradeRingRace(){
+    var box=document.querySelector('.blx-count-feature .blx-trophies');
+    if(!box||box.getAttribute('data-blsn-live')==='1') return;
+    box.setAttribute('data-blsn-live','1');
+    loadChampions(function(results){
+      var data=ringRace(results);
+      box.innerHTML=ringCards(data);
+      box.classList.add('blx-ring-grid');
+      var note=box.parentNode.querySelector('.blx-note');
+      if(note) note.textContent=ringNote(data);
+    });
+  }
+
   function trophyRows(){
-    var champs=[['L.A. Launch',7],['Reno Gamblers',7],['Orlando Vipers',5],['Hartland Hitmen',4],['Kansas City Killers',4],['Tampa Bay Roxx Gang',2],['Terminators',1],['Orange County Mad Hatters',1],['Cincinnati Stormtroopers',1],['Sussex Stonemen',1],['Jersey Jackhammers',1],['Brooklyn Brawlers',1],['Milwaukee Killer Pugs',1]];
-    return champs.map(function(x){return '<div class="blx-trophy-row"><span class="blx-trophy-team">'+esc(x[0])+'</span><span class="blx-trophy-count">'+x[1]+'</span></div>';}).join('');
+    return ringCards(ringRace(null));
   }
 
   function getLogoMap(){
@@ -133,7 +242,7 @@
       {year:2025,champ:'Milwaukee Killer Pugs',runner:'L.A. Launch'},
       {year:2024,champ:'Tampa Bay Roxx Gang',runner:'Bristol Steampunks'},
       {year:2023,champ:'Brooklyn Brawlers',runner:'Bristol Steampunks'},
-      {year:2022,champ:'Reno Gamblers',runner:'L.A. Launch'},
+      {year:2022,champ:'Reno Gamblers',runner:'Winnebago Campers'},
       {year:2021,champ:'Tampa Bay Roxx Gang',runner:'Reno Gamblers'},
       {year:2020,champ:'L.A. Launch',runner:'Reno Gamblers'},
       {year:2019,champ:'Reno Gamblers',runner:'Bristol Steampunks'},
@@ -391,6 +500,7 @@
         decorateMatchups();
         swapStandings();
         [250,900,1800,3500].forEach(function(ms){setTimeout(refreshLatest,ms);});
+        upgradeRingRace();
         [500,1500].forEach(function(ms){setTimeout(function(){decorateHero();decorateMatchups();swapStandings();upgradeNav();},ms);});
         return;
       }

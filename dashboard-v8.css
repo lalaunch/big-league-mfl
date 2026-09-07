@@ -537,3 +537,50 @@
   .blx-hof-footer{align-items:flex-start;flex-direction:column;}
   .blx-count-feature>.blx-title:after{display:block;margin-top:3px;}
 }
+
+/* =========================================================
+   RING RACE CARDS (2026-09-07) - crest, title years, runner-ups
+   ========================================================= */
+.blx-trophies.blx-ring-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+.blx-ring-card{
+  --bar:14%;
+  position:relative;display:grid;grid-template-columns:auto 44px minmax(0,1fr) auto;align-items:center;gap:10px;
+  min-height:64px;padding:9px 12px 12px 10px;border:1px solid #17445c;border-radius:9px;overflow:hidden;
+  background:linear-gradient(180deg,#07202c,#04141d);box-shadow:0 4px 12px rgba(0,0,0,.28);
+}
+.blx-ring-card:hover{border-color:#2a7ea6;}
+.blx-ring-rank{
+  display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;padding:0 5px;border-radius:12px;
+  border:1px solid #2a7ea6;color:#7ad9ff;background:#062637;font-size:9px;font-weight:900;letter-spacing:.04em;
+}
+.blx-ring-crest{width:44px;height:44px;object-fit:contain;filter:drop-shadow(0 4px 6px rgba(0,0,0,.6));}
+.blx-ring-mono{
+  display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;
+  border:1px solid #2c5a70;background:radial-gradient(circle at 40% 35%,#1f5570,#0a2230 70%);color:#a9d8ec;font-size:14px;font-weight:900;letter-spacing:.04em;
+}
+.blx-ring-body{min-width:0;}
+.blx-ring-name{color:#eaf7fc;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.03em;line-height:1.15;}
+.blx-ring-years{margin-top:4px;display:flex;flex-wrap:wrap;gap:3px;}
+.blx-ring-years span{padding:1px 5px;border-radius:3px;background:#0b3247;color:#8fd3ef;font-size:8px;font-weight:800;letter-spacing:.03em;}
+.blx-ring-years .blx-ring-pre{background:transparent;border:1px dashed #2a5b72;color:#6f9dac;}
+.blx-ring-stats{display:flex;gap:12px;align-items:flex-end;text-align:right;}
+.blx-ring-stats b{display:block;line-height:1;font-size:22px;font-weight:900;color:#f4c745;text-shadow:0 0 8px rgba(244,199,69,.15);}
+.blx-ring-stats small{display:block;margin-top:3px;color:#6f9dac;font-size:6.5px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;}
+.blx-ring-runner b{font-size:15px;color:#bfe3f3;text-shadow:none;}
+.blx-ring-bar{position:absolute;left:0;bottom:0;height:3px;width:var(--bar);background:linear-gradient(90deg,#1aa4df,#55d9ff);}
+.blx-ring-noring .blx-ring-stats .blx-ring-titles b{color:#4d7f93;}
+
+.blx-tier-gold{border-color:#c39a2a;background:radial-gradient(circle at 12% 30%,rgba(244,199,69,.16),transparent 45%),linear-gradient(180deg,#0d1d22,#081a24);box-shadow:0 0 0 1px rgba(244,199,69,.18),0 6px 16px rgba(0,0,0,.4);}
+.blx-tier-gold .blx-ring-rank{border-color:#f4c745;color:#1a1200;background:linear-gradient(180deg,#ffe264,#d9a92c);}
+.blx-tier-gold .blx-ring-name{color:#fff;font-size:12.5px;}
+.blx-tier-gold .blx-ring-stats b{font-size:28px;color:#ffe264;}
+.blx-tier-gold .blx-ring-bar{background:linear-gradient(90deg,#d9a92c,#ffe264);height:4px;}
+.blx-tier-silver{border-color:#8fa3ad;}
+.blx-tier-silver .blx-ring-rank{border-color:#d7e2e8;color:#16232a;background:linear-gradient(180deg,#eef3f6,#a9b8c1);}
+.blx-tier-silver .blx-ring-stats b{font-size:26px;color:#eaf2f6;}
+.blx-tier-bronze{border-color:#9a6a36;background:radial-gradient(circle at 12% 30%,rgba(200,120,50,.14),transparent 45%),linear-gradient(180deg,#0f1a20,#081620);}
+.blx-tier-bronze .blx-ring-rank{border-color:#d08a4a;color:#1d0f04;background:linear-gradient(180deg,#e7a86a,#a86530);}
+.blx-tier-bronze .blx-ring-stats b{font-size:26px;color:#f0b77a;}
+
+@media(max-width:1000px){.blx-trophies.blx-ring-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:600px){.blx-trophies.blx-ring-grid{grid-template-columns:1fr;}}
