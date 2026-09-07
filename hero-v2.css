@@ -1,80 +1,67 @@
-/* THE BIG LEAGUE — HERO V2.2 CLEAN
-   Stable hero: completely masks the obsolete 36-years art and keeps the
-   right-side player as a subtle stadium watermark behind the live copy. */
+/* THE BIG LEAGUE — HERO V2.3 CLEAN
+   Hard reset of the right-side hero: removes the legacy 36 and line-art player,
+   then rebuilds the panel with clean stadium lighting and the live quote / GO TIME copy. */
 
 #body_home.blsn-mode .blsn-hero-main{
   position:relative!important;
   overflow:hidden!important;
   isolation:isolate!important;
   background:
-    radial-gradient(ellipse 44% 92% at 78% 52%,rgba(20,120,184,.28),transparent 64%),
+    radial-gradient(ellipse 48% 95% at 79% 50%,rgba(21,126,191,.20),transparent 66%),
     linear-gradient(115deg,#071821 0%,#06141d 48%,#02080d 100%)!important;
   box-shadow:inset 0 0 0 1px rgba(31,145,193,.42),0 10px 30px rgba(0,0,0,.38)!important;
 }
 
-/* Stadium-light atmosphere over the right side. */
-#body_home.blsn-mode .blsn-hero-main:before{
-  content:""!important;
-  position:absolute!important;
-  z-index:5!important;
-  right:0!important;
-  top:0!important;
-  width:46%!important;
-  height:100%!important;
-  pointer-events:none!important;
-  background:
-    radial-gradient(circle at 62% 18%,rgba(255,255,255,.95) 0 2px,rgba(95,205,255,.32) 3px 7px,transparent 25px),
-    radial-gradient(circle at 70% 20%,rgba(255,255,255,.82) 0 2px,rgba(95,205,255,.25) 3px 6px,transparent 22px),
-    radial-gradient(circle at 78% 22%,rgba(255,255,255,.72) 0 2px,rgba(95,205,255,.20) 3px 6px,transparent 20px),
-    radial-gradient(ellipse 62% 82% at 60% 54%,rgba(42,165,226,.22),transparent 65%),
-    linear-gradient(111deg,transparent 0 12%,rgba(84,196,247,.10) 12.4% 13%,transparent 13.4% 100%)!important;
+/* Kill the old outline player completely. */
+#body_home.blsn-mode .blsn-hero-main > img[aria-hidden="true"]{
+  display:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
 }
 
-/* OPAQUE CLEAN PANEL: this is what removes the ghost 36 / old copy for good. */
+/* This is the real cover layer. It sits ABOVE all legacy champion artwork. */
+#body_home.blsn-mode .blsn-hero-main > div:nth-last-child(3){
+  display:block!important;
+  position:absolute!important;
+  right:0!important;
+  top:0!important;
+  width:43%!important;
+  height:100%!important;
+  z-index:900!important;
+  pointer-events:none!important;
+  border-left:1px solid rgba(58,167,217,.34)!important;
+  background:
+    radial-gradient(circle at 58% 17%,rgba(255,255,255,.95) 0 2px,rgba(81,196,255,.28) 3px 7px,transparent 25px),
+    radial-gradient(circle at 67% 19%,rgba(255,255,255,.80) 0 2px,rgba(81,196,255,.22) 3px 6px,transparent 22px),
+    radial-gradient(circle at 76% 21%,rgba(255,255,255,.68) 0 2px,rgba(81,196,255,.18) 3px 6px,transparent 20px),
+    radial-gradient(ellipse 70% 88% at 55% 54%,rgba(26,141,207,.22),transparent 65%),
+    linear-gradient(96deg,#06141d 0%,#04111a 18%,#020a10 72%,#01070b 100%)!important;
+  box-shadow:inset 28px 0 38px rgba(0,0,0,.24)!important;
+}
+
+/* Extra safety mask for any legacy content that might use its own stacking context. */
 #body_home.blsn-mode .blsn-hero-main:after{
   content:""!important;
   position:absolute!important;
-  z-index:6!important;
+  z-index:850!important;
   right:0!important;
   top:0!important;
   width:43%!important;
   height:100%!important;
   pointer-events:none!important;
-  background:
-    radial-gradient(ellipse 62% 80% at 56% 55%,rgba(24,132,196,.20),transparent 64%),
-    linear-gradient(96deg,#06141d 0%,#04111a 17%,#020a10 72%,#01070b 100%)!important;
-  border-left:1px solid rgba(59,166,216,.28)!important;
-  box-shadow:inset 28px 0 34px rgba(0,0,0,.18)!important;
+  background:linear-gradient(96deg,rgba(6,20,29,.98),rgba(4,17,26,.99) 18%,rgba(2,10,16,1) 72%,rgba(1,7,11,1))!important;
 }
 
-/* Existing player art is now a BACKGROUND watermark instead of a giant outline. */
-#body_home.blsn-mode .blsn-hero-main > img[aria-hidden="true"]{
-  display:block!important;
-  position:absolute!important;
-  right:6%!important;
-  bottom:-20%!important;
-  width:31%!important;
-  max-height:118%!important;
-  object-fit:contain!important;
-  opacity:.26!important;
-  z-index:7!important;
-  filter:brightness(1.35) contrast(1.08) drop-shadow(0 0 22px rgba(56,181,238,.28))!important;
-}
-
-/* Retire the old JS shade layer; :after handles the mask cleanly. */
-#body_home.blsn-mode .blsn-hero-main > div:nth-last-child(3){
-  display:none!important;
-}
-
-/* Quote — clean, bright and tucked into the upper right. */
+/* Quote — rebuilt above the cover layer. */
 #body_home.blsn-mode .blsn-hero-main > div:nth-last-child(2){
   display:block!important;
   position:absolute!important;
   right:3.2%!important;
   top:8%!important;
   width:31%!important;
-  z-index:11!important;
+  z-index:1000!important;
   text-align:left!important;
+  pointer-events:none!important;
   text-shadow:0 4px 8px #000!important;
 }
 #body_home.blsn-mode .blsn-hero-main > div:nth-last-child(2) > div:first-child{
@@ -91,13 +78,13 @@
   color:#5ee0ff!important;
 }
 
-/* IT'S GO TIME — broadcast-style lockup. */
+/* IT'S GO TIME — clean concept-style lockup. */
 #body_home.blsn-mode .blsn-hero-main > div:nth-last-child(1){
   display:block!important;
   position:absolute!important;
-  right:3.2%!important;
-  bottom:8%!important;
-  z-index:12!important;
+  right:3.0%!important;
+  bottom:9%!important;
+  z-index:1001!important;
   padding:0 12px 9px!important;
   font-size:44px!important;
   line-height:.88!important;
@@ -108,6 +95,7 @@
   border-bottom:7px solid #f1c21d!important;
   text-shadow:0 6px 8px #000,0 0 16px rgba(255,255,255,.16)!important;
   transform:rotate(-2deg)!important;
+  pointer-events:none!important;
 }
 #body_home.blsn-mode .blsn-hero-main > div:nth-last-child(1):before{
   content:""!important;
@@ -122,15 +110,15 @@
 }
 
 @media(max-width:980px){
+  #body_home.blsn-mode .blsn-hero-main > div:nth-last-child(3),
   #body_home.blsn-mode .blsn-hero-main:after{width:44%!important;}
-  #body_home.blsn-mode .blsn-hero-main > img[aria-hidden="true"]{right:5%!important;width:34%!important;}
-  #body_home.blsn-mode .blsn-hero-main > div:nth-last-child(2){width:32%!important;}
+  #body_home.blsn-mode .blsn-hero-main > div:nth-last-child(2){width:33%!important;}
   #body_home.blsn-mode .blsn-hero-main > div:nth-last-child(1){font-size:38px!important;}
 }
 
 @media(max-width:760px){
+  #body_home.blsn-mode .blsn-hero-main > div:nth-last-child(3),
   #body_home.blsn-mode .blsn-hero-main:after{width:50%!important;}
-  #body_home.blsn-mode .blsn-hero-main > img[aria-hidden="true"]{right:-1%!important;width:45%!important;bottom:-15%!important;opacity:.20!important;}
   #body_home.blsn-mode .blsn-hero-main > div:nth-last-child(2){right:2.5%!important;width:43%!important;}
   #body_home.blsn-mode .blsn-hero-main > div:nth-last-child(2) > div:first-child{font-size:18px!important;}
   #body_home.blsn-mode .blsn-hero-main > div:nth-last-child(1){right:2.5%!important;font-size:30px!important;}
