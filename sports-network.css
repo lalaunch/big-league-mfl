@@ -1,9 +1,9 @@
 /* THE BIG LEAGUE — SPORTS NETWORK LAYOUT
    Page background and the home-page grids (hero row, matchups, standings + power, news row),
    quick links and deadlines panels. Masthead and nav live in masthead.css; the hero panels in
-   hero.css. Page background is scoped :is(#body_home,body[id]).blsn-mode so it applies on every page. */
+   hero.css. Page background is scoped body[id] so it applies on every page with no class dependency. */
 
-:is(#body_home,body[id]).blsn-mode{
+body[id]{
   --bl-navy:#03101a;
   --bl-panel:#061722;
   --bl-panel2:#04111a;
@@ -20,7 +20,7 @@
     repeating-linear-gradient(-62deg,rgba(87,45,156,.07) 0 1px,transparent 1px 42px) !important;
 }
 
-:is(#body_home,body[id]).blsn-mode .pagebody{
+body[id] .pagebody{
   max-width:1480px !important;
   width:calc(100% - 28px) !important;
 }

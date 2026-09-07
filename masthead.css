@@ -1,8 +1,10 @@
 /* THE BIG LEAGUE — MASTHEAD + NAV
    The photographic masthead (the_big_league_same_crew_bigger_legends.png) and
-   the league nav, on every league page. Scoped body[id]
-   so the selector keeps id specificity on home and on every other page; the
-   loader adds blsn-mode to body everywhere. The HTML text (title, taglines,
+   the league nav, on every league page. Scoped body[id] only, deliberately not
+   on a class: the loader adds .blsn-mode to body after the page exists, and
+   Chrome then restyled only the nav links the loader had touched (2026-09-07:
+   seven of ten tabs kept MFL's padding on some loads). This sheet is only ever
+   loaded by our loader, so it needs no guard. The HTML text (title, taglines,
    subline) stays in the MFL header for rollback but is hidden: the words are
    in the image. */
 
