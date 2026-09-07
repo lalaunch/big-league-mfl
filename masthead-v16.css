@@ -1,5 +1,5 @@
-/* THE BIG LEAGUE — MASTHEAD V16.1
-   Uses the new high-resolution uploaded PNG from the repository root. */
+/* THE BIG LEAGUE — MASTHEAD V16.2
+   High-resolution approved masthead with the full 37-year tagline visible. */
 
 #body_home.blsn-mode .bl-masthead{
   position:relative!important;
@@ -18,7 +18,7 @@
   position:relative!important;
   z-index:2!important;
   width:100%!important;
-  aspect-ratio:3.5/1!important;
+  aspect-ratio:3.16/1!important;
   height:auto!important;
   background-image:url("https://lalaunch.github.io/big-league-mfl/the_big_league_same_crew_bigger_legends.png?v=2")!important;
   background-repeat:no-repeat!important;
@@ -46,27 +46,18 @@
   background:linear-gradient(180deg,#0a2d45,#061722)!important;
 }
 
-#body_home.blsn-mode .bl-mainnav a{
-  padding:13px 8px!important;
-}
+#body_home.blsn-mode .bl-mainnav a{padding:13px 8px!important;}
 
 @media(max-width:1100px){
-  #body_home.blsn-mode .bl-masthead:before{
-    aspect-ratio:3.25/1!important;
-  }
+  #body_home.blsn-mode .bl-masthead:before{aspect-ratio:3.05/1!important;}
 }
 
 @media(max-width:760px){
   #body_home.blsn-mode .bl-masthead:before{
-    aspect-ratio:3/1!important;
+    aspect-ratio:2.9/1!important;
     background-size:contain!important;
     background-position:center center!important;
   }
-  #body_home.blsn-mode .bl-mainnav{
-    overflow-x:auto!important;
-  }
-  #body_home.blsn-mode .bl-mainnav a{
-    min-width:88px!important;
-    padding:11px 7px!important;
-  }
+  #body_home.blsn-mode .bl-mainnav{overflow-x:auto!important;}
+  #body_home.blsn-mode .bl-mainnav a{min-width:88px!important;padding:11px 7px!important;}
 }
