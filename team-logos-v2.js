@@ -78,7 +78,9 @@
         'table.report caption .bl-caption-crest{display:inline-block!important;width:34px!important;height:34px!important;'+
         'vertical-align:middle!important;margin:-4px 10px -4px 0!important;object-fit:contain!important;'+
         'filter:drop-shadow(0 3px 5px rgba(0,0,0,.6))!important;background:none!important;}'+
-        'table.report caption:has(.bl-caption-crest){padding:6px 10px!important;line-height:34px!important;}';
+        'table.report caption:has(.bl-caption-crest){padding:6px 10px!important;line-height:34px!important;}'+
+        /* MFL's own icons were 100x100 and rendered at natural size; ours are 400x400. Cap, never force (home CSS sets 36px). */
+        'img[data-bl-team-logo]{max-width:100px!important;max-height:100px!important;}';
       document.head.appendChild(style);
     }
     document.querySelectorAll('table.report caption a[class*="franchise_"]').forEach(function(a){
