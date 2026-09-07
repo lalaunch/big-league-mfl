@@ -175,7 +175,7 @@
   filter:drop-shadow(0 10px 12px rgba(0,0,0,.7)) !important;
 }
 
-#body_home.blsn-mode .blsn-hero-main > div:nth-last-child(3){
+#body_home.blsn-mode .blsn-hero-main > div:not(.blsn-hero-shell):nth-last-child(3){
   right:0 !important;
   top:0 !important;
   width:31% !important;
@@ -185,22 +185,22 @@
   z-index:6 !important;
 }
 
-#body_home.blsn-mode .blsn-hero-main > div:nth-last-child(2){
+#body_home.blsn-mode .blsn-hero-main > div:not(.blsn-hero-shell):nth-last-child(2){
   right:1.7% !important;
   top:11% !important;
   width:27% !important;
   z-index:9 !important;
 }
-#body_home.blsn-mode .blsn-hero-main > div:nth-last-child(2) > div:first-child{
+#body_home.blsn-mode .blsn-hero-main > div:not(.blsn-hero-shell):nth-last-child(2) > div:first-child{
   font-size:17px !important;
   line-height:1.12 !important;
 }
-#body_home.blsn-mode .blsn-hero-main > div:nth-last-child(2) > div:last-child{
+#body_home.blsn-mode .blsn-hero-main > div:not(.blsn-hero-shell):nth-last-child(2) > div:last-child{
   font-size:9px !important;
   margin-top:6px !important;
 }
 
-#body_home.blsn-mode .blsn-hero-main > div:nth-last-child(1){
+#body_home.blsn-mode .blsn-hero-main > div:not(.blsn-hero-shell):nth-last-child(1){
   right:3.2% !important;
   bottom:8% !important;
   font-size:26px !important;
@@ -317,9 +317,9 @@
   .blsn-news-row{grid-template-columns:1fr;}
   #body_home.blsn-mode .blsn-hero-main{max-height:none !important;}
   #body_home.blsn-mode .blsn-hero-main > img[aria-hidden="true"],
-  #body_home.blsn-mode .blsn-hero-main > div:nth-last-child(3),
-  #body_home.blsn-mode .blsn-hero-main > div:nth-last-child(2),
-  #body_home.blsn-mode .blsn-hero-main > div:nth-last-child(1){display:none !important;}
+  #body_home.blsn-mode .blsn-hero-main > div:not(.blsn-hero-shell):nth-last-child(3),
+  #body_home.blsn-mode .blsn-hero-main > div:not(.blsn-hero-shell):nth-last-child(2),
+  #body_home.blsn-mode .blsn-hero-main > div:not(.blsn-hero-shell):nth-last-child(1){display:none !important;}
   #body_home.blsn-mode .bl-mainnav{flex-wrap:wrap;}
   #body_home.blsn-mode .bl-mainnav a{flex:1 1 20%;}
 }

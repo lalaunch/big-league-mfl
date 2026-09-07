@@ -15,7 +15,7 @@
   function loadStyles(){
     [
       ['blx-dashboard','https://lalaunch.github.io/big-league-mfl/dashboard-v8.css?v=3'],
-      ['blsn-network','https://lalaunch.github.io/big-league-mfl/sports-network.css?v=3']
+      ['blsn-network','https://lalaunch.github.io/big-league-mfl/sports-network.css?v=4']
     ].forEach(function(x){
       if(document.querySelector('link[data-'+x[0]+']')) return;
       var l=document.createElement('link');

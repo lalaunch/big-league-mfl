@@ -13,6 +13,7 @@
 
 #body_home.blsn-mode .blsn-hero-shell{
   display:grid!important;
+  left:auto!important;top:auto!important;right:auto!important;bottom:auto!important;padding:0!important; /* the legacy nth-last-child overlay rules must never move the shell */
   grid-template-columns:minmax(0,1.72fr) minmax(340px,.9fr)!important;
   width:100%!important;
   min-height:318px!important;
