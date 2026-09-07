@@ -342,3 +342,13 @@
 @media(max-width:1200px){
   #body_home.blsn-mode .blsn-callout-side .blsn-callout-go{font-size:46px!important;}
 }
+
+/* ------------------------- PHONES AT 980 (2026-09-07) -------------------------
+   MFL sets no viewport meta, so an iPhone lays the page out at 980 CSS px and
+   zooms out. The hero grid only collapsed below 950, so phones got the three-
+   column hero with the champion copy squeezed to ~120px. Collapse at 1000 and
+   let the quick links run three across instead of a 257px-tall stack. */
+@media(max-width:1000px){
+  #body_home.blsn-mode .blsn-hero-grid{grid-template-columns:1fr!important;}
+  #body_home.blsn-mode .blsn-quicklinks-body{grid-template-columns:repeat(3,1fr)!important;}
+}
