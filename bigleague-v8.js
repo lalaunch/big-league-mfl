@@ -8,8 +8,7 @@
   var HOST='https://lalaunch.github.io/big-league-mfl/';
   var CORE=HOST+'bigleague-core-v10.js?v=2';
   var MASTHEAD_CSS=HOST+'masthead-v16.css?v=2';
-  var HERO_CSS=HOST+'hero-v2.css?v=6';
-  var HERO_V3=HOST+'hero-v3.js?v=1';
+  var HERO_CSS=HOST+'hero-v2.css?v=7';
   var TEAM_LOGOS=HOST+'team-logos-v2.js?v=3';
 
   function clean(v){return String(v||'').replace(/\s+/g,' ').trim();}
@@ -33,20 +32,12 @@
       var old=document.getElementById(id);
       if(old) old.remove();
     });
+    if(document.getElementById('bl-hero-v2-css')) return;
     var link=document.createElement('link');
     link.id='bl-hero-v2-css';
     link.rel='stylesheet';
     link.href=HERO_CSS;
     document.head.appendChild(link);
-  }
-
-  function loadHeroV3(){
-    if(document.getElementById('bl-hero-v3-script')) return;
-    var s=document.createElement('script');
-    s.id='bl-hero-v3-script';
-    s.src=HERO_V3;
-    s.defer=true;
-    document.head.appendChild(s);
   }
 
   function loadTeamLogos(){
@@ -126,7 +117,6 @@
   function watch(){
     loadStyle();
     loadHeroStyle();
-    loadHeroV3();
     loadTeamLogos();
     patchNav();
     patchDashboardLinks();
@@ -134,7 +124,6 @@
     var timer=setInterval(function(){
       loadStyle();
       loadHeroStyle();
-      loadHeroV3();
       loadTeamLogos();
       patchNav();
       patchDashboardLinks();
@@ -144,7 +133,6 @@
 
   loadStyle();
   loadHeroStyle();
-  loadHeroV3();
   loadTeamLogos();
 
   var s=document.createElement('script');
