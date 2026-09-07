@@ -7,8 +7,8 @@
   var BASE='https://www42.myfantasyleague.com/'+YEAR;
   var HOST='https://lalaunch.github.io/big-league-mfl/';
   var CORE=HOST+'bigleague-core-v10.js?v=2';
-  var MASTHEAD_CSS=HOST+'masthead-v16.css?v=2';
-  var HERO_CSS=HOST+'hero-v2.css?v=7';
+  var MASTHEAD_CSS=HOST+'masthead-v16.css?v=3';
+  var HERO_CSS=HOST+'hero-v2.css?v=8';
   var TEAM_LOGOS=HOST+'team-logos-v2.js?v=3';
 
   function clean(v){return String(v||'').replace(/\s+/g,' ').trim();}
@@ -30,7 +30,7 @@
   function loadHeroStyle(){
     ['bl-hero-v1-css','bl-hero-v2-css'].forEach(function(id){
       var old=document.getElementById(id);
-      if(old) old.remove();
+      if(old && id!=='bl-hero-v2-css') old.remove();
     });
     if(document.getElementById('bl-hero-v2-css')) return;
     var link=document.createElement('link');
