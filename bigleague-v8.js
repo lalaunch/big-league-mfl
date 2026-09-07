@@ -8,7 +8,7 @@
   var HOST='https://lalaunch.github.io/big-league-mfl/';
   var CORE=HOST+'bigleague-core-v10.js?v=2';
   var MASTHEAD_CSS=HOST+'masthead-v16.css?v=3';
-  var HERO_CSS=HOST+'hero-v2.css?v=10';
+  var HERO_CSS=HOST+'hero-v2.css?v=11';
   var TEAM_LOGOS=HOST+'team-logos-v2.js?v=3';
 
   function clean(v){return String(v||'').replace(/\s+/g,' ').trim();}
@@ -33,7 +33,7 @@
       if(old && id!=='bl-hero-v2-css') old.remove();
     });
     var current=document.getElementById('bl-hero-v2-css');
-    if(current && current.href.indexOf('v=10')>=0) return;
+    if(current && current.href.indexOf('v=11')>=0) return;
     if(current) current.remove();
     var link=document.createElement('link');
     link.id='bl-hero-v2-css';
@@ -49,6 +49,34 @@
     s.src=TEAM_LOGOS;
     s.defer=true;
     document.head.appendChild(s);
+  }
+
+  function patchHeroPanel(){
+    var hero=document.querySelector('.blsn-hero-main');
+    if(!hero) return false;
+
+    /* Remove everything the old decorateHero() injected after the champion block. */
+    var first=hero.firstElementChild;
+    Array.from(hero.children).forEach(function(el){
+      if(el===first || el.classList.contains('blsn-photo-panel')) return;
+      el.remove();
+    });
+
+    var panel=hero.querySelector('.blsn-photo-panel');
+    if(!panel){
+      panel=document.createElement('div');
+      panel.className='blsn-photo-panel';
+      panel.setAttribute('aria-hidden','true');
+      hero.appendChild(panel);
+    }
+
+    /* Keep the native champion card behind the explicit photographic panel. */
+    if(first){
+      first.style.setProperty('position','relative','important');
+      first.style.setProperty('z-index','1','important');
+    }
+
+    return true;
   }
 
   function patchNav(){
@@ -122,6 +150,7 @@
     loadTeamLogos();
     patchNav();
     patchDashboardLinks();
+    patchHeroPanel();
     var tries=0;
     var timer=setInterval(function(){
       loadStyle();
@@ -129,6 +158,7 @@
       loadTeamLogos();
       patchNav();
       patchDashboardLinks();
+      patchHeroPanel();
       if(++tries>=50) clearInterval(timer);
     },300);
   }
