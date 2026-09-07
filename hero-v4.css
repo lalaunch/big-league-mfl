@@ -1,0 +1,46 @@
+/* THE BIG LEAGUE — HERO V4
+   Clean concept panel, no legacy 36 or outline art. */
+#body_home.blsn-mode .blsn-hero-main{
+  position:relative!important;
+  overflow:hidden!important;
+  isolation:isolate!important;
+}
+#body_home.blsn-mode .blsn-hero-main:after{
+  content:""!important;
+  position:absolute!important;
+  z-index:20!important;
+  right:0!important;
+  top:0!important;
+  width:43%!important;
+  height:100%!important;
+  background:linear-gradient(90deg,#06141d 0%,#04111a 14%,#02090f 100%)!important;
+  border-left:1px solid rgba(57,168,218,.32)!important;
+  pointer-events:none!important;
+}
+#body_home.blsn-mode .blsn-hero-v4-panel{
+  position:absolute!important;
+  z-index:30!important;
+  right:0!important;
+  top:4%!important;
+  width:43%!important;
+  height:92%!important;
+  background:
+    linear-gradient(90deg,rgba(4,17,26,.9) 0%,rgba(4,17,26,.22) 10%,rgba(4,17,26,0) 18%),
+    url('https://lalaunch.github.io/big-league-mfl/hero-right-v4.webp?v=1') center center/cover no-repeat!important;
+  pointer-events:none!important;
+  box-shadow:inset 18px 0 24px rgba(0,0,0,.35)!important;
+}
+#body_home.blsn-mode .blsn-hero-v4-quote,
+#body_home.blsn-mode .blsn-hero-v4-go{
+  display:none!important;
+}
+#body_home.blsn-mode .blsn-hero-main > img[aria-hidden="true"]{
+  display:none!important;
+  visibility:hidden!important;
+}
+@media(max-width:980px){
+  #body_home.blsn-mode .blsn-hero-v4-panel{width:44%!important;}
+}
+@media(max-width:760px){
+  #body_home.blsn-mode .blsn-hero-v4-panel{width:48%!important;background-position:58% center!important;}
+}
