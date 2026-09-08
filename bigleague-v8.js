@@ -2,17 +2,19 @@
    This is the one script the MFL header includes (as bigleague-v8.js?v=1; the
    filename is fixed by MFL, so it stays). It loads every hosted file with one
    version stamp, adds the theme class to body on every page, fixes nav links,
-   and builds the home-page hero panel. Bump V to bust every cache at once. */
+   adds the Big League browser icon, and builds the home-page hero panel.
+   Bump V to bust every cache at once. */
 (function(){
   'use strict';
 
-  var V='20260908q';
+  var V='20260908r';
   var YEAR=2026;
   var LEAGUE='73086';
   var BASE='https://www42.myfantasyleague.com/'+YEAR;
   var HOST='https://lalaunch.github.io/big-league-mfl/';
   var BOARD=BASE+'/mb/board_show.pl?bid=202673086';
   var PUGS_LOGO=HOST+'assets/logos/milwaukee-killer-pugs.webp?v='+V;
+  var FAVICON=HOST+'assets/big-league-favicon.png?v='+V;
 
   window.BL_VERSION=V;
 
@@ -34,6 +36,32 @@
     s.defer=true;
     if(onload){s.onload=onload;s.onerror=onload;}
     document.head.appendChild(s);
+  }
+
+  function patchFavicon(){
+    if(!document.head) return;
+    Array.from(document.querySelectorAll('link[rel~="icon"],link[rel="shortcut icon"]')).forEach(function(n){
+      if(n.id!=='bl-site-favicon') n.remove();
+    });
+    var icon=document.getElementById('bl-site-favicon');
+    if(!icon){
+      icon=document.createElement('link');
+      icon.id='bl-site-favicon';
+      icon.rel='icon';
+      icon.type='image/png';
+      icon.sizes='128x128';
+      document.head.appendChild(icon);
+    }
+    icon.href=FAVICON;
+
+    var apple=document.getElementById('bl-site-apple-icon');
+    if(!apple){
+      apple=document.createElement('link');
+      apple.id='bl-site-apple-icon';
+      apple.rel='apple-touch-icon';
+      document.head.appendChild(apple);
+    }
+    apple.href=FAVICON;
   }
 
   function themeEveryPage(){
@@ -110,6 +138,7 @@
   }
 
   function pass(){
+    patchFavicon();
     themeEveryPage();
     patchNav();
     patchDashboardLinks();
@@ -122,6 +151,7 @@
     var timer=setInterval(function(){pass();if(++tries>=50) clearInterval(timer);},300);
   }
 
+  patchFavicon();
   themeEveryPage();
   addStyle('bl-masthead-css','masthead.css');
   addStyle('bl-hero-css','hero.css');
