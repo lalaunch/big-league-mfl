@@ -69,7 +69,7 @@
 :is(#body_home,body[id]).blsn-mode .blt-name{
   position:relative;
   display:inline-block;
-  margin:0 0 14px;
+  margin:0 0 22px;
   padding-right:.12em; /* room for the italic overhang so the extrusion is not clipped */
   color:#fff;
   font-family:Impact,'Arial Black',Arial,sans-serif;
@@ -79,16 +79,24 @@
   font-weight:900;
   letter-spacing:-.03em;
   text-transform:uppercase;
+  /* extrusion: 12 steps down-and-right in the team's primary color, lit at the
+     top edge and falling to near-black, then a hard contact shadow and a soft
+     ground shadow. --t1 is the primary, --t2 the accent (face). */
   text-shadow:
-    0 1px 0 color-mix(in srgb,var(--t2) 92%,#fff),
-    0 2px 0 var(--t2),
-    0 3px 0 color-mix(in srgb,var(--t2) 88%,#000),
-    0 4px 0 color-mix(in srgb,var(--t2) 76%,#000),
-    0 5px 0 color-mix(in srgb,var(--t2) 64%,#000),
-    0 6px 0 color-mix(in srgb,var(--t2) 52%,#000),
-    0 7px 0 color-mix(in srgb,var(--t2) 40%,#000),
-    0 8px 1px rgba(0,0,0,.55),
-    0 16px 26px rgba(0,0,0,.65);
+    1px 1px 0 color-mix(in srgb,var(--t1) 70%,#fff),
+    2px 2px 0 color-mix(in srgb,var(--t1) 88%,#fff),
+    3px 3px 0 var(--t1),
+    4px 4px 0 color-mix(in srgb,var(--t1) 92%,#000),
+    5px 5px 0 color-mix(in srgb,var(--t1) 84%,#000),
+    6px 6px 0 color-mix(in srgb,var(--t1) 76%,#000),
+    7px 7px 0 color-mix(in srgb,var(--t1) 68%,#000),
+    8px 8px 0 color-mix(in srgb,var(--t1) 60%,#000),
+    9px 9px 0 color-mix(in srgb,var(--t1) 52%,#000),
+    10px 10px 0 color-mix(in srgb,var(--t1) 44%,#000),
+    11px 11px 0 color-mix(in srgb,var(--t1) 36%,#000),
+    12px 12px 0 color-mix(in srgb,var(--t1) 28%,#000),
+    13px 13px 2px rgba(0,0,0,.6),
+    10px 24px 34px rgba(0,0,0,.7);
 }
 :is(#body_home,body[id]).blsn-mode .blt-name::after{
   content:attr(data-text);
@@ -96,11 +104,20 @@
   inset:0;
   padding-right:inherit;
   color:transparent;
-  background:linear-gradient(180deg,#fff 0%,#f3f6f9 42%,#b9c4cf 52%,#e6ebf0 62%,#ffffff 100%);
+  /* face: white highlight over the accent color, with a bright band just below the
+     center line so it reads as polished metal in the team's color */
+  background:linear-gradient(180deg,
+    #fff 0%,
+    color-mix(in srgb,var(--t2) 30%,#fff) 30%,
+    color-mix(in srgb,var(--t2) 85%,#fff) 47%,
+    var(--t2) 52%,
+    color-mix(in srgb,var(--t2) 70%,#000) 53%,
+    color-mix(in srgb,var(--t2) 80%,#fff) 68%,
+    #fff 100%);
   -webkit-background-clip:text;
   background-clip:text;
   text-shadow:none;
-  -webkit-text-stroke:.6px rgba(20,30,40,.35);
+  -webkit-text-stroke:.8px color-mix(in srgb,var(--t1) 55%,#000);
   pointer-events:none;
 }
 :is(#body_home,body[id]).blsn-mode .blt-stats{
