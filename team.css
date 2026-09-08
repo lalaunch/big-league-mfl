@@ -131,7 +131,7 @@
   right:-6px;
   bottom:-14px;
   height:auto;
-  max-height:126%;
+  max-height:calc(100% + 32px); /* bleeds 14px past the bottom, tops out 4px inside the hero's top padding: no heads cut (Reno, 2026-09-08) */
   max-width:104%; /* portrait art fills the height; wide art (a reach toward the camera) fills the width */
   object-fit:contain;
   filter:drop-shadow(0 14px 18px rgba(0,0,0,.65));
