@@ -291,7 +291,7 @@
     '0003':{name:'Reno Gamblers',slug:'reno-gamblers',t1:'#0a7d3e',t2:'#f4c745'},
     '0004':{name:'Bristol Steampunks',slug:'bristol-steampunks',t1:'#7a4a1d',t2:'#d8b46a'},
     '0005':{name:'Delafield Draft Attics',slug:'delafield-draft-attics',t1:'#1a49c8',t2:'#d8dde6'},
-    '0006':{name:'Kansas City Killers',slug:'kansas-city-killers',t1:'#b3122e',t2:'#f4c745'},
+    '0006':{name:'Kansas City Killers',slug:'kansas-city-killers',t1:'#b3122e',t2:'#d8dde6'},
     '0007':{name:'Brooklyn Brawlers',slug:'brooklyn-brawlers',t1:'#2b2b2b',t2:'#e63946'},
     '0008':{name:'Winnebago Campers',slug:'winnebago-campers',t1:'#1f6f3f',t2:'#e8dcc0'},
     '0009':{name:'Jersey Jackhammers',slug:'jersey-jackhammers',t1:'#d9412a',t2:'#ffcc00'},
