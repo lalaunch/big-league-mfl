@@ -61,8 +61,16 @@
   letter-spacing:.14em;
   text-transform:uppercase;
 }
+/* The name is drawn twice: the h1 itself carries the extrusion (a stack of 1px
+   text-shadows in the team's accent color, darkening as it drops) and the ::after
+   copy (data-text) sits on top with a metallic gradient face. Two layers because a
+   gradient fill needs a transparent color, and a transparent glyph lets text-shadow
+   show through it. */
 :is(#body_home,body[id]).blsn-mode .blt-name{
-  margin:0 0 12px;
+  position:relative;
+  display:inline-block;
+  margin:0 0 14px;
+  padding-right:.12em; /* room for the italic overhang so the extrusion is not clipped */
   color:#fff;
   font-family:Impact,'Arial Black',Arial,sans-serif;
   font-style:italic;
@@ -71,7 +79,29 @@
   font-weight:900;
   letter-spacing:-.03em;
   text-transform:uppercase;
-  text-shadow:0 4px 0 rgba(0,0,0,.42),0 8px 14px rgba(0,0,0,.5);
+  text-shadow:
+    0 1px 0 color-mix(in srgb,var(--t2) 92%,#fff),
+    0 2px 0 var(--t2),
+    0 3px 0 color-mix(in srgb,var(--t2) 88%,#000),
+    0 4px 0 color-mix(in srgb,var(--t2) 76%,#000),
+    0 5px 0 color-mix(in srgb,var(--t2) 64%,#000),
+    0 6px 0 color-mix(in srgb,var(--t2) 52%,#000),
+    0 7px 0 color-mix(in srgb,var(--t2) 40%,#000),
+    0 8px 1px rgba(0,0,0,.55),
+    0 16px 26px rgba(0,0,0,.65);
+}
+:is(#body_home,body[id]).blsn-mode .blt-name::after{
+  content:attr(data-text);
+  position:absolute;
+  inset:0;
+  padding-right:inherit;
+  color:transparent;
+  background:linear-gradient(180deg,#fff 0%,#f3f6f9 42%,#b9c4cf 52%,#e6ebf0 62%,#ffffff 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  text-shadow:none;
+  -webkit-text-stroke:.6px rgba(20,30,40,.35);
+  pointer-events:none;
 }
 :is(#body_home,body[id]).blsn-mode .blt-stats{
   display:flex;

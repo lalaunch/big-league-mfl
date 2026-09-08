@@ -331,7 +331,7 @@
     hero.innerHTML=
       '<div class="blt-crest-wrap"><img class="blt-crest" src="'+HOSTED+'assets/logos/'+team.slug+'.webp?v='+BLV+'" alt=""></div>'+
       '<div class="blt-copy"><div class="blt-eyebrow">The Big League'+(stats.division?' • '+esc(stats.division)+' Division':'')+'</div>'+
-        '<h1 class="blt-name">'+esc(team.name)+'</h1>'+
+        '<h1 class="blt-name" data-text="'+esc(team.name)+'">'+esc(team.name)+'</h1>'+
         '<div class="blt-stats">'+
           (stats.record?'<div class="blt-stat"><b>'+esc(stats.record)+'</b><small>Record</small></div>':'')+
           (stats.points?'<div class="blt-stat"><b>'+esc(stats.points)+'</b><small>YTD points</small></div>':'')+
