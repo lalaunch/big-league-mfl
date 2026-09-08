@@ -1,0 +1,162 @@
+/* THE BIG LEAGUE — TEAM PAGES
+   A franchise hero under the nav on every franchise page (Franchise Information,
+   Roster, Schedule, ... : any page whose sub-nav reads "TEAM: Main | Roster | ...").
+   Built by bigleague-core.js (buildTeamPage). Team colors arrive as --t1/--t2 on
+   the hero; player art is assets/players/<slug>.webp when it exists, else the
+   crest carries the right side. */
+
+:is(#body_home,body[id]).blsn-mode .blt-hero{
+  --t1:#159ed8; --t2:#f4c745;
+  position:relative;
+  display:grid;
+  grid-template-columns:190px minmax(0,1fr) 340px;
+  align-items:center;
+  gap:26px;
+  min-height:250px;
+  margin:10px 4px 14px;
+  padding:22px 30px;
+  border:1px solid #17445c;
+  border-top:3px solid var(--t2);
+  border-radius:9px;
+  overflow:hidden;
+  isolation:isolate;
+  color:#eaf7fc;
+  background:
+    radial-gradient(ellipse 60% 90% at 88% 50%,color-mix(in srgb,var(--t1) 55%,transparent),transparent 70%),
+    radial-gradient(circle at 12% 40%,color-mix(in srgb,var(--t2) 22%,transparent),transparent 40%),
+    linear-gradient(110deg,#071821 0%,#06141d 55%,#02080d 100%);
+  box-shadow:inset 0 0 0 1px rgba(31,145,193,.3),0 10px 30px rgba(0,0,0,.38);
+}
+:is(#body_home,body[id]).blsn-mode .blt-hero:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:repeating-linear-gradient(62deg,rgba(255,255,255,.025) 0 1px,transparent 1px 34px);
+}
+:is(#body_home,body[id]).blsn-mode .blt-crest-wrap{
+  position:relative;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:190px;
+  height:190px;
+  border-radius:50%;
+  background:radial-gradient(circle,color-mix(in srgb,var(--t2) 18%,transparent),rgba(0,0,0,.35) 68%,rgba(0,0,0,.7));
+  box-shadow:0 12px 26px rgba(0,0,0,.58),inset 0 0 36px color-mix(in srgb,var(--t2) 14%,transparent);
+}
+:is(#body_home,body[id]).blsn-mode .blt-crest{
+  width:170px;
+  height:170px;
+  object-fit:contain;
+  filter:drop-shadow(0 12px 16px rgba(0,0,0,.6));
+}
+:is(#body_home,body[id]).blsn-mode .blt-copy{position:relative;z-index:2;min-width:0;}
+:is(#body_home,body[id]).blsn-mode .blt-eyebrow{
+  margin-bottom:8px;
+  color:var(--t2);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+:is(#body_home,body[id]).blsn-mode .blt-name{
+  margin:0 0 12px;
+  color:#fff;
+  font-family:Impact,'Arial Black',Arial,sans-serif;
+  font-style:italic;
+  font-size:54px;
+  line-height:.9;
+  font-weight:900;
+  letter-spacing:-.03em;
+  text-transform:uppercase;
+  text-shadow:0 4px 0 rgba(0,0,0,.42),0 8px 14px rgba(0,0,0,.5);
+}
+:is(#body_home,body[id]).blsn-mode .blt-stats{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 22px;
+  margin-bottom:14px;
+}
+:is(#body_home,body[id]).blsn-mode .blt-stat b{
+  display:block;
+  color:#fff;
+  font-size:24px;
+  font-weight:900;
+  line-height:1;
+}
+:is(#body_home,body[id]).blsn-mode .blt-stat small{
+  display:block;
+  margin-top:4px;
+  color:#8fd3ef;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+:is(#body_home,body[id]).blsn-mode .blt-subnav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+:is(#body_home,body[id]).blsn-mode .blt-subnav a,
+:is(#body_home,body[id]).blsn-mode .blt-subnav span{
+  display:inline-block;
+  padding:6px 11px;
+  border:1px solid #1a6488;
+  border-radius:5px;
+  background:linear-gradient(180deg,#0b3659,#082944);
+  color:#f1f8fb !important;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  text-decoration:none !important;
+}
+:is(#body_home,body[id]).blsn-mode .blt-subnav span{
+  border-color:var(--t2);
+  background:var(--t2);
+  color:#061019 !important;
+}
+:is(#body_home,body[id]).blsn-mode .blt-subnav a:hover{border-color:var(--t2);background:var(--t2);color:#061019 !important;}
+:is(#body_home,body[id]).blsn-mode .blt-art{
+  position:relative;
+  z-index:1;
+  align-self:stretch;
+  min-height:250px;
+}
+:is(#body_home,body[id]).blsn-mode .blt-art img{
+  position:absolute;
+  right:-10px;
+  bottom:-24px;
+  height:126%;
+  max-width:none;
+  object-fit:contain;
+  filter:drop-shadow(0 14px 18px rgba(0,0,0,.65));
+}
+:is(#body_home,body[id]).blsn-mode .blt-art.blt-art-crest img{
+  right:10px;
+  bottom:auto;
+  top:50%;
+  height:210px;
+  transform:translateY(-50%) rotate(-6deg);
+  opacity:.28;
+  filter:drop-shadow(0 0 30px color-mix(in srgb,var(--t2) 40%,transparent));
+}
+
+/* what the hero replaces */
+:is(#body_home,body[id]).blsn-mode.blt-page .reportnavigation{display:none !important;}
+:is(#body_home,body[id]).blsn-mode.blt-page h3.blt-old-subnav{display:none !important;}
+:is(#body_home,body[id]).blsn-mode.blt-page table.report tr:has(> td > img.franchiselogo){display:none !important;}
+
+@media(max-width:1000px){
+  :is(#body_home,body[id]).blsn-mode .blt-hero{grid-template-columns:150px minmax(0,1fr) 260px;padding:18px 22px;}
+  :is(#body_home,body[id]).blsn-mode .blt-crest-wrap{width:150px;height:150px;}
+  :is(#body_home,body[id]).blsn-mode .blt-crest{width:134px;height:134px;}
+  :is(#body_home,body[id]).blsn-mode .blt-name{font-size:42px;}
+}
+@media(max-width:760px){
+  :is(#body_home,body[id]).blsn-mode .blt-hero{grid-template-columns:120px minmax(0,1fr);}
+  :is(#body_home,body[id]).blsn-mode .blt-art{display:none;}
+}

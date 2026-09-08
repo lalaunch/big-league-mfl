@@ -279,6 +279,101 @@
     return ringCards(ringRace(null));
   }
 
+  /* ---------------- Team pages (2026-09-08) ----------------
+     Any page whose sub-nav reads "TEAM: Main | Roster | ..." gets a franchise hero: crest, name,
+     division / record / points, the sub-nav as tabs, and player art on the right when
+     assets/players/<slug>.webp exists (else the crest, faded). Colors per franchise are the
+     TEAMS map; tune there. Stats come from the Franchise Information table on O=01, fetched
+     same-origin on the other franchise pages. */
+  var TEAMS={
+    '0001':{name:'Tampa Bay Roxx Gang',slug:'tampa-bay-roxx-gang',t1:'#b3122e',t2:'#f4c745'},
+    '0002':{name:'LA Launch',slug:'la-launch',t1:'#1f3dd6',t2:'#ffd200'},
+    '0003':{name:'Reno Gamblers',slug:'reno-gamblers',t1:'#0a7d3e',t2:'#f4c745'},
+    '0004':{name:'Bristol Steampunks',slug:'bristol-steampunks',t1:'#7a4a1d',t2:'#d8b46a'},
+    '0005':{name:'Delafield Draft Attics',slug:'delafield-draft-attics',t1:'#4a2a6a',t2:'#d9b64c'},
+    '0006':{name:'Kansas City Killers',slug:'kansas-city-killers',t1:'#b3122e',t2:'#f4c745'},
+    '0007':{name:'Brooklyn Brawlers',slug:'brooklyn-brawlers',t1:'#2b2b2b',t2:'#e63946'},
+    '0008':{name:'Winnebago Campers',slug:'winnebago-campers',t1:'#1f6f3f',t2:'#e8dcc0'},
+    '0009':{name:'Jersey Jackhammers',slug:'jersey-jackhammers',t1:'#d9412a',t2:'#ffcc00'},
+    '0010':{name:'Milwaukee Killer Pugs',slug:'milwaukee-killer-pugs',t1:'#7b1e1e',t2:'#f4c745'}
+  };
+  var HOSTED='https://lalaunch.github.io/big-league-mfl/';
+  var BLV=window.BL_VERSION||'0';
+
+  function findTeamSubnav(){
+    var hs=Array.from(document.querySelectorAll('h3'));
+    for(var i=0;i<hs.length;i++){
+      var t=clean(hs[i].textContent);
+      if(/:\s*Main\b/.test(t) && /\|\s*Roster\b/i.test(t)) return hs[i];
+    }
+    return null;
+  }
+  function franchiseIdFrom(h3){
+    var a=Array.from(h3.querySelectorAll('a')).map(function(x){return x.href;}).join(' ');
+    var m=a.match(/[?&]F=(\d{4})/); if(m) return m[1];
+    var img=document.querySelector('img[id^="franchiselogo_"]');
+    if(img){m=img.id.match(/(\d{4})$/); if(m) return m[1];}
+    m=location.search.match(/[?&]F=(\d{4})/); return m?m[1]:null;
+  }
+  function statsFromDoc(doc){
+    var out={};
+    Array.from(doc.querySelectorAll('table.report tr')).forEach(function(tr){
+      var tds=tr.querySelectorAll('td'); if(tds.length<2) return;
+      var k=clean(tds[0].textContent).replace(/:$/,''), v=clean(tds[1].textContent);
+      if(/^Division/i.test(k)) out.division=v;
+      else if(/^Record/i.test(k)) out.record=(v.match(/\d+\s*-\s*\d+\s*-\s*\d+/)||[v])[0].replace(/\s+/g,'');
+      else if(/^YTD Points/i.test(k)) out.points=v;
+    });
+    return out;
+  }
+  function renderTeamHero(hero,team,id,stats){
+    var subnav=hero.getAttribute('data-subnav')||'';
+    hero.innerHTML=
+      '<div class="blt-crest-wrap"><img class="blt-crest" src="'+HOSTED+'assets/logos/'+team.slug+'.webp?v='+BLV+'" alt=""></div>'+
+      '<div class="blt-copy"><div class="blt-eyebrow">The Big League \u2022 Franchise '+esc(id)+(stats.division?' \u2022 '+esc(stats.division):'')+'</div>'+
+        '<h1 class="blt-name">'+esc(team.name)+'</h1>'+
+        '<div class="blt-stats">'+
+          (stats.record?'<div class="blt-stat"><b>'+esc(stats.record)+'</b><small>Record</small></div>':'')+
+          (stats.points?'<div class="blt-stat"><b>'+esc(stats.points)+'</b><small>YTD points</small></div>':'')+
+          (stats.division?'<div class="blt-stat"><b>'+esc(stats.division)+'</b><small>Division</small></div>':'')+
+        '</div>'+
+        '<nav class="blt-subnav">'+subnav+'</nav></div>'+
+      '<div class="blt-art blt-art-crest"><img src="'+HOSTED+'assets/logos/'+team.slug+'.webp?v='+BLV+'" alt=""></div>';
+    var art=new Image();
+    art.onload=function(){var box=hero.querySelector('.blt-art');box.classList.remove('blt-art-crest');box.innerHTML='';box.appendChild(art);};
+    art.alt='';
+    art.src=HOSTED+'assets/players/'+team.slug+'.webp?v='+BLV;
+  }
+  function buildTeamPage(){
+    if(document.querySelector('.blt-hero')) return true;
+    var h3=findTeamSubnav(); if(!h3) return false;
+    var id=franchiseIdFrom(h3), team=id&&TEAMS[id]; if(!team) return false;
+    document.body.classList.add('blt-page');
+    var hero=document.createElement('section');
+    hero.className='blt-hero';
+    hero.style.setProperty('--t1',team.t1); hero.style.setProperty('--t2',team.t2);
+    var parts=[];
+    Array.from(h3.childNodes).forEach(function(n){
+      if(n.nodeType===1&&n.tagName==='A') parts.push('<a href="'+esc(n.href)+'">'+esc(n.textContent)+'</a>');
+      else if(n.nodeType===3){
+        var bits=n.textContent.split('|');
+        bits.forEach(function(b){b=clean(b).replace(/^.*?:\s*/,'');if(b&&!/^\|?$/.test(b)) parts.push('<span>'+esc(b)+'</span>');});
+      }
+    });
+    hero.setAttribute('data-subnav',parts.join(''));
+    h3.classList.add('blt-old-subnav');
+    h3.parentNode.insertBefore(hero,h3);
+    var stats=statsFromDoc(document);
+    renderTeamHero(hero,team,id,stats);
+    if(!stats.record){
+      fetch(BASE+'/options?L='+LEAGUE+'&F='+id+'&O=01',{credentials:'same-origin'}).then(function(r){return r.text();}).then(function(html){
+        var doc=new DOMParser().parseFromString(html,'text/html');
+        renderTeamHero(hero,team,id,statsFromDoc(doc));
+      }).catch(function(){});
+    }
+    return true;
+  }
+
   function getLogoMap(){
     var map={};
     Array.from(document.querySelectorAll('#standings tr')).forEach(function(row){
@@ -496,6 +591,8 @@
   function boot(){
     loadStyles();
     upgradeNav();
+    buildTeamPage();
+    [400,1200,3000].forEach(function(ms){setTimeout(buildTeamPage,ms);});
     var tries=0;
     (function wait(){
       tries++;

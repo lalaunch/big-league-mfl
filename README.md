@@ -19,6 +19,7 @@ every cache at once:
 |---|---|
 | `masthead.css` | photographic masthead and nav, on every league page |
 | `hero.css` | the champion panel and photo callout under the nav (home) |
+| `team.css` | the franchise hero on team pages (crest, name, record, sub-nav tabs, player art from `assets/players/<slug>.webp` when present) |
 | `bigleague-core.js` | rebuilds the home page: hero grid, quick links, matchups, deadlines, standings, news row, Legacy cards, ring race |
 | `sports-network.css` | page background, layout grids, quick links, matchups, standings, news row |
 | `dashboard.css` | lower dashboard cards: Legacy, ring race |
