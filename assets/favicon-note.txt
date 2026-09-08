@@ -1,0 +1,1 @@
+The browser favicon is managed by bigleague-v8.js and points to assets/big-league-1g-favicon.png.
