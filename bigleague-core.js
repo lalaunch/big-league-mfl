@@ -294,7 +294,7 @@
     '0006':{name:'Kansas City Killers',slug:'kansas-city-killers',t1:'#b3122e',t2:'#d8dde6'},
     '0007':{name:'Brooklyn Brawlers',slug:'brooklyn-brawlers',t1:'#2b2b2b',t2:'#e63946'},
     '0008':{name:'Winnebago Campers',slug:'winnebago-campers',t1:'#1f6f3f',t2:'#e8dcc0'},
-    '0009':{name:'Jersey Jackhammers',slug:'jersey-jackhammers',t1:'#d9412a',t2:'#ffcc00'},
+    '0009':{name:'Jersey Jackhammers',slug:'jersey-jackhammers',t1:'#b3122e',t2:'#d8dde6'},
     '0010':{name:'Milwaukee Killer Pugs',slug:'milwaukee-killer-pugs',t1:'#7b1e1e',t2:'#f4c745'}
   };
   var HOSTED='https://lalaunch.github.io/big-league-mfl/';
