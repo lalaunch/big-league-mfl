@@ -7,14 +7,14 @@
 (function(){
   'use strict';
 
-  var V='20260908r';
+  var V='20260908s';
   var YEAR=2026;
   var LEAGUE='73086';
   var BASE='https://www42.myfantasyleague.com/'+YEAR;
   var HOST='https://lalaunch.github.io/big-league-mfl/';
   var BOARD=BASE+'/mb/board_show.pl?bid=202673086';
   var PUGS_LOGO=HOST+'assets/logos/milwaukee-killer-pugs.webp?v='+V;
-  var FAVICON=HOST+'assets/big-league-favicon.png?v='+V;
+  var FAVICON='data:image/png;base64,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';
 
   window.BL_VERSION=V;
 
@@ -41,7 +41,7 @@
   function patchFavicon(){
     if(!document.head) return;
     Array.from(document.querySelectorAll('link[rel~="icon"],link[rel="shortcut icon"]')).forEach(function(n){
-      if(n.id!=='bl-site-favicon') n.remove();
+      if(n.id!=='bl-site-favicon' && n.id!=='bl-site-shortcut-icon') n.remove();
     });
     var icon=document.getElementById('bl-site-favicon');
     if(!icon){
@@ -49,10 +49,20 @@
       icon.id='bl-site-favicon';
       icon.rel='icon';
       icon.type='image/png';
-      icon.sizes='128x128';
+      icon.sizes='64x64';
       document.head.appendChild(icon);
     }
     icon.href=FAVICON;
+
+    var shortcut=document.getElementById('bl-site-shortcut-icon');
+    if(!shortcut){
+      shortcut=document.createElement('link');
+      shortcut.id='bl-site-shortcut-icon';
+      shortcut.rel='shortcut icon';
+      shortcut.type='image/png';
+      document.head.appendChild(shortcut);
+    }
+    shortcut.href=FAVICON;
 
     var apple=document.getElementById('bl-site-apple-icon');
     if(!apple){
