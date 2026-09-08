@@ -340,7 +340,7 @@
         '<nav class="blt-subnav">'+subnav+'</nav></div>'+
       '<div class="blt-art blt-art-crest"><img src="'+HOSTED+'assets/logos/'+team.slug+'.webp?v='+BLV+'" alt=""></div>';
     var art=new Image();
-    art.onload=function(){var box=hero.querySelector('.blt-art');box.classList.remove('blt-art-crest');box.innerHTML='';box.appendChild(art);};
+    art.onload=function(){var box=hero.querySelector('.blt-art');box.classList.remove('blt-art-crest');if(art.naturalWidth/art.naturalHeight<0.5) box.classList.add('blt-art-tall'); /* full-body render: scale up, crop at the knees */ box.innerHTML='';box.appendChild(art);};
     art.alt='';
     art.src=HOSTED+'assets/players/'+team.slug+'.webp?v='+BLV;
   }
