@@ -189,6 +189,38 @@
   transform:rotate(-2deg);
 }
 
+#body_home.blsn-mode .blsn-callout-clock{
+  position:absolute;
+  left:26px;
+  top:146px;
+  z-index:3;
+  padding:8px 12px 7px 12px;
+  border-left:3px solid #f1c21d;
+  background:linear-gradient(90deg,rgba(3,17,26,.78),rgba(3,17,26,.35) 80%,rgba(3,17,26,0));
+  color:#fff;
+}
+#body_home.blsn-mode .blsn-clock-label{
+  display:block;
+  margin-bottom:3px;
+  color:#55d5ff;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+#body_home.blsn-mode .blsn-clock-digits{
+  display:block;
+  font-family:Impact,'Arial Black',Arial,sans-serif;
+  font-style:italic;
+  font-size:30px;
+  line-height:1;
+  letter-spacing:.02em;
+  font-variant-numeric:tabular-nums;
+  text-shadow:2px 2px 0 #7a5b00,3px 3px 0 #3d2e00,0 8px 14px rgba(0,0,0,.7);
+}
+#body_home.blsn-mode .blsn-clock-digits b{font-weight:900;color:#fff;}
+#body_home.blsn-mode .blsn-clock-digits i{font-style:normal;color:#f1c21d;margin:0 1px;}
+
 /* ---- breakpoints ----
    The hero grid itself (hero + quick links) collapses at 1000px in
    sports-network.css. Phones with no viewport meta render at 980. */
@@ -201,6 +233,8 @@
   #body_home.blsn-mode .blsn-callout-quote{font-size:19px;max-width:170px;}
   #body_home.blsn-mode .blsn-callout-by{top:98px;}
   #body_home.blsn-mode .blsn-callout-go{font-size:46px;}
+  #body_home.blsn-mode .blsn-callout-clock{top:132px;}
+  #body_home.blsn-mode .blsn-clock-digits{font-size:26px;}
 }
 @media(max-width:900px){
   #body_home.blsn-mode .blsn-hero-shell{grid-template-columns:1fr;}

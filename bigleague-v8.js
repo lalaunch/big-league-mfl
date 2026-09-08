@@ -7,7 +7,7 @@
 (function(){
   'use strict';
 
-  var V='20260908y';
+  var V='20260908z';
   var YEAR=2026;
   var LEAGUE='73086';
   var BASE='https://www42.myfantasyleague.com/'+YEAR;
@@ -100,9 +100,62 @@
         '<div class="blsn-callout-quote">“SAME LEAGUE.<br>DIFFERENT YEAR.<br>BIGGER STORIES.”</div>'+
         '<div class="blsn-callout-by">— THE BIG LEAGUE</div>'+
         '<div class="blsn-callout-go">IT\'S<br>GO TIME.</div>'+
+        '<div class="blsn-callout-clock" aria-live="off"><span class="blsn-clock-label">KICKOFF IN</span><span class="blsn-clock-digits"></span></div>'+
       '</section>';
     hero.appendChild(shell);
+    startClock();
     return true;
+  }
+
+  /* ---- kickoff clock (2026-09-08) ----
+     Lives in the photo callout, ticks once a second, no page refresh. Before the
+     season opener it counts to that instant; after it, to the next Sunday noon CT
+     (the fantasy slate). Sunday noon to midnight CT reads GAME DAY. Off after the
+     regular season ends. Times are built in America/Chicago via Intl so DST is
+     handled; the opener is a fixed UTC instant. */
+  var KICKOFF_UTC=Date.UTC(2026,8,10,0,20,0); /* Wed 2026-09-09 8:20 PM ET = 7:20 PM CT: Seahawks vs Patriots, per NFL.com */
+  var SEASON_END_UTC=Date.UTC(2027,0,12,6,0,0); /* stop after the regular season's last Monday night */
+  function ctParts(ms){
+    var p={};
+    new Intl.DateTimeFormat('en-US',{timeZone:'America/Chicago',hour12:false,weekday:'short',year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'numeric'})
+      .formatToParts(new Date(ms)).forEach(function(x){p[x.type]=x.value;});
+    p.hour=+p.hour%24; p.day=+p.day; p.month=+p.month; p.year=+p.year;
+    return p;
+  }
+  function ctNoonUtc(ms){
+    /* the UTC instant of 12:00 CT on the CT calendar day containing ms */
+    var p=ctParts(ms), guess=Date.UTC(p.year,p.month-1,p.day,17,0,0); /* 17Z is noon CDT */
+    var h=ctParts(guess).hour; return guess+(12-h)*3600000; /* shift if that day is on CST */
+  }
+  function nextTarget(now){
+    if(now<KICKOFF_UTC) return {label:'KICKOFF IN',at:KICKOFF_UTC};
+    if(now>SEASON_END_UTC) return null;
+    for(var d=0;d<8;d++){
+      var day=now+d*86400000, p=ctParts(day);
+      if(p.weekday==='Sun'){
+        var noon=ctNoonUtc(day);
+        if(d===0 && now>=noon) return {label:'GAME DAY',at:null};
+        if(noon>now) return {label:'SUNDAY KICKOFF IN',at:noon};
+      }
+    }
+    return null;
+  }
+  function pad(n){return (n<10?'0':'')+n;}
+  function tickClock(){
+    var el=document.querySelector('.blsn-callout-clock'); if(!el) return;
+    var t=nextTarget(Date.now());
+    if(!t){el.style.display='none';return;}
+    el.style.display='';
+    el.querySelector('.blsn-clock-label').textContent=t.label;
+    var dig=el.querySelector('.blsn-clock-digits');
+    if(!t.at){dig.innerHTML='<b>GO TIME</b>';return;}
+    var s=Math.max(0,Math.floor((t.at-Date.now())/1000)), dd=Math.floor(s/86400), hh=Math.floor(s%86400/3600), mm=Math.floor(s%3600/60), ss=s%60;
+    dig.innerHTML=(dd>0?'<b>'+dd+'</b><i>d</i> ':'')+'<b>'+pad(hh)+'</b><i>:</i><b>'+pad(mm)+'</b><i>:</i><b>'+pad(ss)+'</b>';
+  }
+  function startClock(){
+    if(window.__blClock) return;
+    window.__blClock=setInterval(tickClock,1000);
+    tickClock();
   }
 
   function tabClick(a,tab){
