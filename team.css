@@ -77,7 +77,7 @@
   font-size:54px;
   line-height:.9;
   font-weight:900;
-  letter-spacing:-.03em;
+  letter-spacing:.015em;
   text-transform:uppercase;
   /* extrusion: 12 steps down-and-right in the team's primary color, lit at the
      top edge and falling to near-black, then a hard contact shadow and a soft
