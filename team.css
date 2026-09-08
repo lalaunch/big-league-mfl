@@ -139,7 +139,9 @@
 :is(#body_home,body[id]).blsn-mode .blt-art.blt-art-tall img{
   max-height:180%; /* full-body renders (narrower than 1:2): head 4px inside the top, legs cropped below */
   bottom:-73%;
-  right:14px;
+  right:auto;
+  left:50%;
+  transform:translateX(-50%); /* centered in the column, not hugging the right edge */
 }
 :is(#body_home,body[id]).blsn-mode .blt-art.blt-art-crest img{
   right:10px;
