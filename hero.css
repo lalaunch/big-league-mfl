@@ -51,8 +51,9 @@
   justify-content:center;
   width:200px;
   height:200px;
-  background:radial-gradient(circle,rgba(214,174,41,.12),rgba(0,0,0,.30) 68%,rgba(0,0,0,.65));
-  box-shadow:0 12px 26px rgba(0,0,0,.58),inset 0 0 36px rgba(241,190,34,.10);
+  border-radius:50%; /* crests are transparent now (2026-09-08); the wrap is a lit disc, not a square */
+  background:radial-gradient(circle,rgba(244,199,69,.22) 0%,rgba(214,174,41,.10) 38%,rgba(0,0,0,.30) 68%,rgba(0,0,0,.65) 100%);
+  box-shadow:0 12px 26px rgba(0,0,0,.58),inset 0 0 36px rgba(241,190,34,.14);
 }
 #body_home.blsn-mode .blsn-champ-logo{
   display:block;
@@ -69,6 +70,7 @@
   font-weight:900;
   letter-spacing:.12em;
   text-transform:uppercase;
+  white-space:nowrap; /* the closing star was wrapping onto its own line at 1400px */
 }
 #body_home.blsn-mode .blsn-champ-title{
   margin:0 0 14px;
@@ -80,7 +82,22 @@
   font-weight:900;
   letter-spacing:-.035em;
   text-transform:uppercase;
-  text-shadow:0 4px 0 rgba(0,0,0,.42),0 8px 14px rgba(0,0,0,.50);
+  padding-right:.1em;
+  /* extrusion in the Pugs' maroon under the gold face, same construction as the
+     team-page name (team.css .blt-name) so the two heroes match */
+  text-shadow:
+    1px 1px 0 #a34a4a,
+    2px 2px 0 #8c2e2e,
+    3px 3px 0 #7b1e1e,
+    4px 4px 0 #711c1c,
+    5px 5px 0 #661919,
+    6px 6px 0 #5a1616,
+    7px 7px 0 #4e1313,
+    8px 8px 0 #421010,
+    9px 9px 0 #360d0d,
+    10px 10px 0 #2a0a0a,
+    11px 11px 2px rgba(0,0,0,.6),
+    8px 20px 30px rgba(0,0,0,.7);
 }
 #body_home.blsn-mode .blsn-champ-tagline{
   margin-bottom:14px;
