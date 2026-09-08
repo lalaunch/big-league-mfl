@@ -128,10 +128,11 @@
 }
 :is(#body_home,body[id]).blsn-mode .blt-art img{
   position:absolute;
-  right:-10px;
-  bottom:-24px;
-  height:126%;
-  max-width:none;
+  right:-6px;
+  bottom:-14px;
+  height:auto;
+  max-height:126%;
+  max-width:104%; /* portrait art fills the height; wide art (a reach toward the camera) fills the width */
   object-fit:contain;
   filter:drop-shadow(0 14px 18px rgba(0,0,0,.65));
 }

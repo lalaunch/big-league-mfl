@@ -286,7 +286,7 @@
      TEAMS map; tune there. Stats come from the Franchise Information table on O=01, fetched
      same-origin on the other franchise pages. */
   var TEAMS={
-    '0001':{name:'Tampa Bay Roxx Gang',slug:'tampa-bay-roxx-gang',t1:'#b3122e',t2:'#f4c745'},
+    '0001':{name:'Tampa Bay Roxx Gang',slug:'tampa-bay-roxx-gang',t1:'#8f0f1f',t2:'#d8dde6'},
     '0002':{name:'LA Launch',slug:'la-launch',t1:'#1f3dd6',t2:'#ffd200'},
     '0003':{name:'Reno Gamblers',slug:'reno-gamblers',t1:'#0a7d3e',t2:'#f4c745'},
     '0004':{name:'Bristol Steampunks',slug:'bristol-steampunks',t1:'#7a4a1d',t2:'#d8b46a'},
