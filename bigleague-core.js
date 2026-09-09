@@ -409,6 +409,36 @@
     return map;
   }
 
+  /* Championship banners (2026-09-09): one hanging pennant per Big League title in
+     FINALS, newest first, in the champion's colors. Active teams take colors and crest
+     from TEAMS; the retired franchises get a heritage palette and the league star. */
+  var HERITAGE={
+    'hartlandhitmen':{t1:'#4a3220',t2:'#d9b64c'},
+    'sussexstonemen':{t1:'#4a3220',t2:'#d9b64c'},
+    'orlandovipers':{t1:'#0f5a3a',t2:'#9be08a'},
+    'terminators':{t1:'#33363d',t2:'#c9ccd3'},
+    'orangecountymadhatters':{t1:'#c9521c',t2:'#ffd27a'},
+    'cincinnatistormtroopers':{t1:'#1d2233',t2:'#c8ccd6'}
+  };
+  function teamStyle(name){
+    var k=teamKey(name), id;
+    for(id in TEAMS){ if(teamKey(TEAMS[id].name)===k) return {t1:TEAMS[id].t1,t2:TEAMS[id].t2,logo:HOSTED+'assets/logos/'+TEAMS[id].slug+'.webp?v='+BLV}; }
+    var h=HERITAGE[k]||{t1:'#2b3a46',t2:'#d8dde6'};
+    return {t1:h.t1,t2:h.t2,logo:''};
+  }
+  function bannerCards(){
+    return FINALS.slice().reverse().map(function(r,index){
+      var s=teamStyle(r[1]);
+      return '<article class="blx-banner'+(index===0?' blx-banner-current':'')+'" style="--b1:'+s.t1+';--b2:'+s.t2+'" title="'+esc(r[0]+' • '+r[1]+' over '+r[2])+'">'+
+        '<span class="blx-banner-ring blx-banner-ring-l"></span><span class="blx-banner-ring blx-banner-ring-r"></span>'+
+        '<div class="blx-banner-frame"><div class="blx-banner-body">'+
+          '<div class="blx-banner-team">'+esc(r[1])+'</div>'+
+          (s.logo?'<img class="blx-banner-crest" src="'+s.logo+'" alt="" loading="lazy">':'<div class="blx-banner-crest blx-banner-star">★</div>')+
+          '<div class="blx-banner-league">BIG LEAGUE</div><div class="blx-banner-champ">CHAMPION</div>'+
+          '<div class="blx-banner-year">'+r[0]+'</div>'+
+        '</div></div></article>';
+    }).join('');
+  }
   function hallCards(){
     var logos=getLogoMap();
     /* the last ten finals, newest first, from the same FINALS table the ring race uses */
@@ -454,7 +484,7 @@
           <div class="blx-deadline"><span class="blx-kicker">Postseason</span><div class="blx-main">Playoffs Week 15 • Championship Week 16.</div></div>
         </div></section>
       </div>
-      <section class="blx-card blx-hof-feature"><div class="blx-hof-header"><div class="blx-hof-eyebrow">★ BIG LEAGUE LEGACY ★</div><div class="blx-hof-title">HALL OF CHAMPIONS</div><div class="blx-hof-subtitle">THE LAST 10 WORLD CHAMPIONS • 2016–2025</div></div><div class="blx-body"><div class="blx-hof-grid">${hallCards()}</div><div class="blx-hof-footer"><span>10 seasons. 10 stories. One Big League.</span><a class="blx-btn blx-hof-btn" href="${BASE}/home/${LEAGUE}#3">View Full Championship History</a></div></div></section>
+      <section class="blx-card blx-hof-feature"><div class="blx-hof-header"><div class="blx-hof-eyebrow">★ BIG LEAGUE LEGACY ★</div><div class="blx-hof-title">CHAMPIONSHIP BANNERS</div><div class="blx-hof-subtitle">${FINALS.length} WORLD CHAMPIONS • ${FINALS[0][0]}–${FINALS[FINALS.length-1][0]}</div></div><div class="blx-body"><div class="blx-banner-rod"></div><div class="blx-banner-grid">${bannerCards()}</div><div class="blx-hof-footer"><span>${FINALS.length} seasons. ${FINALS.length} banners. One Big League.</span><a class="blx-btn blx-hof-btn" href="${BASE}/home/${LEAGUE}#3">View Full Championship History</a></div></div></section>
       <section class="blx-card blx-count-feature"><div class="blx-title">Championship Count — 1990 to 2025</div><div class="blx-body"><div class="blx-trophies blx-ring-grid">${trophyRows()}</div><div class="blx-note">${ringNote(ringRace(null))}</div></div></section>`;
     anchor.insertAdjacentElement('afterend',wrap);
     return true;

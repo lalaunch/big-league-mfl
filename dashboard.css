@@ -357,6 +357,116 @@
   letter-spacing:.09em;
 }
 
+/* ---- championship banners: hanging pennants, one per title ---- */
+.blx-banner-rod{
+  height:8px;
+  margin:2px 2px 0;
+  border-radius:4px;
+  background:linear-gradient(180deg,#f3d27a,#b88a1e 55%,#6b4d0a);
+  box-shadow:0 2px 4px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.5);
+}
+.blx-banner-grid{
+  display:grid;
+  grid-template-columns:repeat(9,minmax(0,1fr));
+  gap:10px 8px;
+  padding:0 6px;
+}
+.blx-banner{
+  --b1:#2b3a46; --b2:#d8dde6;
+  position:relative;
+  min-width:0;
+  padding-top:10px;
+  filter:drop-shadow(0 10px 10px rgba(0,0,0,.55));
+  transition:transform .18s ease;
+  transform-origin:50% 0;
+}
+.blx-banner:hover{transform:rotate(-1.2deg) translateY(2px);}
+.blx-banner-ring{
+  position:absolute;
+  top:-6px;
+  width:10px;
+  height:14px;
+  border:2.5px solid #111;
+  border-radius:50%;
+  box-shadow:inset 0 0 0 1px #3a3a3a;
+  z-index:2;
+}
+.blx-banner-ring-l{left:16%;}
+.blx-banner-ring-r{right:16%;}
+.blx-banner-frame{
+  padding:4px 4px 0;
+  background:linear-gradient(180deg,#8d949a,#5e656b 60%,#3f4549);
+  clip-path:polygon(0 0,100% 0,100% 78%,50% 100%,0 78%);
+}
+.blx-banner-body{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  aspect-ratio:11/19;
+  padding:7px 5px 0;
+  color:#fff;
+  clip-path:polygon(0 0,100% 0,100% 78%,50% 100%,0 78%);
+  background:
+    radial-gradient(ellipse 70% 40% at 50% 28%,rgba(255,255,255,.18),transparent 70%),
+    linear-gradient(180deg,color-mix(in srgb,var(--b1) 80%,#fff) 0%,var(--b1) 30%,color-mix(in srgb,var(--b1) 78%,#000) 100%);
+}
+.blx-banner-team{
+  min-height:20px;
+  font-size:8px;
+  line-height:1.15;
+  font-weight:900;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:#fff;
+  text-shadow:0 1px 2px #000;
+}
+.blx-banner-crest{
+  width:58%;
+  aspect-ratio:1;
+  object-fit:contain;
+  margin:4px 0 5px;
+  filter:drop-shadow(0 4px 6px rgba(0,0,0,.6));
+}
+.blx-banner-star{
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.22),rgba(0,0,0,.25) 70%);
+  color:var(--b2);
+  font-size:30px;
+  line-height:1;
+}
+.blx-banner-league{
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.12em;
+  color:color-mix(in srgb,var(--b2) 80%,#fff);
+  text-shadow:0 1px 1px #000;
+}
+.blx-banner-champ{
+  font-family:Impact,'Arial Black',Arial,sans-serif;
+  font-size:19px;
+  line-height:.95;
+  letter-spacing:.01em;
+  color:var(--b2);
+  text-shadow:0 2px 0 rgba(0,0,0,.55),0 4px 8px rgba(0,0,0,.5);
+}
+.blx-banner-year{
+  margin-top:auto;
+  padding-bottom:22%;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.06em;
+  color:#fff;
+  text-shadow:0 1px 2px #000;
+}
+.blx-banner-current .blx-banner-frame{background:linear-gradient(180deg,#f3d27a,#b88a1e 60%,#6b4d0a);}
+
+@media(max-width:1000px){.blx-banner-grid{grid-template-columns:repeat(6,minmax(0,1fr));}}
+@media(max-width:700px){.blx-banner-grid{grid-template-columns:repeat(4,minmax(0,1fr));}}
+@media(max-width:480px){.blx-banner-grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
+
 @media(max-width:850px){
   .blx-grid.blx-three{grid-template-columns:1fr;}
   .blx-hof-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
