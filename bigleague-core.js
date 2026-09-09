@@ -650,6 +650,30 @@
     var st=tdStore('dbg'); st.events=(list||[]).map(function(e){return {t:Date.now(),pid:'0',fid:e.fid||'0002',kind:e.kind||'REC',yds:e.yds==null?null:e.yds,sure:e.sure!==false,pts:0,team:e.team||0,name:e.name||'Test Player',nfl:e.nfl||'',pos:e.pos||''};});
     renderTdTicker('dbg',st);
   };
+  /* console demo: BL_DEMO() paints five touchdowns and a live-looking Week 1 into the
+     matchup cards and stops the real poll so it stays. Refresh to go back to live data.
+     Pass BL_DEMO(false) to leave the poll running. */
+  window.BL_DEMO=function(stopPoll){
+    if(stopPoll!==false && window.__blScoreTimer){clearInterval(window.__blScoreTimer);window.__blScoreTimer=null;}
+    function f(id,score,left,playing,home){return {id:id,score:String(score),playersYetToPlay:String(left),playersCurrentlyPlaying:String(playing),isHome:home?'1':'0'};}
+    var fake={liveScoring:{week:'1',matchup:[
+      {franchise:[f('0001',78.40,3,2,false),f('0009',91.15,2,1,true)]},
+      {franchise:[f('0004',112.30,0,0,false),f('0002',129.85,0,0,true)]},
+      {franchise:[f('0008',44.60,5,1,false),f('0007',51.20,4,2,true)]},
+      {franchise:[f('0003',88.05,2,2,false),f('0010',60.30,3,1,true)]},
+      {franchise:[f('0006',0,9,0,false),f('0005',0,9,0,true)]}
+    ]}};
+    var st={leagueStandings:{franchise:['0001','0002','0003','0004','0005','0006','0007','0008','0009','0010'].map(function(id){return {id:id,h2hwlt:'0-0-0'};})}};
+    renderMatchupTable(fake,st);
+    window.BL_TD_DEBUG([
+      {name:"Ja'Marr Chase",kind:'REC',yds:12,fid:'0008'},
+      {name:'Jalen Hurts',kind:'RUSH',yds:1,fid:'0001'},
+      {name:'Bijan Robinson',kind:'RUSH',yds:44,fid:'0004'},
+      {name:'Josh Allen',kind:'PASS',yds:18,fid:'0010'},
+      {name:'Justin Jefferson',kind:'REC',yds:30,fid:'0002'}
+    ]);
+    return 'demo painted; refresh the page to return to live data';
+  };
   function loadScores(){
     if(!document.querySelector('#next_weeks_fantasy_schedule')) return;
     Promise.all([
