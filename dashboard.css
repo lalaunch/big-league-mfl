@@ -407,9 +407,9 @@
 @keyframes bl-td-scroll{from{transform:translateX(0)}to{transform:translateX(-100%)}}
 #body_home.blsn-mode .bl-td-item{display:inline-flex;align-items:center;gap:8px;color:#eaf7fc;font-size:14px;letter-spacing:.02em;}
 #body_home.blsn-mode .bl-td-item img{width:24px;height:24px;object-fit:contain;}
-#body_home.blsn-mode .bl-td-item b{color:#ffe14d;font-weight:900;}
+#body_home.blsn-mode .bl-td-item b{color:#ffe14d;font-weight:900;text-transform:uppercase;letter-spacing:.04em;}
 #body_home.blsn-mode .bl-td-item i{font-style:normal;color:#8fd3ef;font-size:12px;}
-#body_home.blsn-mode .bl-td-item em{font-style:normal;color:#fff;font-weight:700;}
+#body_home.blsn-mode .bl-td-item em{font-style:normal;color:#fff;font-weight:900;text-transform:uppercase;letter-spacing:.06em;}
 #body_home.blsn-mode .bl-td-item small{color:#5fa9c9;font-size:11px;}
 #body_home.blsn-mode .bl-td-maybe b::after{content:" ?";color:#8fd3ef;}
 #body_home.blsn-mode .bl-td-none{color:#8fd3ef;font-size:12px;letter-spacing:.08em;text-transform:uppercase;}

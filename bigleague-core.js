@@ -577,13 +577,23 @@
     var n=0; String(stats||'').replace(/(\d+)\s*(?:[A-Z]{1,3}\s?)?TD\b/g,function(_,c){n+=parseInt(c,10)||0;return _;});
     return n;
   }
+  function statMap(stats){
+    var m={}; String(stats||'').replace(/(\d+)\s*([A-Z]{2,5})\b/g,function(_,n,k){m[k]=(m[k]||0)+(+n);return _;});
+    return m;
+  }
+  /* which TD type went up, and the yards of that type gained since the previous poll
+     (the TD's length, to within one 30s window) */
   function tdKind(stats,prevStats){
-    var kinds={PATD:'pass TD',RUTD:'rush TD',RETD:'rec TD',KRTD:'kick return TD',PRTD:'punt return TD',TD:'TD'};
-    var now={},prev={};
-    String(stats||'').replace(/(\d+)\s*([A-Z]{1,3})?\s?TD\b/g,function(_,c,k){k=(k||'')+'TD';now[k]=(now[k]||0)+(+c);return _;});
-    String(prevStats||'').replace(/(\d+)\s*([A-Z]{1,3})?\s?TD\b/g,function(_,c,k){k=(k||'')+'TD';prev[k]=(prev[k]||0)+(+c);return _;});
-    for(var k in now){ if((now[k]||0)>(prev[k]||0)) return kinds[k]||k.replace('TD',' TD'); }
-    return 'TD';
+    var now=statMap(stats), prev=statMap(prevStats);
+    var types=[['RETD','REC','REYD'],['RUTD','RUSH','RUYD'],['PATD','PASS','PAYD'],['KRTD','KR','KRYD'],['PRTD','PR','PRYD'],['TD','TD',null]];
+    for(var t=0;t<types.length;t++){
+      var code=types[t][0];
+      if((now[code]||0)>(prev[code]||0)){
+        var yk=types[t][2], yds=yk?Math.max(0,(now[yk]||0)-(prev[yk]||0)):null;
+        return {type:types[t][1],yds:yds};
+      }
+    }
+    return {type:'TD',yds:null};
   }
   function loadPlayers(cb){
     if(TD_PLAYERS) return cb(TD_PLAYERS);
@@ -603,9 +613,9 @@
         if(p.status!=='starter') return;
         var prev=st.snap[p.id]||{s:0,t:0,u:''}, score=parseFloat(p.score||0), tds=tdCount(p.updatedStats);
         var hit=null;
-        if(tds>prev.t) hit={kind:tdKind(p.updatedStats,prev.u),sure:true};
-        else if(!p.updatedStats && prev.seen && score-prev.s>=5.9) hit={kind:'TD (probable)',sure:false};
-        if(hit) fresh.push({t:Date.now(),pid:p.id,fid:f.id,kind:hit.kind,sure:hit.sure,pts:score,team:fscore});
+        if(tds>prev.t){var k=tdKind(p.updatedStats,prev.u);hit={kind:k.type,yds:k.yds,sure:true};}
+        else if(!p.updatedStats && prev.seen && score-prev.s>=5.9) hit={kind:'TD',yds:null,sure:false};
+        if(hit) fresh.push({t:Date.now(),pid:p.id,fid:f.id,kind:hit.kind,yds:hit.yds,sure:hit.sure,pts:score,team:fscore});
         st.snap[p.id]={s:score,t:tds,u:p.updatedStats||'',seen:true};
       });
     });});
@@ -628,16 +638,16 @@
     tk.classList.remove('bl-td-empty');
     var items=evs.map(function(e){
       var t=TEAMS[e.fid], when=new Date(e.t).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
-      return '<span class="bl-td-item'+(e.sure?'':' bl-td-maybe')+'">'+
+      /* "JUSTIN JEFFERSON 30 YD REC" - crest, name, TD length when known, type */
+      return '<span class="bl-td-item'+(e.sure?'':' bl-td-maybe')+'" title="'+esc((t?t.name+' ':'')+(e.nfl?e.nfl+' '+e.pos+' ':'')+when)+'">'+
         (t?'<img src="'+HOSTED+'assets/logos/'+t.slug+'.webp?v='+BLV+'" alt="">':'')+
-        '<b>'+esc(e.name)+'</b> <i>'+esc((e.nfl?e.nfl+' ':'')+(e.pos||''))+'</i> '+esc(e.kind)+
-        ' <em>'+(t?esc(t.name):'')+' '+e.team.toFixed(2)+'</em> <small>'+when+'</small></span>';
+        '<b>'+esc(e.name)+'</b> <em>'+(e.yds!=null&&e.yds>0?e.yds+' YD ':'')+esc(e.kind)+'</em></span>';
     }).join('<span class="bl-td-sep">◆</span>');
     run.innerHTML=items+'<span class="bl-td-sep">◆</span>'+items; /* doubled so the loop is seamless */
     run.style.animationDuration=Math.max(18,evs.length*6)+'s';
   }
   window.BL_TD_DEBUG=function(list){ /* console hook: BL_TD_DEBUG([{name,nfl,pos,kind,fid,team}]) previews events */
-    var st=tdStore('dbg'); st.events=(list||[]).map(function(e){return {t:Date.now(),pid:'0',fid:e.fid||'0002',kind:e.kind||'rec TD',sure:e.sure!==false,pts:0,team:e.team||0,name:e.name||'Test Player',nfl:e.nfl||'',pos:e.pos||''};});
+    var st=tdStore('dbg'); st.events=(list||[]).map(function(e){return {t:Date.now(),pid:'0',fid:e.fid||'0002',kind:e.kind||'REC',yds:e.yds==null?null:e.yds,sure:e.sure!==false,pts:0,team:e.team||0,name:e.name||'Test Player',nfl:e.nfl||'',pos:e.pos||''};});
     renderTdTicker('dbg',st);
   };
   function loadScores(){
