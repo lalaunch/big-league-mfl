@@ -81,14 +81,14 @@
   display:flex;
   flex-direction:column;
   align-items:center;
-  width:46px;
-}
-:is(#body_home,body[id]).blsn-mode .blt-trophy svg{
   width:40px;
-  height:66px;
-  filter:drop-shadow(0 5px 6px rgba(0,0,0,.8));
 }
-:is(#body_home,body[id]).blsn-mode .blt-trophy-defs{position:absolute;width:0;height:0;overflow:hidden;}
+:is(#body_home,body[id]).blsn-mode .blt-trophy img{
+  display:block;
+  height:64px;
+  width:auto;
+  filter:drop-shadow(0 6px 6px rgba(0,0,0,.85)) drop-shadow(0 0 10px rgba(255,255,255,.12));
+}
 :is(#body_home,body[id]).blsn-mode .blt-trophy b{
   position:relative; /* a filtered svg paints above plain inline text; lift the year over it */
   z-index:1;
