@@ -339,15 +339,15 @@
       years.map(function(y){return '<span class="blt-trophy">'+cup+'<b>'+y+'</b></span>';}).join('')+
       '</div>';
   }
-  /* Top Gun tile for the team hero: the same trophy photo, gold-toned in CSS, one per
-     Top Gun season in TOPGUN (MFL League Awards), year under each. Sits in the stat
+  /* Top Gun tile for the team hero: the Top Gun plaque photo (assets/trophies/top-gun-trophy.webp,
+     wall keyed out 2026-09-09), one per Top Gun season in TOPGUN (MFL League Awards), year under each. Sits in the stat
      row after Division. Empty string when the team has none. */
   function topGunTile(teamName){
     var k=teamKey(teamName), years=[];
     TOPGUN.forEach(function(r){if(teamKey(r[1])===k) years.push(r[0]);});
     if(!years.length) return '';
     return '<div class="blt-stat blt-topgun" title="Top Gun Trophies: '+years.join(', ')+'">'+
-      '<div class="blt-topgun-row">'+years.map(function(y){return '<span class="blt-topgun-cup"><img src="'+HOSTED+'assets/trophies/big-league-trophy.webp?v='+BLV+'" alt="" loading="lazy"><b>'+y+'</b></span>';}).join('')+'</div>'+
+      '<div class="blt-topgun-row">'+years.map(function(y){return '<span class="blt-topgun-cup"><img src="'+HOSTED+'assets/trophies/top-gun-trophy.webp?v='+BLV+'" alt="" loading="lazy"><b>'+y+'</b></span>';}).join('')+'</div>'+
       '<small>Top Gun</small></div>';
   }
   function renderTeamHero(hero,team,id,stats){

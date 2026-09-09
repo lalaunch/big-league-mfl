@@ -214,12 +214,12 @@
 /* Top Gun tile: same chip as the other stats, holding gold-toned mini trophies */
 :is(#body_home,body[id]).blsn-mode .blt-topgun{padding:7px 14px 8px 18px;}
 :is(#body_home,body[id]).blsn-mode .blt-topgun-row{display:flex;gap:6px;align-items:flex-end;}
-:is(#body_home,body[id]).blsn-mode .blt-topgun-cup{display:flex;flex-direction:column;align-items:center;width:22px;}
+:is(#body_home,body[id]).blsn-mode .blt-topgun-cup{display:flex;flex-direction:column;align-items:center;width:40px;}
 :is(#body_home,body[id]).blsn-mode .blt-topgun-cup img{
   display:block;
-  height:30px;
+  height:34px;
   width:auto;
-  filter:sepia(1) saturate(3.2) hue-rotate(-12deg) brightness(1.02) drop-shadow(0 3px 3px rgba(0,0,0,.8));
+  filter:drop-shadow(0 3px 3px rgba(0,0,0,.8));
 }
 :is(#body_home,body[id]).blsn-mode .blt-topgun-cup b{
   margin-top:2px;
