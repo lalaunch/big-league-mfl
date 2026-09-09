@@ -563,12 +563,89 @@
       cap.innerHTML=(anyLive?'<span class="bl-mu-livedot">● LIVE</span> ':allFinal?'FINAL • ':'')+esc(cap.getAttribute('data-bl-orig'))+' <span class="bl-mu-stamp">as of '+stamp+'</span>';
     }
   }
+  /* ---- touchdown ticker (2026-09-09) ----
+     Rides on the same 30s liveScoring poll, now with DETAILS=1 so every rostered player
+     comes back with score and updatedStats (MFL fills that string only while the player's
+     game is live, e.g. "2 REC 34 REYD 1 RETD"). A TD is logged when a starter's TD count in
+     that string rises; if the string is empty, a jump of 5.9+ points in one poll is logged
+     as a probable TD. Events persist per week in localStorage so a refresh keeps the day.
+     Names come from the players export, fetched once and cached (id -> name|team|pos). */
+  var TD_PLAYERS=null;
+  function tdStore(week){try{return JSON.parse(localStorage.getItem('bl_td_'+YEAR+'_'+week)||'{}');}catch(e){return {};}}
+  function tdSave(week,st){try{localStorage.setItem('bl_td_'+YEAR+'_'+week,JSON.stringify(st));}catch(e){}}
+  function tdCount(stats){
+    var n=0; String(stats||'').replace(/(\d+)\s*(?:[A-Z]{1,3}\s?)?TD\b/g,function(_,c){n+=parseInt(c,10)||0;return _;});
+    return n;
+  }
+  function tdKind(stats,prevStats){
+    var kinds={PATD:'pass TD',RUTD:'rush TD',RETD:'rec TD',KRTD:'kick return TD',PRTD:'punt return TD',TD:'TD'};
+    var now={},prev={};
+    String(stats||'').replace(/(\d+)\s*([A-Z]{1,3})?\s?TD\b/g,function(_,c,k){k=(k||'')+'TD';now[k]=(now[k]||0)+(+c);return _;});
+    String(prevStats||'').replace(/(\d+)\s*([A-Z]{1,3})?\s?TD\b/g,function(_,c,k){k=(k||'')+'TD';prev[k]=(prev[k]||0)+(+c);return _;});
+    for(var k in now){ if((now[k]||0)>(prev[k]||0)) return kinds[k]||k.replace('TD',' TD'); }
+    return 'TD';
+  }
+  function loadPlayers(cb){
+    if(TD_PLAYERS) return cb(TD_PLAYERS);
+    try{var c=localStorage.getItem('bl_players_'+YEAR); if(c){TD_PLAYERS=JSON.parse(c); return cb(TD_PLAYERS);}}catch(e){}
+    fetch(EXPORT+'players&DETAILS=0',{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(j){
+      var map={}; (j.players&&j.players.player||[]).forEach(function(p){map[p.id]=(p.name||'')+'|'+(p.team||'')+'|'+(p.position||'');});
+      TD_PLAYERS=map; try{localStorage.setItem('bl_players_'+YEAR,JSON.stringify(map));}catch(e){} cb(map);
+    }).catch(function(){cb({});});
+  }
+  function tickTds(live){
+    var ls=live&&live.liveScoring; if(!ls||!ls.matchup) return;
+    var week=ls.week, st=tdStore(week); st.snap=st.snap||{}; st.events=st.events||[];
+    var fresh=[];
+    ls.matchup.forEach(function(mu){mu.franchise.forEach(function(f){
+      var fscore=parseFloat(f.score||0);
+      (f.players&&f.players.player||[]).forEach(function(p){
+        if(p.status!=='starter') return;
+        var prev=st.snap[p.id]||{s:0,t:0,u:''}, score=parseFloat(p.score||0), tds=tdCount(p.updatedStats);
+        var hit=null;
+        if(tds>prev.t) hit={kind:tdKind(p.updatedStats,prev.u),sure:true};
+        else if(!p.updatedStats && prev.seen && score-prev.s>=5.9) hit={kind:'TD (probable)',sure:false};
+        if(hit) fresh.push({t:Date.now(),pid:p.id,fid:f.id,kind:hit.kind,sure:hit.sure,pts:score,team:fscore});
+        st.snap[p.id]={s:score,t:tds,u:p.updatedStats||'',seen:true};
+      });
+    });});
+    if(fresh.length){
+      loadPlayers(function(map){
+        fresh.forEach(function(e){var m=(map[e.pid]||'||').split('|');e.name=m[0]||('#'+e.pid);e.nfl=m[1]||'';e.pos=m[2]||'';});
+        st.events=st.events.concat(fresh).slice(-200);
+        tdSave(week,st); renderTdTicker(week,st);
+      });
+    }else{ tdSave(week,st); renderTdTicker(week,st); }
+  }
+  function renderTdTicker(week,st){
+    var table=document.querySelector('#next_weeks_fantasy_schedule'); if(!table) return;
+    var host=table.parentNode; var tk=host.querySelector('.bl-td-ticker');
+    if(!tk){tk=document.createElement('div');tk.className='bl-td-ticker';tk.innerHTML='<span class="bl-td-label">TD TICKER</span><div class="bl-td-track"><div class="bl-td-run"></div></div>';host.insertBefore(tk,table);}
+    var today=new Date().toDateString();
+    var evs=(st.events||[]).filter(function(e){return new Date(e.t).toDateString()===today;}).slice().reverse();
+    var run=tk.querySelector('.bl-td-run');
+    if(!evs.length){tk.classList.add('bl-td-empty');run.innerHTML='<span class="bl-td-item bl-td-none">No touchdowns yet today • Week '+esc(week)+'</span>';return;}
+    tk.classList.remove('bl-td-empty');
+    var items=evs.map(function(e){
+      var t=TEAMS[e.fid], when=new Date(e.t).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
+      return '<span class="bl-td-item'+(e.sure?'':' bl-td-maybe')+'">'+
+        (t?'<img src="'+HOSTED+'assets/logos/'+t.slug+'.webp?v='+BLV+'" alt="">':'')+
+        '<b>'+esc(e.name)+'</b> <i>'+esc((e.nfl?e.nfl+' ':'')+(e.pos||''))+'</i> '+esc(e.kind)+
+        ' <em>'+(t?esc(t.name):'')+' '+e.team.toFixed(2)+'</em> <small>'+when+'</small></span>';
+    }).join('<span class="bl-td-sep">◆</span>');
+    run.innerHTML=items+'<span class="bl-td-sep">◆</span>'+items; /* doubled so the loop is seamless */
+    run.style.animationDuration=Math.max(18,evs.length*6)+'s';
+  }
+  window.BL_TD_DEBUG=function(list){ /* console hook: BL_TD_DEBUG([{name,nfl,pos,kind,fid,team}]) previews events */
+    var st=tdStore('dbg'); st.events=(list||[]).map(function(e){return {t:Date.now(),pid:'0',fid:e.fid||'0002',kind:e.kind||'rec TD',sure:e.sure!==false,pts:0,team:e.team||0,name:e.name||'Test Player',nfl:e.nfl||'',pos:e.pos||''};});
+    renderTdTicker('dbg',st);
+  };
   function loadScores(){
     if(!document.querySelector('#next_weeks_fantasy_schedule')) return;
     Promise.all([
-      fetch(EXPORT+'liveScoring',{credentials:'same-origin'}).then(function(r){return r.json();}),
+      fetch(EXPORT+'liveScoring&DETAILS=1',{credentials:'same-origin'}).then(function(r){return r.json();}),
       fetch(EXPORT+'leagueStandings',{credentials:'same-origin'}).then(function(r){return r.json();}).catch(function(){return null;})
-    ]).then(function(res){renderMatchupTable(res[0],res[1]);}).catch(function(){});
+    ]).then(function(res){renderMatchupTable(res[0],res[1]);try{tickTds(res[0]);}catch(e){}}).catch(function(){});
   }
   function startScores(){
     loadScores();
