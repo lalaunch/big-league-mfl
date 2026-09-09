@@ -74,19 +74,19 @@
 :is(#body_home,body[id]).blsn-mode .blt-trophies{
   display:flex;
   flex-wrap:wrap;
-  gap:4px;
-  padding-bottom:10px; /* clears the name's 13px extrusion so the cups sit on the same baseline as the letters */
+  gap:7px;
+  padding-bottom:8px; /* clears the name's 13px extrusion so the cups sit on the same baseline as the letters */
 }
 :is(#body_home,body[id]).blsn-mode .blt-trophy{
   display:flex;
   flex-direction:column;
   align-items:center;
-  width:34px;
+  width:48px;
 }
 :is(#body_home,body[id]).blsn-mode .blt-trophy svg{
-  width:30px;
-  height:33px;
-  filter:drop-shadow(0 3px 4px rgba(0,0,0,.7));
+  width:44px;
+  height:48px;
+  filter:drop-shadow(0 4px 6px rgba(0,0,0,.75));
 }
 :is(#body_home,body[id]).blsn-mode .blt-trophy .blt-cup,
 :is(#body_home,body[id]).blsn-mode .blt-trophy .blt-foot,
@@ -94,13 +94,13 @@
 :is(#body_home,body[id]).blsn-mode .blt-trophy .blt-handle{fill:none;stroke:#e0aa2a;stroke-width:2.4;stroke-linecap:round;}
 :is(#body_home,body[id]).blsn-mode .blt-trophy .blt-plate{fill:#1b1b1b;stroke:#c8931a;stroke-width:.8;}
 :is(#body_home,body[id]).blsn-mode .blt-trophy b{
-  margin-top:-7px;
+  margin-top:-10px;
   color:#ffe28a;
-  font-size:8.5px;
+  font-size:11.5px;
   font-weight:900;
-  letter-spacing:.02em;
+  letter-spacing:.03em;
   line-height:1;
-  text-shadow:0 1px 0 #000;
+  text-shadow:0 1px 0 #000,0 0 6px rgba(0,0,0,.9);
 }
 /* The name is drawn twice: the h1 itself carries the extrusion (a stack of 1px
    text-shadows in the team's accent color, darkening as it drops) and the ::after
