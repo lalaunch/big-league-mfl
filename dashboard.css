@@ -382,7 +382,9 @@
 #next_weeks_fantasy_schedule tr.bl-mu-row-live td{background:rgba(179,18,46,.10);}
 #next_weeks_fantasy_schedule .bl-mu-livedot{color:#ff5a5a;animation:blx-pulse 1.4s ease-in-out infinite;}
 @keyframes blx-pulse{0%,100%{opacity:1}50%{opacity:.45}}
-#next_weeks_fantasy_schedule .bl-mu-stamp{display:inline !important;font-size:10px !important;line-height:1;color:#5fa9c9 !important;letter-spacing:.04em;font-weight:700;margin-left:8px;text-transform:none;vertical-align:middle;}
+/* sports-network.css sets every caption span to 22px with padding (two ids + class); these out-rank it */
+#body_home.blsn-mode #next_weeks_fantasy_schedule caption span.bl-mu-stamp{display:inline !important;padding:0 !important;font-size:10px !important;line-height:1;color:#5fa9c9 !important;letter-spacing:.04em !important;font-weight:700;margin-left:8px;text-transform:none;vertical-align:middle;}
+#body_home.blsn-mode #next_weeks_fantasy_schedule caption span.bl-mu-livedot{display:inline !important;padding:0 !important;font-size:inherit !important;}
 
 /* ---- championship banners: hanging pennants, one per title ---- */
 .blx-banner-rod{
