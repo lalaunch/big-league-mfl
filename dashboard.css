@@ -360,10 +360,6 @@
 /* ---- live scores inside the WEEK N MATCHUPS table ----
    MFL lays this table out as a grid of 152px cards, one per team (tbody and tr are
    display:grid, each td a block). The data stacks under the team name inside the card. */
-#next_weeks_fantasy_schedule .bl-mu-crest{
-  display:block;margin:0 auto 4px;width:34px;height:34px;object-fit:contain;
-  filter:drop-shadow(0 2px 3px rgba(0,0,0,.7));
-}
 #next_weeks_fantasy_schedule .bl-mu-meta{
   display:flex;flex-direction:column;align-items:center;gap:3px;margin-top:6px;text-align:center;
 }

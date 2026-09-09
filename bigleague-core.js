@@ -540,7 +540,6 @@
       var id=m[1], f=byId[id], t=TEAMS[id], opp=byId[pair[id]], td=a.closest('td');
       any=true;
       td.classList.add('bl-mu-cell');
-      if(t&&!td.querySelector('.bl-mu-crest')){var img=document.createElement('img');img.className='bl-mu-crest';img.alt='';img.src=HOSTED+'assets/logos/'+t.slug+'.webp?v='+BLV;td.insertBefore(img,a);}
       var meta=td.querySelector('.bl-mu-meta');
       if(!meta){meta=document.createElement('span');meta.className='bl-mu-meta';meta.innerHTML='<span class="bl-mu-rec"></span><b class="bl-mu-score"></b><span class="bl-mu-state"></span>';td.appendChild(meta);}
       meta.querySelector('.bl-mu-rec').textContent=recs[id]||'';
