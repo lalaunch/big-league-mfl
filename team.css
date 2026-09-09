@@ -84,15 +84,11 @@
   width:48px;
 }
 :is(#body_home,body[id]).blsn-mode .blt-trophy svg{
-  width:42px;
-  height:44px;
-  filter:drop-shadow(0 4px 6px rgba(0,0,0,.75));
+  width:44px;
+  height:53px;
+  filter:drop-shadow(0 5px 6px rgba(0,0,0,.8));
 }
-:is(#body_home,body[id]).blsn-mode .blt-trophy .blt-cup,
-:is(#body_home,body[id]).blsn-mode .blt-trophy .blt-foot,
-:is(#body_home,body[id]).blsn-mode .blt-trophy .blt-stem{fill:url(#blt-gold);stroke:#5a3d00;stroke-width:.8;}
-:is(#body_home,body[id]).blsn-mode .blt-trophy .blt-handle{fill:none;stroke:#e0aa2a;stroke-width:2.4;stroke-linecap:round;}
-:is(#body_home,body[id]).blsn-mode .blt-trophy .blt-plate{fill:#1b1b1b;stroke:#c8931a;stroke-width:.8;}
+:is(#body_home,body[id]).blsn-mode .blt-trophy-defs{position:absolute;width:0;height:0;overflow:hidden;}
 :is(#body_home,body[id]).blsn-mode .blt-trophy b{
   position:relative; /* a filtered svg paints above plain inline text; lift the year over it */
   z-index:1;
