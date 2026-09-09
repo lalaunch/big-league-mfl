@@ -519,7 +519,7 @@
   /* ---- live scoreboard (2026-09-09) ----
      Five matchup cards under the hero, from the league's export API (same origin):
      liveScoring for scores / players left, leagueStandings for records. Refreshes every
-     60s while the tab is visible. Team names, crests and colors come from TEAMS. */
+     30s while the tab is visible. Team names, crests and colors come from TEAMS. */
   var EXPORT=BASE+'/export?L='+LEAGUE+'&JSON=1&TYPE=';
   function makeScoreboard(){
     var sec=document.createElement('section');
@@ -558,7 +558,7 @@
     }).join('');
     sec.querySelector('.blx-score-grid').innerHTML=html;
     sec.querySelector('.blx-score-week').textContent='WEEK '+week+' SCOREBOARD';
-    sec.querySelector('.blx-score-status').textContent=anyLive?'● LIVE':allFinal?'FINAL':'Updates every minute during games';
+    sec.querySelector('.blx-score-status').textContent=anyLive?'● LIVE':allFinal?'FINAL':'Updates every 30 seconds during games';
     sec.classList.toggle('blx-score-islive',anyLive);
     var d=new Date(); sec.querySelector('.blx-score-stamp').textContent='as of '+d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
   }
@@ -571,7 +571,7 @@
   function startScoreboard(sec){
     loadScoreboard(sec);
     if(window.__blScoreTimer) clearInterval(window.__blScoreTimer);
-    window.__blScoreTimer=setInterval(function(){if(document.visibilityState==='visible') loadScoreboard(sec);},60000);
+    window.__blScoreTimer=setInterval(function(){if(document.visibilityState==='visible') loadScoreboard(sec);},30000);
   }
   function findChampionAnchor(){
     var nodes=Array.from(document.querySelectorAll('#tabcontent0 div,#tabcontent0 table,#tabcontent0 td'));
