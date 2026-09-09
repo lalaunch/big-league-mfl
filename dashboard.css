@@ -394,9 +394,9 @@
   background:linear-gradient(180deg,#071823,#04111a);
 }
 #body_home.blsn-mode .bl-td-label{
-  flex:0 0 auto;padding:7px 12px;
+  flex:0 0 auto;padding:9px 14px;
   background:linear-gradient(180deg,#e63946,#8f0f1f);
-  color:#fff;font-size:10px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;
+  color:#fff;font-size:12px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;
   box-shadow:2px 0 8px rgba(0,0,0,.5);z-index:1;
 }
 #body_home.blsn-mode .bl-td-empty .bl-td-label{background:linear-gradient(180deg,#0a4d78,#083a5c);}
@@ -405,14 +405,14 @@
 #body_home.blsn-mode .bl-td-empty .bl-td-run{padding-left:14px;animation:none;}
 #body_home.blsn-mode .bl-td-ticker:hover .bl-td-run{animation-play-state:paused;}
 @keyframes bl-td-scroll{from{transform:translateX(0)}to{transform:translateX(-100%)}}
-#body_home.blsn-mode .bl-td-item{display:inline-flex;align-items:center;gap:6px;color:#eaf7fc;font-size:11px;letter-spacing:.02em;}
-#body_home.blsn-mode .bl-td-item img{width:18px;height:18px;object-fit:contain;}
+#body_home.blsn-mode .bl-td-item{display:inline-flex;align-items:center;gap:8px;color:#eaf7fc;font-size:14px;letter-spacing:.02em;}
+#body_home.blsn-mode .bl-td-item img{width:24px;height:24px;object-fit:contain;}
 #body_home.blsn-mode .bl-td-item b{color:#ffe14d;font-weight:900;}
-#body_home.blsn-mode .bl-td-item i{font-style:normal;color:#8fd3ef;font-size:10px;}
+#body_home.blsn-mode .bl-td-item i{font-style:normal;color:#8fd3ef;font-size:12px;}
 #body_home.blsn-mode .bl-td-item em{font-style:normal;color:#fff;font-weight:700;}
-#body_home.blsn-mode .bl-td-item small{color:#5fa9c9;font-size:9px;}
+#body_home.blsn-mode .bl-td-item small{color:#5fa9c9;font-size:11px;}
 #body_home.blsn-mode .bl-td-maybe b::after{content:" ?";color:#8fd3ef;}
-#body_home.blsn-mode .bl-td-none{color:#8fd3ef;font-size:10px;letter-spacing:.08em;text-transform:uppercase;}
+#body_home.blsn-mode .bl-td-none{color:#8fd3ef;font-size:12px;letter-spacing:.08em;text-transform:uppercase;}
 #body_home.blsn-mode .bl-td-sep{display:inline-block;margin:0 14px;color:#f4c745;font-size:9px;}
 
 /* ---- championship banners: hanging pennants, one per title ---- */
