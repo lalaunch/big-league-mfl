@@ -211,6 +211,27 @@
   text-transform:uppercase;
   opacity:.95;
 }
+/* Top Gun tile: same chip as the other stats, holding gold-toned mini trophies */
+:is(#body_home,body[id]).blsn-mode .blt-topgun{padding:7px 14px 8px 18px;}
+:is(#body_home,body[id]).blsn-mode .blt-topgun-row{display:flex;gap:6px;align-items:flex-end;}
+:is(#body_home,body[id]).blsn-mode .blt-topgun-cup{display:flex;flex-direction:column;align-items:center;width:22px;}
+:is(#body_home,body[id]).blsn-mode .blt-topgun-cup img{
+  display:block;
+  height:30px;
+  width:auto;
+  filter:sepia(1) saturate(3.2) hue-rotate(-12deg) brightness(1.02) drop-shadow(0 3px 3px rgba(0,0,0,.8));
+}
+:is(#body_home,body[id]).blsn-mode .blt-topgun-cup b{
+  margin-top:2px;
+  color:#ffd54a;
+  font-size:8px;
+  font-weight:900;
+  line-height:1;
+  letter-spacing:.02em;
+  text-shadow:0 1px 0 #000;
+}
+:is(#body_home,body[id]).blsn-mode .blt-topgun small{margin-top:6px;}
+
 /* Sub-nav: beveled buttons tinted with the primary color; the current page is a
    raised accent-color tab with a bright top edge. */
 :is(#body_home,body[id]).blsn-mode .blt-subnav{

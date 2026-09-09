@@ -339,6 +339,17 @@
       years.map(function(y){return '<span class="blt-trophy">'+cup+'<b>'+y+'</b></span>';}).join('')+
       '</div>';
   }
+  /* Top Gun tile for the team hero: the same trophy photo, gold-toned in CSS, one per
+     Top Gun season in TOPGUN (MFL League Awards), year under each. Sits in the stat
+     row after Division. Empty string when the team has none. */
+  function topGunTile(teamName){
+    var k=teamKey(teamName), years=[];
+    TOPGUN.forEach(function(r){if(teamKey(r[1])===k) years.push(r[0]);});
+    if(!years.length) return '';
+    return '<div class="blt-stat blt-topgun" title="Top Gun Trophies: '+years.join(', ')+'">'+
+      '<div class="blt-topgun-row">'+years.map(function(y){return '<span class="blt-topgun-cup"><img src="'+HOSTED+'assets/trophies/big-league-trophy.webp?v='+BLV+'" alt="" loading="lazy"><b>'+y+'</b></span>';}).join('')+'</div>'+
+      '<small>Top Gun</small></div>';
+  }
   function renderTeamHero(hero,team,id,stats){
     var subnav=hero.getAttribute('data-subnav')||'';
     hero.innerHTML=
@@ -349,6 +360,7 @@
           (stats.record?'<div class="blt-stat"><b>'+esc(stats.record)+'</b><small>Record</small></div>':'')+
           (stats.points?'<div class="blt-stat"><b>'+esc(stats.points)+'</b><small>YTD points</small></div>':'')+
           (stats.division?'<div class="blt-stat"><b>'+esc(stats.division)+'</b><small>Division</small></div>':'')+
+          topGunTile(team.name)+
         '</div>'+
         '<nav class="blt-subnav">'+subnav+'</nav></div>'+
       '<div class="blt-art blt-art-crest"><img src="'+HOSTED+'assets/logos/'+team.slug+'.webp?v='+BLV+'" alt=""></div>';
