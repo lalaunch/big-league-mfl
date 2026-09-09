@@ -84,8 +84,8 @@
   width:48px;
 }
 :is(#body_home,body[id]).blsn-mode .blt-trophy svg{
-  width:44px;
-  height:48px;
+  width:42px;
+  height:44px;
   filter:drop-shadow(0 4px 6px rgba(0,0,0,.75));
 }
 :is(#body_home,body[id]).blsn-mode .blt-trophy .blt-cup,
@@ -94,13 +94,18 @@
 :is(#body_home,body[id]).blsn-mode .blt-trophy .blt-handle{fill:none;stroke:#e0aa2a;stroke-width:2.4;stroke-linecap:round;}
 :is(#body_home,body[id]).blsn-mode .blt-trophy .blt-plate{fill:#1b1b1b;stroke:#c8931a;stroke-width:.8;}
 :is(#body_home,body[id]).blsn-mode .blt-trophy b{
-  margin-top:-10px;
-  color:#ffe28a;
-  font-size:11.5px;
+  position:relative; /* a filtered svg paints above plain inline text; lift the year over it */
+  z-index:1;
+  margin-top:1px;
+  padding:2px 5px 1px;
+  border-radius:3px;
+  background:rgba(0,0,0,.55);
+  color:#ffd54a;
+  font-size:12px;
   font-weight:900;
-  letter-spacing:.03em;
+  letter-spacing:.04em;
   line-height:1;
-  text-shadow:0 1px 0 #000,0 0 6px rgba(0,0,0,.9);
+  text-shadow:0 1px 0 #000;
 }
 /* The name is drawn twice: the h1 itself carries the extrusion (a stack of 1px
    text-shadows in the team's accent color, darkening as it drops) and the ::after
