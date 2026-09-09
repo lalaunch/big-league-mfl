@@ -516,6 +516,63 @@
     return div;
   }
 
+  /* ---- live scoreboard (2026-09-09) ----
+     Five matchup cards under the hero, from the league's export API (same origin):
+     liveScoring for scores / players left, leagueStandings for records. Refreshes every
+     60s while the tab is visible. Team names, crests and colors come from TEAMS. */
+  var EXPORT=BASE+'/export?L='+LEAGUE+'&JSON=1&TYPE=';
+  function makeScoreboard(){
+    var sec=document.createElement('section');
+    sec.className='blx-score';
+    sec.innerHTML='<div class="blx-score-head"><span class="blx-score-week">SCOREBOARD</span><span class="blx-score-status">Loading…</span><span class="blx-score-stamp"></span></div><div class="blx-score-grid"></div>';
+    return sec;
+  }
+  function fmtScore(s){var n=parseFloat(s||'0');return n.toFixed(2);}
+  function renderScoreboard(sec,live,standings){
+    var recs={}; (standings&&standings.leagueStandings&&standings.leagueStandings.franchise||[]).forEach(function(f){recs[f.id]=f.h2hwlt||'';});
+    var mus=live&&live.liveScoring&&live.liveScoring.matchup||[];
+    if(!mus.length){sec.querySelector('.blx-score-status').textContent='No matchups this week';return;}
+    var week=live.liveScoring.week;
+    var anyLive=false, allFinal=true;
+    var html=mus.map(function(mu){
+      var fr=mu.franchise.slice().sort(function(a,b){return (a.isHome==='1')-(b.isHome==='1');}); /* away first */
+      var sa=parseFloat(fr[0].score||0), sb=parseFloat(fr[1].score||0);
+      var live=fr.some(function(f){return +f.playersCurrentlyPlaying>0;});
+      var done=fr.every(function(f){return +f.playersYetToPlay===0 && +f.playersCurrentlyPlaying===0;});
+      var started=fr.some(function(f){return parseFloat(f.score||0)>0 || +f.playersYetToPlay<9;});
+      if(live) anyLive=true; if(!done) allFinal=false;
+      var state=live?'LIVE':done?'FINAL':started?'IN PROGRESS':'PREGAME';
+      function side(f,cls){
+        var t=TEAMS[f.id]||{name:'Team '+f.id,slug:'',t1:'#2b3a46',t2:'#d8dde6'};
+        return '<a class="blx-score-team '+cls+'" href="'+BASE+'/options?L='+LEAGUE+'&F='+f.id+'&O=01" style="--s1:'+t.t1+';--s2:'+t.t2+'">'+
+          (t.slug?'<img src="'+HOSTED+'assets/logos/'+t.slug+'.webp?v='+BLV+'" alt="">':'')+
+          '<span class="blx-score-name">'+esc(t.name)+'</span><span class="blx-score-rec">'+esc(recs[f.id]||'')+'</span>'+
+          '<span class="blx-score-left">'+(done?'':(+f.playersCurrentlyPlaying>0?f.playersCurrentlyPlaying+' playing':f.playersYetToPlay+' to play'))+'</span></a>';
+      }
+      var lead=sa===sb?'':(sa>sb?'a':'b');
+      return '<article class="blx-score-card blx-score-'+state.toLowerCase().replace(' ','-')+'">'+
+        side(fr[0],'blx-score-away'+(lead==='a'?' blx-score-lead':''))+
+        '<div class="blx-score-mid"><b class="'+(lead==='a'?'blx-score-hi':'')+'">'+fmtScore(fr[0].score)+'</b><i>'+state+'</i><b class="'+(lead==='b'?'blx-score-hi':'')+'">'+fmtScore(fr[1].score)+'</b></div>'+
+        side(fr[1],'blx-score-home'+(lead==='b'?' blx-score-lead':''))+
+        '</article>';
+    }).join('');
+    sec.querySelector('.blx-score-grid').innerHTML=html;
+    sec.querySelector('.blx-score-week').textContent='WEEK '+week+' SCOREBOARD';
+    sec.querySelector('.blx-score-status').textContent=anyLive?'● LIVE':allFinal?'FINAL':'Updates every minute during games';
+    sec.classList.toggle('blx-score-islive',anyLive);
+    var d=new Date(); sec.querySelector('.blx-score-stamp').textContent='as of '+d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
+  }
+  function loadScoreboard(sec){
+    Promise.all([
+      fetch(EXPORT+'liveScoring',{credentials:'same-origin'}).then(function(r){return r.json();}),
+      fetch(EXPORT+'leagueStandings',{credentials:'same-origin'}).then(function(r){return r.json();}).catch(function(){return null;})
+    ]).then(function(res){renderScoreboard(sec,res[0],res[1]);}).catch(function(){sec.querySelector('.blx-score-status').textContent='Scores unavailable';});
+  }
+  function startScoreboard(sec){
+    loadScoreboard(sec);
+    if(window.__blScoreTimer) clearInterval(window.__blScoreTimer);
+    window.__blScoreTimer=setInterval(function(){if(document.visibilityState==='visible') loadScoreboard(sec);},60000);
+  }
   function findChampionAnchor(){
     var nodes=Array.from(document.querySelectorAll('#tabcontent0 div,#tabcontent0 table,#tabcontent0 td'));
     var matches=nodes.filter(function(el){
@@ -550,6 +607,11 @@
       hero.appendChild(main);
       main.appendChild(champ);
       hero.appendChild(makeQuickLinks());
+      if(!document.querySelector('.blx-score')){
+        var sb=makeScoreboard();
+        hero.insertAdjacentElement('afterend',sb);
+        startScoreboard(sb);
+      }
     }
 
     var matchWrap=matchup.closest('.mobile-wrap')||matchup;
