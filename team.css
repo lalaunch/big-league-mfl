@@ -61,6 +61,47 @@
   letter-spacing:.14em;
   text-transform:uppercase;
 }
+/* Name row: the 3D name with the championship trophies beside it. Trophies wrap
+   under the name when the two do not fit on one line. */
+:is(#body_home,body[id]).blsn-mode .blt-namerow{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:flex-end;
+  gap:6px 22px;
+  margin-bottom:22px;
+}
+:is(#body_home,body[id]).blsn-mode .blt-namerow .blt-name{margin-bottom:0;}
+:is(#body_home,body[id]).blsn-mode .blt-trophies{
+  display:flex;
+  flex-wrap:wrap;
+  gap:4px;
+  padding-bottom:10px; /* clears the name's 13px extrusion so the cups sit on the same baseline as the letters */
+}
+:is(#body_home,body[id]).blsn-mode .blt-trophy{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  width:34px;
+}
+:is(#body_home,body[id]).blsn-mode .blt-trophy svg{
+  width:30px;
+  height:33px;
+  filter:drop-shadow(0 3px 4px rgba(0,0,0,.7));
+}
+:is(#body_home,body[id]).blsn-mode .blt-trophy .blt-cup,
+:is(#body_home,body[id]).blsn-mode .blt-trophy .blt-foot,
+:is(#body_home,body[id]).blsn-mode .blt-trophy .blt-stem{fill:url(#blt-gold);stroke:#5a3d00;stroke-width:.8;}
+:is(#body_home,body[id]).blsn-mode .blt-trophy .blt-handle{fill:none;stroke:#e0aa2a;stroke-width:2.4;stroke-linecap:round;}
+:is(#body_home,body[id]).blsn-mode .blt-trophy .blt-plate{fill:#1b1b1b;stroke:#c8931a;stroke-width:.8;}
+:is(#body_home,body[id]).blsn-mode .blt-trophy b{
+  margin-top:-7px;
+  color:#ffe28a;
+  font-size:8.5px;
+  font-weight:900;
+  letter-spacing:.02em;
+  line-height:1;
+  text-shadow:0 1px 0 #000;
+}
 /* The name is drawn twice: the h1 itself carries the extrusion (a stack of 1px
    text-shadows in the team's accent color, darkening as it drops) and the ::after
    copy (data-text) sits on top with a metallic gradient face. Two layers because a

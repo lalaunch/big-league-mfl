@@ -326,12 +326,32 @@
     });
     return out;
   }
+  /* Big League championship trophies for the team hero: one cup per title in FINALS
+     (the plaques), year on the base. Matched on teamKey so "L.A. Launch" in the
+     plaques finds "LA Launch" in TEAMS. The merged Hitmen/Stonemen franchise is
+     not an active team, so no SAME lookup is needed here. */
+  function trophyRow(teamName){
+    var k=teamKey(teamName), years=[];
+    FINALS.forEach(function(r){if(teamKey(r[1])===k) years.push(r[0]);});
+    if(!years.length) return '';
+    var cup='<svg viewBox="0 0 40 44" aria-hidden="true">'+
+      '<defs><linearGradient id="blt-gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3b0"/><stop offset=".35" stop-color="#f4c745"/><stop offset=".7" stop-color="#c8931a"/><stop offset="1" stop-color="#8a5f00"/></linearGradient></defs>'+
+      '<path class="blt-cup" d="M11 4h18v9c0 6-4 10-9 10s-9-4-9-10z"/>'+
+      '<path class="blt-handle" d="M11 7H6c-1 0-2 1-2 2 0 5 3 8 7 8M29 7h5c1 0 2 1 2 2 0 5-3 8-7 8"/>'+
+      '<rect class="blt-stem" x="17.5" y="23" width="5" height="6" rx="1"/>'+
+      '<path class="blt-foot" d="M10 34c0-3 3-5 10-5s10 2 10 5v2H10z"/>'+
+      '<rect class="blt-plate" x="6" y="36" width="28" height="7" rx="1.5"/>'+
+      '</svg>';
+    return '<div class="blt-trophies" title="Big League Championships: '+years.join(', ')+'">'+
+      years.map(function(y){return '<span class="blt-trophy">'+cup+'<b>'+y+'</b></span>';}).join('')+
+      '</div>';
+  }
   function renderTeamHero(hero,team,id,stats){
     var subnav=hero.getAttribute('data-subnav')||'';
     hero.innerHTML=
       '<div class="blt-crest-wrap"><img class="blt-crest" src="'+HOSTED+'assets/logos/'+team.slug+'.webp?v='+BLV+'" alt=""></div>'+
       '<div class="blt-copy"><div class="blt-eyebrow">The Big League'+(stats.division?' • '+esc(stats.division)+' Division':'')+'</div>'+
-        '<h1 class="blt-name" data-text="'+esc(team.name)+'">'+esc(team.name)+'</h1>'+
+        '<div class="blt-namerow"><h1 class="blt-name" data-text="'+esc(team.name)+'">'+esc(team.name)+'</h1>'+trophyRow(team.name)+'</div>'+
         '<div class="blt-stats">'+
           (stats.record?'<div class="blt-stat"><b>'+esc(stats.record)+'</b><small>Record</small></div>':'')+
           (stats.points?'<div class="blt-stat"><b>'+esc(stats.points)+'</b><small>YTD points</small></div>':'')+
