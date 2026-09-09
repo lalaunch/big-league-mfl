@@ -516,62 +516,67 @@
     return div;
   }
 
-  /* ---- live scoreboard (2026-09-09) ----
-     Five matchup cards under the hero, from the league's export API (same origin):
-     liveScoring for scores / players left, leagueStandings for records. Refreshes every
-     30s while the tab is visible. Team names, crests and colors come from TEAMS. */
+  /* ---- live scores in the WEEK N MATCHUPS table (2026-09-09) ----
+     MFL's own matchup table (#next_weeks_fantasy_schedule) lists each game as two rows,
+     away then home, with a Spread column. We add Record, Score and Status columns and a
+     crest, from the export API (liveScoring + leagueStandings), refreshed every 30s while
+     the tab is visible. Nothing is duplicated; the panel MFL already shows gets the data. */
   var EXPORT=BASE+'/export?L='+LEAGUE+'&JSON=1&TYPE=';
-  function makeScoreboard(){
-    var sec=document.createElement('section');
-    sec.className='blx-score';
-    sec.innerHTML='<div class="blx-score-head"><span class="blx-score-week">SCOREBOARD</span><span class="blx-score-status">Loading…</span><span class="blx-score-stamp"></span></div><div class="blx-score-grid"></div>';
-    return sec;
-  }
-  function fmtScore(s){var n=parseFloat(s||'0');return n.toFixed(2);}
-  function renderScoreboard(sec,live,standings){
+  function fmtScore(s){return parseFloat(s||'0').toFixed(2);}
+  function renderMatchupTable(live,standings){
+    var table=document.querySelector('#next_weeks_fantasy_schedule'); if(!table) return;
     var recs={}; (standings&&standings.leagueStandings&&standings.leagueStandings.franchise||[]).forEach(function(f){recs[f.id]=f.h2hwlt||'';});
-    var mus=live&&live.liveScoring&&live.liveScoring.matchup||[];
-    if(!mus.length){sec.querySelector('.blx-score-status').textContent='No matchups this week';return;}
-    var week=live.liveScoring.week;
-    var anyLive=false, allFinal=true;
-    var html=mus.map(function(mu){
-      var fr=mu.franchise.slice().sort(function(a,b){return (a.isHome==='1')-(b.isHome==='1');}); /* away first */
-      var sa=parseFloat(fr[0].score||0), sb=parseFloat(fr[1].score||0);
-      var live=fr.some(function(f){return +f.playersCurrentlyPlaying>0;});
-      var done=fr.every(function(f){return +f.playersYetToPlay===0 && +f.playersCurrentlyPlaying===0;});
-      var started=fr.some(function(f){return parseFloat(f.score||0)>0 || +f.playersYetToPlay<9;});
-      if(live) anyLive=true; if(!done) allFinal=false;
-      var state=live?'LIVE':done?'FINAL':started?'IN PROGRESS':'PREGAME';
-      function side(f,cls){
-        var t=TEAMS[f.id]||{name:'Team '+f.id,slug:'',t1:'#2b3a46',t2:'#d8dde6'};
-        return '<a class="blx-score-team '+cls+'" href="'+BASE+'/options?L='+LEAGUE+'&F='+f.id+'&O=01" style="--s1:'+t.t1+';--s2:'+t.t2+'">'+
-          (t.slug?'<img src="'+HOSTED+'assets/logos/'+t.slug+'.webp?v='+BLV+'" alt="">':'')+
-          '<span class="blx-score-name">'+esc(t.name)+'</span><span class="blx-score-rec">'+esc(recs[f.id]||'')+'</span>'+
-          '<span class="blx-score-left">'+(done?'':(+f.playersCurrentlyPlaying>0?f.playersCurrentlyPlaying+' playing':f.playersYetToPlay+' to play'))+'</span></a>';
-      }
-      var lead=sa===sb?'':(sa>sb?'a':'b');
-      return '<article class="blx-score-card blx-score-'+state.toLowerCase().replace(' ','-')+'">'+
-        side(fr[0],'blx-score-away'+(lead==='a'?' blx-score-lead':''))+
-        '<div class="blx-score-mid"><b class="'+(lead==='a'?'blx-score-hi':'')+'">'+fmtScore(fr[0].score)+'</b><i>'+state+'</i><b class="'+(lead==='b'?'blx-score-hi':'')+'">'+fmtScore(fr[1].score)+'</b></div>'+
-        side(fr[1],'blx-score-home'+(lead==='b'?' blx-score-lead':''))+
-        '</article>';
-    }).join('');
-    sec.querySelector('.blx-score-grid').innerHTML=html;
-    sec.querySelector('.blx-score-week').textContent='WEEK '+week+' SCOREBOARD';
-    sec.querySelector('.blx-score-status').textContent=anyLive?'● LIVE':allFinal?'FINAL':'Updates every 30 seconds during games';
-    sec.classList.toggle('blx-score-islive',anyLive);
-    var d=new Date(); sec.querySelector('.blx-score-stamp').textContent='as of '+d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
+    var byId={}, pair={};
+    (live&&live.liveScoring&&live.liveScoring.matchup||[]).forEach(function(mu){
+      mu.franchise.forEach(function(f){byId[f.id]=f;});
+      if(mu.franchise.length===2){pair[mu.franchise[0].id]=mu.franchise[1].id;pair[mu.franchise[1].id]=mu.franchise[0].id;}
+    });
+    var head=table.querySelector('tr th'); var hrow=head&&head.parentNode;
+    if(hrow&&!hrow.querySelector('.bl-mu-h')){
+      var spreadTh=hrow.querySelector('th.points');
+      ['Record','Score','Status'].forEach(function(t){var th=document.createElement('th');th.className='bl-mu-h bl-mu-h-'+t.toLowerCase();th.textContent=t;hrow.insertBefore(th,spreadTh);});
+    }
+    var anyLive=false, allFinal=true, any=false;
+    Array.from(table.querySelectorAll('tr')).forEach(function(tr){
+      var a=tr.querySelector('a[class*="franchise_"]'); if(!a) return;
+      var m=a.className.match(/franchise_(\d{4})/); if(!m) return;
+      var id=m[1], f=byId[id], t=TEAMS[id], opp=byId[pair[id]];
+      any=true;
+      if(t&&!tr.querySelector('.bl-mu-crest')){var img=document.createElement('img');img.className='bl-mu-crest';img.alt='';img.src=HOSTED+'assets/logos/'+t.slug+'.webp?v='+BLV;a.parentNode.insertBefore(img,a);}
+      var spread=tr.querySelector('td.points');
+      function cell(cls){var c=tr.querySelector('.'+cls);if(!c){c=document.createElement('td');c.className=cls;tr.insertBefore(c,spread);}return c;}
+      cell('bl-mu-rec').textContent=recs[id]||'';
+      var sc=cell('bl-mu-score'), st=cell('bl-mu-state');
+      if(!f){sc.textContent='';st.textContent='';return;}
+      var mine=parseFloat(f.score||0), theirs=opp?parseFloat(opp.score||0):0;
+      var isLive=+f.playersCurrentlyPlaying>0||(opp&&+opp.playersCurrentlyPlaying>0);
+      var done=+f.playersYetToPlay===0&&+f.playersCurrentlyPlaying===0&&(!opp||(+opp.playersYetToPlay===0&&+opp.playersCurrentlyPlaying===0));
+      if(isLive) anyLive=true; if(!done) allFinal=false;
+      sc.textContent=fmtScore(f.score);
+      sc.classList.toggle('bl-mu-lead',mine>theirs&&(isLive||done||mine>0));
+      st.textContent=done?'FINAL':(+f.playersCurrentlyPlaying>0?f.playersCurrentlyPlaying+' playing':f.playersYetToPlay+' to play');
+      st.className='bl-mu-state'+(done?' bl-mu-final':isLive?' bl-mu-live':'');
+      tr.classList.toggle('bl-mu-row-live',!!isLive);
+    });
+    if(!any) return;
+    var cap=table.querySelector('caption span strong:last-child');
+    if(cap){
+      if(!cap.getAttribute('data-bl-orig')) cap.setAttribute('data-bl-orig',cap.textContent);
+      var d=new Date(), stamp=d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
+      cap.innerHTML=(anyLive?'<span class="bl-mu-livedot">● LIVE</span> ':allFinal?'FINAL • ':'')+esc(cap.getAttribute('data-bl-orig'))+' <span class="bl-mu-stamp">as of '+stamp+'</span>';
+    }
   }
-  function loadScoreboard(sec){
+  function loadScores(){
+    if(!document.querySelector('#next_weeks_fantasy_schedule')) return;
     Promise.all([
       fetch(EXPORT+'liveScoring',{credentials:'same-origin'}).then(function(r){return r.json();}),
       fetch(EXPORT+'leagueStandings',{credentials:'same-origin'}).then(function(r){return r.json();}).catch(function(){return null;})
-    ]).then(function(res){renderScoreboard(sec,res[0],res[1]);}).catch(function(){sec.querySelector('.blx-score-status').textContent='Scores unavailable';});
+    ]).then(function(res){renderMatchupTable(res[0],res[1]);}).catch(function(){});
   }
-  function startScoreboard(sec){
-    loadScoreboard(sec);
+  function startScores(){
+    loadScores();
     if(window.__blScoreTimer) clearInterval(window.__blScoreTimer);
-    window.__blScoreTimer=setInterval(function(){if(document.visibilityState==='visible') loadScoreboard(sec);},30000);
+    window.__blScoreTimer=setInterval(function(){if(document.visibilityState==='visible') loadScores();},30000);
   }
   function findChampionAnchor(){
     var nodes=Array.from(document.querySelectorAll('#tabcontent0 div,#tabcontent0 table,#tabcontent0 td'));
@@ -607,11 +612,6 @@
       hero.appendChild(main);
       main.appendChild(champ);
       hero.appendChild(makeQuickLinks());
-      if(!document.querySelector('.blx-score')){
-        var sb=makeScoreboard();
-        hero.insertAdjacentElement('afterend',sb);
-        startScoreboard(sb);
-      }
     }
 
     var matchWrap=matchup.closest('.mobile-wrap')||matchup;
@@ -628,6 +628,7 @@
       quote.className='blsn-playoff-quote';
       quote.textContent='“Every week feels like the playoffs.”';
       mr.insertAdjacentElement('afterend',quote);
+      startScores();
     }
 
     var standWrap=standings.closest('.mobile-wrap')||standings;

@@ -357,107 +357,40 @@
   letter-spacing:.09em;
 }
 
-/* ---- live scoreboard ---- */
-.blx-score{
-  margin:10px 4px 12px;
-  border:1px solid #0e6794;
-  border-radius:7px;
-  overflow:hidden;
-  background:linear-gradient(180deg,#071823,#04111a);
-  box-shadow:0 5px 18px rgba(0,0,0,.30);
+/* ---- live scores inside the WEEK N MATCHUPS table ---- */
+#next_weeks_fantasy_schedule .bl-mu-crest{
+  width:22px;height:22px;object-fit:contain;vertical-align:middle;margin:-3px 7px -3px 0;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.7));
 }
-.blx-score-head{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  padding:7px 14px;
-  border-bottom:1px solid #0e6794;
-  background:linear-gradient(90deg,#083a5c,#0a4d78 50%,#083a5c);
-  color:#fff;
-  font-size:11px;
-  font-weight:900;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-}
-.blx-score-status{color:#8fd3ef;font-size:10px;letter-spacing:.08em;}
-.blx-score-islive .blx-score-status{color:#ff5a5a;animation:blx-pulse 1.4s ease-in-out infinite;}
-@keyframes blx-pulse{0%,100%{opacity:1}50%{opacity:.45}}
-.blx-score-stamp{margin-left:auto;color:#5fa9c9;font-size:9px;letter-spacing:.06em;text-transform:none;}
-.blx-score-grid{
-  display:grid;
-  grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:1px;
-  background:#0e6794;
-}
-.blx-score-card{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
-  align-items:center;
-  gap:6px;
-  min-width:0;
-  padding:10px 8px 9px;
-  background:linear-gradient(180deg,#071925,#04111a);
-}
-.blx-score-team{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  min-width:0;
+#next_weeks_fantasy_schedule th.bl-mu-h{text-align:center;white-space:nowrap;}
+#next_weeks_fantasy_schedule td.bl-mu-rec{text-align:center;color:#8fd3ef;font-weight:700;white-space:nowrap;}
+#next_weeks_fantasy_schedule td.bl-mu-score{
   text-align:center;
-  color:#eaf7fc !important;
-  text-decoration:none !important;
-}
-.blx-score-team img{
-  width:40px;
-  height:40px;
-  object-fit:contain;
-  filter:drop-shadow(0 3px 4px rgba(0,0,0,.7));
-}
-.blx-score-name{
-  margin-top:4px;
-  max-width:100%;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-  font-size:9px;
-  font-weight:900;
-  letter-spacing:.05em;
-  text-transform:uppercase;
-}
-.blx-score-rec{font-size:9px;color:#8fd3ef;font-weight:700;}
-.blx-score-left{min-height:11px;font-size:8px;color:#5fa9c9;letter-spacing:.04em;text-transform:uppercase;}
-.blx-score-lead .blx-score-name{color:var(--s2);}
-.blx-score-mid{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:2px;
-  min-width:58px;
-}
-.blx-score-mid b{
   font-family:Impact,'Arial Black',Arial,sans-serif;
-  font-size:22px;
+  font-size:20px;
   line-height:1;
   color:#ffe14d;
   font-variant-numeric:tabular-nums;
   text-shadow:0 2px 0 rgba(0,0,0,.6),0 0 12px rgba(255,225,77,.35);
+  white-space:nowrap;
 }
-.blx-score-mid b.blx-score-hi{color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.6),0 0 14px rgba(255,225,77,.9),0 0 3px #ffe14d;}
-.blx-score-mid i{
-  font-style:normal;
-  font-size:8px;
+#next_weeks_fantasy_schedule td.bl-mu-score.bl-mu-lead{color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.6),0 0 14px rgba(255,225,77,.9),0 0 3px #ffe14d;}
+#next_weeks_fantasy_schedule td.bl-mu-state{
+  text-align:center;
+  font-size:9px;
   font-weight:900;
-  letter-spacing:.14em;
+  letter-spacing:.1em;
+  text-transform:uppercase;
   color:#5fa9c9;
-  padding:2px 6px;
-  border:1px solid #17445c;
-  border-radius:3px;
+  white-space:nowrap;
 }
-.blx-score-live .blx-score-mid i{color:#fff;background:#b3122e;border-color:#e63946;}
-.blx-score-final .blx-score-mid i{color:#f4c745;border-color:#a07a22;}
-@media(max-width:1000px){.blx-score-grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
-@media(max-width:700px){.blx-score-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
-@media(max-width:480px){.blx-score-grid{grid-template-columns:1fr;}}
+#next_weeks_fantasy_schedule td.bl-mu-state.bl-mu-live{color:#fff;}
+#next_weeks_fantasy_schedule td.bl-mu-state.bl-mu-live::before{content:"● ";color:#ff5a5a;}
+#next_weeks_fantasy_schedule td.bl-mu-state.bl-mu-final{color:#f4c745;}
+#next_weeks_fantasy_schedule tr.bl-mu-row-live td{background:rgba(179,18,46,.10);}
+#next_weeks_fantasy_schedule .bl-mu-livedot{color:#ff5a5a;animation:blx-pulse 1.4s ease-in-out infinite;}
+@keyframes blx-pulse{0%,100%{opacity:1}50%{opacity:.45}}
+#next_weeks_fantasy_schedule .bl-mu-stamp{font-size:9px;color:#5fa9c9;letter-spacing:.04em;font-weight:700;margin-left:6px;}
 
 /* ---- championship banners: hanging pennants, one per title ---- */
 .blx-banner-rod{
