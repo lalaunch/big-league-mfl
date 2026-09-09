@@ -357,40 +357,41 @@
   letter-spacing:.09em;
 }
 
-/* ---- live scores inside the WEEK N MATCHUPS table ---- */
+/* ---- live scores inside the WEEK N MATCHUPS table ----
+   MFL lays this table out as stacked cards (td{display:block}); the data rides inline in
+   the name cell, right-aligned, so the card shape is unchanged. */
+#next_weeks_fantasy_schedule td.bl-mu-cell{display:flex !important;align-items:center;gap:8px;min-width:0;}
+#next_weeks_fantasy_schedule td.bl-mu-cell > a{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 #next_weeks_fantasy_schedule .bl-mu-crest{
-  width:22px;height:22px;object-fit:contain;vertical-align:middle;margin:-3px 7px -3px 0;
+  flex:0 0 auto;width:26px;height:26px;object-fit:contain;
   filter:drop-shadow(0 2px 3px rgba(0,0,0,.7));
 }
-#next_weeks_fantasy_schedule th.bl-mu-h{text-align:center;white-space:nowrap;}
-#next_weeks_fantasy_schedule td.bl-mu-rec{text-align:center;color:#8fd3ef;font-weight:700;white-space:nowrap;}
-#next_weeks_fantasy_schedule td.bl-mu-score{
-  text-align:center;
+#next_weeks_fantasy_schedule .bl-mu-meta{
+  display:inline-flex;align-items:center;gap:10px;margin-left:auto;flex:0 0 auto;white-space:nowrap;
+}
+#next_weeks_fantasy_schedule .bl-mu-rec{color:#8fd3ef;font-size:11px;font-weight:700;min-width:38px;text-align:right;}
+#next_weeks_fantasy_schedule .bl-mu-score{
   font-family:Impact,'Arial Black',Arial,sans-serif;
   font-size:20px;
   line-height:1;
   color:#ffe14d;
   font-variant-numeric:tabular-nums;
   text-shadow:0 2px 0 rgba(0,0,0,.6),0 0 12px rgba(255,225,77,.35);
-  white-space:nowrap;
+  min-width:58px;text-align:right;
 }
-#next_weeks_fantasy_schedule td.bl-mu-score.bl-mu-lead{color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.6),0 0 14px rgba(255,225,77,.9),0 0 3px #ffe14d;}
-#next_weeks_fantasy_schedule td.bl-mu-state{
-  text-align:center;
-  font-size:9px;
-  font-weight:900;
-  letter-spacing:.1em;
-  text-transform:uppercase;
-  color:#5fa9c9;
-  white-space:nowrap;
+#next_weeks_fantasy_schedule .bl-mu-score.bl-mu-lead{color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.6),0 0 14px rgba(255,225,77,.9),0 0 3px #ffe14d;}
+#next_weeks_fantasy_schedule .bl-mu-state{
+  min-width:64px;text-align:left;
+  font-size:9px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:#5fa9c9;
 }
-#next_weeks_fantasy_schedule td.bl-mu-state.bl-mu-live{color:#fff;}
-#next_weeks_fantasy_schedule td.bl-mu-state.bl-mu-live::before{content:"● ";color:#ff5a5a;}
-#next_weeks_fantasy_schedule td.bl-mu-state.bl-mu-final{color:#f4c745;}
+#next_weeks_fantasy_schedule .bl-mu-state.bl-mu-live{color:#fff;}
+#next_weeks_fantasy_schedule .bl-mu-state.bl-mu-live::before{content:"● ";color:#ff5a5a;}
+#next_weeks_fantasy_schedule .bl-mu-state.bl-mu-final{color:#f4c745;}
 #next_weeks_fantasy_schedule tr.bl-mu-row-live td{background:rgba(179,18,46,.10);}
 #next_weeks_fantasy_schedule .bl-mu-livedot{color:#ff5a5a;animation:blx-pulse 1.4s ease-in-out infinite;}
 @keyframes blx-pulse{0%,100%{opacity:1}50%{opacity:.45}}
 #next_weeks_fantasy_schedule .bl-mu-stamp{font-size:9px;color:#5fa9c9;letter-spacing:.04em;font-weight:700;margin-left:6px;}
+@media(max-width:700px){#next_weeks_fantasy_schedule .bl-mu-state{display:none;}}
 
 /* ---- championship banners: hanging pennants, one per title ---- */
 .blx-banner-rod{
