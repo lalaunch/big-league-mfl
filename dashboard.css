@@ -436,10 +436,11 @@
   color:#fff;font-size:15px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;
 }
 #body_home.blsn-mode .blx-rv-head small{margin-left:auto;color:#8fd3ef;font-size:10px;letter-spacing:.08em;font-weight:700;}
-#body_home.blsn-mode .blx-rv-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;background:#0e6794;}
+#body_home.blsn-mode .blx-rv-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;} /* dividers come from the tiles, so a short last row leaves no blue hole */
 #body_home.blsn-mode .blx-rv-tile{
   display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0;padding:14px 10px 12px;
   background:linear-gradient(180deg,#071925,#04111a);
+  box-shadow:0 0 0 1px #0e6794;
 }
 #body_home.blsn-mode .blx-rv-gold{background:radial-gradient(ellipse at 50% 0%,rgba(244,199,69,.16),transparent 60%),linear-gradient(180deg,#071925,#04111a);}
 #body_home.blsn-mode .blx-rv-cold{background:radial-gradient(ellipse at 50% 0%,rgba(31,145,193,.14),transparent 60%),linear-gradient(180deg,#071925,#04111a);}
