@@ -26,7 +26,8 @@
   box-shadow:0 4px 12px rgba(0,0,0,.35);
   transition:border-color .15s ease,transform .15s ease;
 }
-#body_ajax_ls .ls_other_game:hover{border-color:#f4c745;transform:translateY(-1px);}
+#body_ajax_ls #other_games .ls_other_game{border:1px solid #0e6794 !important;} /* MFL sets the gray border with an id selector */
+#body_ajax_ls #other_games .ls_other_game:hover{border-color:#f4c745 !important;transform:translateY(-1px);}
 #body_ajax_ls .ls_other_game table{width:100% !important;border:0 !important;background:transparent !important;}
 #body_ajax_ls .ls_other_game td{padding:5px 10px !important;border:0 !important;background:transparent !important;color:#eaf7fc;font-size:11px;}
 #body_ajax_ls .ls_other_game tr:first-child td{padding-top:8px !important;border-bottom:1px solid rgba(14,103,148,.35) !important;}
