@@ -1,0 +1,87 @@
+/* THE BIG LEAGUE — REPORT PAGES (options?O=NNN)
+   MFL's report pages (Power Rank, Standings, Schedule, Transactions, ...) share one shape:
+   span.reportnavigation (title), form.reportform (sort/week controls), table.report
+   (caption, th row, td rows with a.franchise_NNNN links). This file gives them the home
+   page's card language. Scoped to body[id^="body_options_"] so the home page and the live
+   scoring page keep their own sheets. Crests on franchise links come from team-logos.js
+   (a.franchise_NNNN:before), sized here. */
+
+body[id^="body_options_"].blsn-mode .reportnavigation{
+  display:block;margin:12px 4px 10px;padding:10px 16px;
+  border:1px solid #0e6794;border-radius:7px;
+  background:linear-gradient(90deg,#083a5c,#0a4d78 50%,#083a5c);
+  color:#fff;font-size:15px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;text-align:left;
+  box-shadow:0 5px 18px rgba(0,0,0,.3);
+}
+body[id^="body_options_"].blsn-mode .reportnavigationheader{color:#fff;font-size:15px;font-weight:900;}
+body[id^="body_options_"].blsn-mode .reportnavigation a{color:#8fd3ef !important;text-decoration:none !important;}
+
+body[id^="body_options_"].blsn-mode form.reportform{
+  display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 4px 12px;padding:9px 14px;
+  border:1px solid #0e6794;border-radius:7px;background:linear-gradient(180deg,#071823,#04111a);
+  color:#8fd3ef;font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;text-align:left;
+}
+body[id^="body_options_"].blsn-mode form.reportform select,
+body[id^="body_options_"].blsn-mode form.reportform input[type="text"]{
+  padding:5px 8px;border:1px solid #17445c;border-radius:5px;background:#04111a;color:#fff;font-size:11px;font-weight:700;
+}
+body[id^="body_options_"].blsn-mode form.reportform input[type="submit"],
+body[id^="body_options_"].blsn-mode form.reportform button{
+  padding:6px 14px;border:1px solid #e63946;border-radius:5px;cursor:pointer;
+  background:linear-gradient(180deg,#e63946,#8f0f1f);color:#fff;font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 3px 8px rgba(0,0,0,.5);
+}
+
+body[id^="body_options_"].blsn-mode table.report{
+  width:100% !important;margin:0 0 14px;
+  border:1px solid #0e6794 !important;border-radius:7px;overflow:hidden;border-collapse:separate;border-spacing:0;
+  background:linear-gradient(180deg,#071823,#04111a) !important;box-shadow:0 5px 18px rgba(0,0,0,.3);
+}
+body[id^="body_options_"].blsn-mode table.report caption{
+  padding:10px 14px;text-align:left;
+  background:linear-gradient(180deg,#0a2b42,#071a27) !important;border-bottom:1px solid #1a6488;
+  color:#fff;font-size:14px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;
+}
+body[id^="body_options_"].blsn-mode table.report caption a{color:#fff !important;text-decoration:none !important;}
+body[id^="body_options_"].blsn-mode table.report th{
+  padding:8px 10px !important;text-align:center;
+  background:linear-gradient(90deg,#083a5c,#0a4d78 50%,#083a5c) !important;
+  color:#fff !important;font-size:9px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;font-style:normal !important;
+  border:0 !important;border-bottom:1px solid #0e6794 !important;white-space:nowrap;
+}
+body[id^="body_options_"].blsn-mode table.report th:first-child{text-align:left;}
+body[id^="body_options_"].blsn-mode table.report th a{color:#fff !important;text-decoration:none !important;}
+body[id^="body_options_"].blsn-mode table.report td{
+  padding:8px 10px !important;text-align:center;vertical-align:middle;
+  border:0 !important;border-bottom:1px solid rgba(14,103,148,.22) !important;
+  background:transparent !important;color:#eaf7fc;font-size:12px;font-variant-numeric:tabular-nums;
+}
+body[id^="body_options_"].blsn-mode table.report td:first-child{text-align:left;white-space:nowrap;}
+body[id^="body_options_"].blsn-mode table.report tr.oddtablerow td{background:rgba(255,255,255,.025) !important;}
+body[id^="body_options_"].blsn-mode table.report tbody tr:hover td{background:rgba(31,145,193,.10) !important;}
+body[id^="body_options_"].blsn-mode table.report td a{color:#8fd3ef !important;text-decoration:none !important;}
+body[id^="body_options_"].blsn-mode table.report td a:hover{color:#ffe14d !important;}
+
+/* franchise links: crest (from team-logos.js) + white name */
+body[id^="body_options_"].blsn-mode table.report a[class*="franchise_"]{
+  display:inline-flex;align-items:center;gap:8px;color:#fff !important;font-weight:700;letter-spacing:.02em;
+}
+body[id^="body_options_"].blsn-mode table.report a[class*="franchise_"]:before{
+  content:"";display:inline-block;flex:0 0 auto;width:24px;height:24px;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.7));
+}
+
+/* the column a report is about (set by bigleague-core.js decorateReportTables) */
+body[id^="body_options_"].blsn-mode table.report td.bl-col-hot{
+  font-family:Impact,'Arial Black',Arial,sans-serif;font-size:16px;line-height:1;color:#ffe14d;
+  text-shadow:0 2px 0 rgba(0,0,0,.6),0 0 10px rgba(255,225,77,.3);
+}
+body[id^="body_options_"].blsn-mode table.report th.bl-col-hot{color:#ffe14d !important;}
+
+/* footer links MFL puts under every report */
+body[id^="body_options_"].blsn-mode .pagebody > a[href^="#"]{display:inline-block;margin:4px 4px 12px;color:#5fa9c9 !important;font-size:10px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none !important;}
+
+/* team pages keep their own hero; the report tables under it take this look too */
+@media(max-width:700px){
+  body[id^="body_options_"].blsn-mode table.report{display:block;overflow-x:auto;}
+}

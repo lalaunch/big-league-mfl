@@ -57,7 +57,7 @@
     }
     var css='';
     Object.keys(LOGOS).forEach(function(id){
-      css+='#body_home a.franchise_'+id+':before,#body_home a[class*="franchise_'+id+'"]:before{'+
+      css+=':is(#body_home,body[id]) a.franchise_'+id+':before,:is(#body_home,body[id]) a[class*="franchise_'+id+'"]:before{'+
         'content:""!important;'+
         'background-image:url("'+LOGOS[id]+'")!important;'+
         'background-size:contain!important;'+

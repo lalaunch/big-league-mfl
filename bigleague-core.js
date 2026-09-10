@@ -929,10 +929,25 @@
     sub.textContent=tx.date||'Latest MFL transaction';
   }
 
+  /* report pages: tag the column the report is named for so report.css can light it up */
+  function decorateReportTables(){
+    if(!/^body_options_/.test(document.body.id)) return;
+    var HOT=/^(power rank|pts|pf|points|total)$/i;
+    Array.from(document.querySelectorAll('table.report')).forEach(function(tbl){
+      if(tbl.getAttribute('data-bl-hot')) return;
+      var ths=Array.from(tbl.querySelectorAll('tr th')); if(!ths.length) return;
+      var row=ths[0].parentNode, idx=-1;
+      Array.from(row.children).forEach(function(th,i){ if(idx<0&&HOT.test(clean(th.textContent))) idx=i; });
+      if(idx<0) return;
+      tbl.setAttribute('data-bl-hot','1'); row.children[idx].classList.add('bl-col-hot');
+      Array.from(tbl.querySelectorAll('tr')).forEach(function(tr){ var c=tr.children[idx]; if(c&&c.tagName==='TD') c.classList.add('bl-col-hot'); });
+    });
+  }
   function boot(){
     loadStyles();
     upgradeNav();
     buildTeamPage();
+    decorateReportTables();
     [400,1200,3000].forEach(function(ms){setTimeout(buildTeamPage,ms);});
     var tries=0;
     (function wait(){

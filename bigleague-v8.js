@@ -7,7 +7,7 @@
 (function(){
   'use strict';
 
-  var V='20260910g';
+  var V='20260910h';
   var YEAR=2026;
   var LEAGUE='73086';
   var BASE='https://www42.myfantasyleague.com/'+YEAR;
@@ -224,6 +224,7 @@
   addStyle('bl-masthead-css','masthead.css');
   addStyle('bl-hero-css','hero.css');
   addStyle('bl-team-css','team.css');
+  addStyle('bl-report-css','report.css');
   if(location.pathname.indexOf('/ajax_ls')>=0) addStyle('bl-live-css','live.css'); /* live scoring page only; body may not exist yet when this runs */
   addScript('bl-team-logos-script','team-logos.js');
   addScript('bl-core-script','bigleague-core.js',watch);
