@@ -717,6 +717,54 @@
     ]);
     return 'demo painted; refresh the page to return to live data';
   };
+  /* ---- Team of the Week (2026-09-10) ----
+     Once a week is complete, the photo callout becomes the highest-scoring team's panel:
+     their player art, crest, name in the 3D treatment, the score and who they beat. Before
+     Week 1 is final it stays the generic "It's go time" callout. Data: liveScoring for the
+     previous week (final when nobody is playing or yet to play). Console preview:
+     BL_TOW_DEBUG('0003', 1, 142.35, 'Bristol Steampunks', 112.3) */
+  function renderTeamOfWeek(fid,week,pts,oppName,oppPts){
+    var side=document.querySelector('.blsn-callout-side'), t=TEAMS[fid]; if(!side||!t) return false;
+    side.classList.add('blsn-tow');
+    side.style.setProperty('--t1',t.t1); side.style.setProperty('--t2',t.t2);
+    side.style.backgroundImage='none';
+    var art=side.querySelector('.blsn-tow-art');
+    if(!art){art=document.createElement('img');art.className='blsn-tow-art';art.alt='';side.insertBefore(art,side.firstChild);}
+    art.onload=function(){side.classList.toggle('blsn-tow-tall',art.naturalWidth/art.naturalHeight<0.5);};
+    art.src=HOSTED+'assets/players/'+t.slug+'.webp?v='+BLV;
+    var copy=side.querySelector('.blsn-tow-copy');
+    if(!copy){copy=document.createElement('div');copy.className='blsn-tow-copy';var q=side.querySelector('.blsn-callout-quote');side.insertBefore(copy,q||side.firstChild);}
+    copy.innerHTML=
+      '<div class="blsn-tow-eyebrow">★ TEAM OF THE WEEK • WEEK '+esc(week)+' ★</div>'+
+      '<div class="blsn-tow-namerow"><img class="blsn-tow-crest" src="'+HOSTED+'assets/logos/'+t.slug+'.webp?v='+BLV+'" alt="">'+
+      '<h2 class="blsn-tow-name" data-text="'+esc(t.name)+'">'+esc(t.name)+'</h2></div>'+
+      '<div class="blsn-tow-score"><b>'+(+pts).toFixed(2)+'</b><small>PTS</small>'+(oppName?'<span>def. '+esc(oppName)+' '+(+oppPts).toFixed(2)+'</span>':'')+'</div>';
+    return true;
+  }
+  function buildTeamOfWeek(){
+    if(!document.querySelector('.blsn-callout-side')) return false;
+    fetch(EXPORT+'liveScoring',{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(cur){
+      var wk=parseInt(cur.liveScoring&&cur.liveScoring.week||'1',10);
+      function tryWeek(w){
+        if(w<1) return;
+        fetch(EXPORT+'liveScoring&W='+w,{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(j){
+          var mus=j.liveScoring&&j.liveScoring.matchup||[]; if(!mus.length) return;
+          var done=true, best=null;
+          mus.forEach(function(mu){mu.franchise.forEach(function(f){
+            if(+f.playersYetToPlay>0||+f.playersCurrentlyPlaying>0) done=false;
+            var s=parseFloat(f.score||0);
+            if(!best||s>best.pts){var opp=mu.franchise.filter(function(x){return x.id!==f.id;})[0];best={fid:f.id,pts:s,opp:opp?TEAMS[opp.id]&&TEAMS[opp.id].name:'',oppPts:opp?parseFloat(opp.score||0):0};}
+          });});
+          if(!done||!best||best.pts<=0){ if(w===wk) tryWeek(w-1); return; }
+          renderTeamOfWeek(best.fid,w,best.pts,best.opp,best.oppPts);
+        }).catch(function(){});
+      }
+      /* the current week if it is already final (Tuesday onward), else the one before */
+      tryWeek(wk);
+    }).catch(function(){});
+    return true;
+  }
+  window.BL_TOW_DEBUG=function(fid,week,pts,opp,oppPts){return renderTeamOfWeek(fid||'0003',week||1,pts||142.35,opp||'Bristol Steampunks',oppPts||112.3);};
   function loadScores(){
     if(!document.querySelector('#next_weeks_fantasy_schedule')) return;
     Promise.all([
@@ -780,6 +828,7 @@
       quote.textContent='“Every week feels like the playoffs.”';
       mr.insertAdjacentElement('afterend',quote);
       startScores();
+      setTimeout(buildTeamOfWeek,800); /* after v8's hero pass has built the callout */
     }
 
     var standWrap=standings.closest('.mobile-wrap')||standings;

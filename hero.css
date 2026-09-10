@@ -224,6 +224,56 @@
 #body_home.blsn-mode .blsn-clock-digits b{font-weight:900;color:#fff;}
 #body_home.blsn-mode .blsn-clock-digits i{font-style:normal;color:#f1c21d;margin:0 1px;}
 
+/* ---- Team of the Week mode for the photo callout (set by bigleague-core.js) ----
+   The team's player art replaces the pointing player, the quote gives way to the team
+   name in the 3D treatment, and the clock stays where it is. --t1/--t2 arrive inline. */
+#body_home.blsn-mode .blsn-callout-side.blsn-tow{
+  --t1:#159ed8; --t2:#f4c745;
+  background:
+    radial-gradient(ellipse 60% 90% at 82% 50%,color-mix(in srgb,var(--t1) 55%,transparent),transparent 70%),
+    radial-gradient(circle at 12% 30%,color-mix(in srgb,var(--t2) 22%,transparent),transparent 40%),
+    linear-gradient(110deg,#071821 0%,#06141d 55%,#02080d 100%) !important;
+}
+#body_home.blsn-mode .blsn-tow .blsn-callout-quote,
+#body_home.blsn-mode .blsn-tow .blsn-callout-by,
+#body_home.blsn-mode .blsn-tow .blsn-callout-go{display:none;}
+#body_home.blsn-mode .blsn-tow-art{
+  position:absolute;right:-6px;bottom:-14px;z-index:1;
+  height:auto;max-height:calc(100% + 32px);max-width:56%;object-fit:contain;
+  filter:drop-shadow(0 14px 18px rgba(0,0,0,.65));
+}
+#body_home.blsn-mode .blsn-tow-tall .blsn-tow-art{max-height:180%;bottom:-73%;right:10%;}
+#body_home.blsn-mode .blsn-tow-copy{position:absolute;left:26px;top:26px;z-index:3;max-width:58%;}
+#body_home.blsn-mode .blsn-tow-eyebrow{
+  margin-bottom:8px;color:var(--t2);font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;
+  text-shadow:0 2px 4px #000;
+}
+#body_home.blsn-mode .blsn-tow-namerow{display:flex;align-items:center;gap:12px;}
+#body_home.blsn-mode .blsn-tow-crest{width:56px;height:56px;object-fit:contain;filter:drop-shadow(0 6px 8px rgba(0,0,0,.7));}
+#body_home.blsn-mode .blsn-tow-name{
+  position:relative;display:inline-block;margin:0;padding-right:.12em;
+  color:#fff;font-family:Impact,'Arial Black',Arial,sans-serif;font-style:italic;font-size:40px;line-height:.9;font-weight:900;
+  letter-spacing:.015em;text-transform:uppercase;
+  text-shadow:
+    1px 1px 0 color-mix(in srgb,var(--t1) 70%,#fff),2px 2px 0 color-mix(in srgb,var(--t1) 88%,#fff),3px 3px 0 var(--t1),
+    4px 4px 0 color-mix(in srgb,var(--t1) 92%,#000),5px 5px 0 color-mix(in srgb,var(--t1) 84%,#000),6px 6px 0 color-mix(in srgb,var(--t1) 76%,#000),
+    7px 7px 0 color-mix(in srgb,var(--t1) 68%,#000),8px 8px 0 color-mix(in srgb,var(--t1) 60%,#000),9px 9px 1px rgba(0,0,0,.6),8px 18px 26px rgba(0,0,0,.7);
+}
+#body_home.blsn-mode .blsn-tow-name::after{
+  content:attr(data-text);position:absolute;inset:0;padding-right:inherit;color:transparent;
+  background:linear-gradient(180deg,#fff 0%,color-mix(in srgb,var(--t2) 30%,#fff) 30%,color-mix(in srgb,var(--t2) 85%,#fff) 47%,var(--t2) 52%,color-mix(in srgb,var(--t2) 70%,#000) 53%,color-mix(in srgb,var(--t2) 80%,#fff) 68%,#fff 100%);
+  -webkit-background-clip:text;background-clip:text;text-shadow:none;-webkit-text-stroke:.8px color-mix(in srgb,var(--t1) 55%,#000);pointer-events:none;
+}
+#body_home.blsn-mode .blsn-tow-score{display:flex;align-items:baseline;gap:8px;margin-top:14px;color:#fff;}
+#body_home.blsn-mode .blsn-tow-score b{
+  font-family:Impact,'Arial Black',Arial,sans-serif;font-size:34px;line-height:1;color:#ffe14d;font-variant-numeric:tabular-nums;
+  text-shadow:0 2px 0 rgba(0,0,0,.6),0 0 14px rgba(255,225,77,.4);
+}
+#body_home.blsn-mode .blsn-tow-score small{font-size:10px;font-weight:900;letter-spacing:.14em;color:#8fd3ef;}
+#body_home.blsn-mode .blsn-tow-score span{margin-left:6px;font-size:11px;font-weight:700;color:#cfe6f2;letter-spacing:.04em;}
+#body_home.blsn-mode .blsn-tow .blsn-callout-clock{top:auto;bottom:34px;}
+@media(max-width:1200px){#body_home.blsn-mode .blsn-tow-name{font-size:32px;}#body_home.blsn-mode .blsn-tow-score b{font-size:28px;}}
+
 /* ---- breakpoints ----
    The hero grid itself (hero + quick links) collapses at 1000px in
    sports-network.css. Phones with no viewport meta render at 980. */
