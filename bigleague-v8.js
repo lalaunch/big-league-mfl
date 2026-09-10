@@ -7,7 +7,7 @@
 (function(){
   'use strict';
 
-  var V='20260910d';
+  var V='20260910e';
   var YEAR=2026;
   var LEAGUE='73086';
   var BASE='https://www42.myfantasyleague.com/'+YEAR;
@@ -122,20 +122,25 @@
     p.hour=+p.hour%24; p.day=+p.day; p.month=+p.month; p.year=+p.year;
     return p;
   }
-  function ctNoonUtc(ms){
-    /* the UTC instant of 12:00 CT on the CT calendar day containing ms */
-    var p=ctParts(ms), guess=Date.UTC(p.year,p.month-1,p.day,17,0,0); /* 17Z is noon CDT */
-    var h=ctParts(guess).hour; return guess+(12-h)*3600000; /* shift if that day is on CST */
+  function ctTimeUtc(ms,h,m){
+    /* the UTC instant of h:m CT on the CT calendar day containing ms */
+    var p=ctParts(ms), guess=Date.UTC(p.year,p.month-1,p.day,h+5,m||0,0); /* +5 = CDT */
+    var got=ctParts(guess); return guess+((h-got.hour)*60-(+got.minute-(m||0)))*60000; /* shift if that day is on CST */
   }
+  /* weekly kickoff slots, CT: [weekday, hour, minute, window hours, label] */
+  var SLOTS=[['Thu',19,15,4,'THURSDAY KICKOFF IN'],['Sun',12,0,12,'SUNDAY KICKOFF IN'],['Mon',19,15,4,'MONDAY KICKOFF IN']];
+  var SLOT_OVERRIDES={'2026-9-10':[19,35]}; /* Rams at 49ers in Melbourne, 8:35 PM ET */
   function nextTarget(now){
     if(now<KICKOFF_UTC) return {label:'KICKOFF IN',at:KICKOFF_UTC};
     if(now>SEASON_END_UTC) return null;
     for(var d=0;d<8;d++){
       var day=now+d*86400000, p=ctParts(day);
-      if(p.weekday==='Sun'){
-        var noon=ctNoonUtc(day);
-        if(d===0 && now>=noon) return {label:'GAME DAY',at:null};
-        if(noon>now) return {label:'SUNDAY KICKOFF IN',at:noon};
+      for(var k=0;k<SLOTS.length;k++){
+        var sl=SLOTS[k]; if(p.weekday!==sl[0]) continue;
+        var ov=SLOT_OVERRIDES[p.year+'-'+p.month+'-'+p.day], h=ov?ov[0]:sl[1], m=ov?ov[1]:sl[2];
+        var at=ctTimeUtc(day,h,m), end=at+sl[3]*3600000;
+        if(now>=at && now<end) return {label:'GAME DAY',at:null};
+        if(at>now) return {label:sl[4],at:at};
       }
     }
     return null;
