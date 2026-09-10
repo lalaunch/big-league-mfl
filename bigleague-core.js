@@ -556,6 +556,11 @@
       tr.classList.toggle('bl-mu-row-live',!!isLive);
     });
     if(!any) return;
+    var capWrap=table.querySelector('caption span[data-blsn-caption]');
+    if(capWrap&&!capWrap.querySelector('.bl-mu-livebtn')){
+      var btn=document.createElement('a'); btn.className='bl-mu-livebtn'; btn.href=BASE+'/ajax_ls?L='+LEAGUE; btn.textContent='LIVE SCORING';
+      var first=capWrap.querySelector('strong'); if(first) first.insertAdjacentElement('afterend',btn); else capWrap.appendChild(btn);
+    }
     var cap=table.querySelector('caption span strong:last-child');
     if(cap){
       if(!cap.getAttribute('data-bl-orig')) cap.setAttribute('data-bl-orig',cap.textContent);
