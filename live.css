@@ -21,7 +21,7 @@
 #body_ajax_ls #other_games > tbody > tr > td{padding:0 !important;background:transparent !important;border:0 !important;display:flex;flex-wrap:wrap;gap:8px;}
 #body_ajax_ls .ls_other_game{
   flex:1 1 0;min-width:150px;
-  border:1px solid #0e6794;border-radius:7px;overflow:hidden;
+  border:1px solid #0e6794 !important;border-radius:7px;overflow:hidden;
   background:linear-gradient(180deg,#071823,#04111a);
   box-shadow:0 4px 12px rgba(0,0,0,.35);
   transition:border-color .15s ease,transform .15s ease;
@@ -99,7 +99,9 @@
 #body_ajax_ls table[id^="roster_"] td.ls_player_stats{color:#9fb3bf;font-size:10.5px;}
 #body_ajax_ls table[id^="roster_"] td.ls_proj_points{color:#5fa9c9;font-style:italic;text-align:right;font-variant-numeric:tabular-nums;}
 #body_ajax_ls table[id^="roster_"] td:last-child{text-align:right;}
-#body_ajax_ls table[id^="roster_"] div[class^="pfpts_"]{
+#body_ajax_ls table[id^="roster_"] td:last-child a,#body_ajax_ls table[id^="roster_"] div[class^="pfpts_"] a{text-decoration:none !important;color:inherit !important;}
+#body_ajax_ls .ls_other_game a{text-decoration:none !important;}
+#body_ajax_ls table[id^="roster_"] div[class^="pfpts_"]{text-decoration:none !important;
   font-family:Impact,'Arial Black',Arial,sans-serif;font-size:16px !important;line-height:1;color:#ffe14d;font-variant-numeric:tabular-nums;
   text-shadow:0 2px 0 rgba(0,0,0,.6);
 }
