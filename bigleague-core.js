@@ -585,10 +585,10 @@
   function tdSave(week,st){try{localStorage.setItem('bl_td_'+YEAR+'_'+week,JSON.stringify(st));}catch(e){}}
   function loadPlayers(cb){
     if(TD_PLAYERS) return cb(TD_PLAYERS);
-    try{var c=localStorage.getItem('bl_players_'+YEAR); if(c){TD_PLAYERS=JSON.parse(c); return cb(TD_PLAYERS);}}catch(e){}
+    try{var c=localStorage.getItem('bl_players2_'+YEAR); if(c){TD_PLAYERS=JSON.parse(c); return cb(TD_PLAYERS);}}catch(e){}
     fetch(EXPORT+'players&DETAILS=0',{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(j){
-      var map={}; (j.players&&j.players.player||[]).forEach(function(p){map[p.id]=(p.name||'')+'|'+(p.team||'')+'|'+(p.position||'');});
-      TD_PLAYERS=map; try{localStorage.setItem('bl_players_'+YEAR,JSON.stringify(map));}catch(e){} cb(map);
+      var map={}; (j.players&&j.players.player||[]).forEach(function(p){var n=String(p.name||''),c=n.indexOf(', ');if(c>0) n=n.slice(c+2)+' '+n.slice(0,c);map[p.id]=n+'|'+(p.team||'')+'|'+(p.position||'');});
+      TD_PLAYERS=map; try{localStorage.setItem('bl_players2_'+YEAR,JSON.stringify(map));}catch(e){} cb(map);
     }).catch(function(){cb({});});
   }
   /* read the week row of a player page's stats table: {P:tds,R:tds,C:tds} */
@@ -611,6 +611,10 @@
     }
     return {P:0,R:0,C:0};
   }
+  function fetchPlayerWeek(pid,week){
+    return fetch(BASE+'/player?L='+LEAGUE+'&P='+pid,{credentials:'same-origin'}).then(function(r){return r.text();}).then(function(html){return parsePlayerWeek(html,week);}).catch(function(e){window.__blTdErr=String(e);return null;});
+  }
+  window.BL_TD_TEST=function(pid,week){return fetchPlayerWeek(pid,week||'1');}; /* console: await BL_TD_TEST('16580') */
   function posGroup(pos){pos=String(pos||'').toUpperCase(); return TD_RULES.hasOwnProperty(pos)?pos:(pos==='DEF'||pos.indexOf('TM')===0?'Def':null);}
   function tickTds(live){
     var ls=live&&live.liveScoring; if(!ls||!ls.matchup) return;
@@ -630,7 +634,7 @@
       });});
       if(!checks.length){tdSave(week,st);renderTdTicker(week,st);return;}
       Promise.all(checks.map(function(c){
-        return fetch(BASE+'/player?L='+LEAGUE+'&P='+c.pid,{credentials:'same-origin'}).then(function(r){return r.text();}).then(function(html){return parsePlayerWeek(html,week);}).catch(function(){return null;});
+        return fetchPlayerWeek(c.pid,week);
       })).then(function(results){
         results.forEach(function(now,k){
           var c=checks[k], before=st.counts[c.pid];
