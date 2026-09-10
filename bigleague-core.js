@@ -935,10 +935,12 @@
     var HOT=/^(power rank|pts|pf|points|total)$/i;
     Array.from(document.querySelectorAll('table.report')).forEach(function(tbl){
       if(tbl.getAttribute('data-bl-hot')) return;
-      var ths=Array.from(tbl.querySelectorAll('tr th')); if(!ths.length) return;
-      var row=ths[0].parentNode, idx=-1;
-      Array.from(row.children).forEach(function(th,i){ if(idx<0&&HOT.test(clean(th.textContent))) idx=i; });
-      if(idx<0) return;
+      var row=null, idx=-1;
+      Array.from(tbl.querySelectorAll('tr')).forEach(function(tr){ /* headers can span two rows; find the row that names the column */
+        if(row||!tr.querySelector('th')) return;
+        Array.from(tr.children).forEach(function(th,i){ if(idx<0&&HOT.test(clean(th.textContent))){idx=i;row=tr;} });
+      });
+      if(!row||idx<0) return;
       tbl.setAttribute('data-bl-hot','1'); row.children[idx].classList.add('bl-col-hot');
       Array.from(tbl.querySelectorAll('tr')).forEach(function(tr){ var c=tr.children[idx]; if(c&&c.tagName==='TD') c.classList.add('bl-col-hot'); });
     });
