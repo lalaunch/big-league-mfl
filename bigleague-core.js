@@ -594,8 +594,8 @@
   /* read the week row of a player page's stats table: {P:tds,R:tds,C:tds} */
   function parsePlayerWeek(html,week){
     var m=html.match(/<table[^>]*id="player_stats_table"[^>]*>[\s\S]*?<\/table>/); if(!m) return null;
-    var t=m[0], ths=[], mm, re=/<th[^>]*?(?:title="([^"]*)")?[^>]*>([\s\S]*?)<\/th>/g;
-    while((mm=re.exec(t))) ths.push(mm[1]||clean(mm[2].replace(/<[^>]+>/g,'')));
+    var t=m[0], ths=[], mm, re=/<th([^>]*)>([\s\S]*?)<\/th>/g;
+    while((mm=re.exec(t))){var tt=/title="([^"]*)"/.exec(mm[1]); ths.push(tt?tt[1]:clean(mm[2].replace(/<[^>]+>/g,'')));}
     var start=ths.indexOf('Week'); if(start<0) return null;
     var heads=ths.slice(start);
     var rows=t.match(/<tr[^>]*>[\s\S]*?<\/tr>/g)||[];
