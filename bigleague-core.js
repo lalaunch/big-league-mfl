@@ -932,14 +932,11 @@
   /* report pages: tag the column the report is named for so report.css can light it up */
   function decorateReportTables(){
     if(!/^body_options_/.test(document.body.id)) return;
-    var HOT=/^(power rank|pts|pf|points|total)$/i;
+    var HOTS=[/^power rank$/i,/^points$/i,/^pts$/i,/^pf$/i,/^total$/i]; /* priority order, not column order */
     Array.from(document.querySelectorAll('table.report')).forEach(function(tbl){
       if(tbl.getAttribute('data-bl-hot')) return;
-      var row=null, idx=-1;
-      Array.from(tbl.querySelectorAll('tr')).forEach(function(tr){ /* headers can span two rows; find the row that names the column */
-        if(row||!tr.querySelector('th')) return;
-        Array.from(tr.children).forEach(function(th,i){ if(idx<0&&HOT.test(clean(th.textContent))){idx=i;row=tr;} });
-      });
+      var row=null, idx=-1, hrows=Array.from(tbl.querySelectorAll('tr')).filter(function(tr){return tr.querySelector('th');});
+      HOTS.forEach(function(re){ if(row) return; hrows.forEach(function(tr){ if(row) return; Array.from(tr.children).forEach(function(th,i){ if(!row&&re.test(clean(th.textContent))){idx=i;row=tr;} }); }); });
       if(!row||idx<0) return;
       tbl.setAttribute('data-bl-hot','1'); row.children[idx].classList.add('bl-col-hot');
       Array.from(tbl.querySelectorAll('tr')).forEach(function(tr){ var c=tr.children[idx]; if(c&&c.tagName==='TD') c.classList.add('bl-col-hot'); });
