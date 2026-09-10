@@ -788,6 +788,73 @@
     return true;
   }
   window.BL_TOW_DEBUG=function(fid,week,pts,opp,oppPts,rec){return renderTeamOfWeek(fid||'0003',week||1,pts||142.35,opp||'Bristol Steampunks',oppPts||112.3,rec===undefined?{fid:'0002',pts:151.8,week:1}:rec);};
+  /* ---- Week in Review (2026-09-10) ----
+     A card under the matchups once the previous week is final: high score, player of the
+     week, closest game, biggest blowout, low score. Data is liveScoring for that week with
+     DETAILS=1 (franchise scores plus every player's points); names from the players export.
+     Console preview: BL_REVIEW_DEBUG() */
+  function crestImg(fid,cls){var t=TEAMS[fid];return t?'<img class="'+(cls||'blx-rv-crest')+'" src="'+HOSTED+'assets/logos/'+t.slug+'.webp?v='+BLV+'" alt="">':'';}
+  function teamName(fid){return TEAMS[fid]?TEAMS[fid].name:('Team '+fid);}
+  function renderReview(week,d){
+    var host=document.querySelector('.blsn-playoff-quote')||document.querySelector('.blsn-matchups-row'); if(!host) return false;
+    var sec=document.querySelector('.blx-review');
+    if(!sec){sec=document.createElement('section');sec.className='blx-card blx-review';host.insertAdjacentElement('afterend',sec);}
+    function tile(label,fids,big,cap,cls){
+      return '<div class="blx-rv-tile '+(cls||'')+'"><div class="blx-rv-label">'+label+'</div><div class="blx-rv-crests">'+fids.map(function(f){return crestImg(f);}).join('')+'</div><div class="blx-rv-big">'+big+'</div><div class="blx-rv-cap">'+cap+'</div></div>';
+    }
+    sec.innerHTML='<div class="blx-rv-head"><span>WEEK '+esc(week)+' IN REVIEW</span><small>'+esc(d.games)+' games • '+esc(d.total.toFixed(2))+' total points</small></div><div class="blx-rv-grid">'+
+      tile('HIGH SCORE',[d.high.fid],d.high.pts.toFixed(2),esc(teamName(d.high.fid)),'blx-rv-gold')+
+      (d.player?tile('PLAYER OF THE WEEK',[d.player.fid],d.player.pts.toFixed(2),'<b>'+esc(d.player.name)+'</b> '+esc(d.player.nfl+' '+d.player.pos)+'<br>'+esc(teamName(d.player.fid))):'')+
+      tile('CLOSEST GAME',[d.close.w,d.close.l],'by '+d.close.margin.toFixed(2),esc(teamName(d.close.w))+' '+d.close.wp.toFixed(2)+'<br>'+esc(teamName(d.close.l))+' '+d.close.lp.toFixed(2))+
+      tile('BIGGEST BLOWOUT',[d.blow.w,d.blow.l],'by '+d.blow.margin.toFixed(2),esc(teamName(d.blow.w))+' '+d.blow.wp.toFixed(2)+'<br>'+esc(teamName(d.blow.l))+' '+d.blow.lp.toFixed(2))+
+      tile('LOW SCORE',[d.low.fid],d.low.pts.toFixed(2),esc(teamName(d.low.fid)),'blx-rv-cold')+
+      '</div>';
+    return true;
+  }
+  function summarizeWeek(j,map){
+    var mus=j.liveScoring&&j.liveScoring.matchup||[]; if(!mus.length) return null;
+    var d={games:mus.length,total:0,high:null,low:null,close:null,blow:null,player:null}, done=true;
+    mus.forEach(function(mu){
+      var fr=mu.franchise; fr.forEach(function(f){
+        if(+f.playersYetToPlay>0||+f.playersCurrentlyPlaying>0) done=false;
+        var s=parseFloat(f.score||0); d.total+=s;
+        if(!d.high||s>d.high.pts) d.high={fid:f.id,pts:s};
+        if(!d.low||s<d.low.pts) d.low={fid:f.id,pts:s};
+        (f.players&&f.players.player||[]).forEach(function(p){
+          if(p.status!=='starter') return; var ps=parseFloat(p.score||0);
+          if(!d.player||ps>d.player.pts){var info=(map[p.id]||'||').split('|');d.player={fid:f.id,pid:p.id,pts:ps,name:info[0]||('#'+p.id),nfl:info[1]||'',pos:info[2]||''};}
+        });
+      });
+      if(fr.length===2){
+        var a=parseFloat(fr[0].score||0), b=parseFloat(fr[1].score||0), w=a>=b?fr[0]:fr[1], l=a>=b?fr[1]:fr[0], m=Math.abs(a-b);
+        var g={w:w.id,l:l.id,wp:Math.max(a,b),lp:Math.min(a,b),margin:m};
+        if(!d.close||m<d.close.margin) d.close=g;
+        if(!d.blow||m>d.blow.margin) d.blow=g;
+      }
+    });
+    return done&&d.total>0?d:null;
+  }
+  function buildWeekReview(){
+    fetch(EXPORT+'liveScoring',{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(cur){
+      var wk=parseInt(cur.liveScoring&&cur.liveScoring.week||'1',10);
+      loadPlayers(function(map){
+        function tryWeek(w){
+          if(w<1) return;
+          fetch(EXPORT+'liveScoring&W='+w+'&DETAILS=1',{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(j){
+            var d=summarizeWeek(j,map);
+            if(!d){ if(w===wk) tryWeek(w-1); return; }
+            renderReview(w,d);
+          }).catch(function(){});
+        }
+        tryWeek(wk);
+      });
+    }).catch(function(){});
+  }
+  window.BL_REVIEW_DEBUG=function(){
+    return renderReview(1,{games:5,total:1042.55,high:{fid:'0003',pts:142.35},low:{fid:'0006',pts:71.2},
+      close:{w:'0002',l:'0004',wp:118.4,lp:116.9,margin:1.5},blow:{w:'0003',l:'0010',wp:142.35,lp:88.05,margin:54.3},
+      player:{fid:'0002',pid:'0',pts:34.6,name:'Justin Jefferson',nfl:'MIN',pos:'WR'}});
+  };
   function loadScores(){
     if(!document.querySelector('#next_weeks_fantasy_schedule')) return;
     Promise.all([
@@ -852,6 +919,7 @@
       mr.insertAdjacentElement('afterend',quote);
       startScores();
       setTimeout(buildTeamOfWeek,800); /* after v8's hero pass has built the callout */
+      setTimeout(buildWeekReview,900);
     }
 
     var standWrap=standings.closest('.mobile-wrap')||standings;

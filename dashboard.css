@@ -427,6 +427,36 @@
 #body_home.blsn-mode .bl-td-none{color:#8fd3ef;font-size:12px;letter-spacing:.08em;text-transform:uppercase;}
 #body_home.blsn-mode .bl-td-sep{display:inline-block;margin:0 14px;color:#f4c745;font-size:9px;}
 
+/* ---- Week in Review card ---- */
+#body_home.blsn-mode .blx-review{margin:12px 4px 12px;border-color:#a07a22;}
+#body_home.blsn-mode .blx-rv-head{
+  display:flex;align-items:baseline;gap:14px;padding:9px 14px;
+  border-bottom:1px solid #b78b25;
+  background:linear-gradient(90deg,rgba(244,199,69,.06),rgba(7,60,94,.96) 20%,rgba(9,92,143,.98) 50%,rgba(7,60,94,.96) 80%,rgba(244,199,69,.06));
+  color:#fff;font-size:15px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;
+}
+#body_home.blsn-mode .blx-rv-head small{margin-left:auto;color:#8fd3ef;font-size:10px;letter-spacing:.08em;font-weight:700;}
+#body_home.blsn-mode .blx-rv-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;background:#0e6794;}
+#body_home.blsn-mode .blx-rv-tile{
+  display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0;padding:14px 10px 12px;
+  background:linear-gradient(180deg,#071925,#04111a);
+}
+#body_home.blsn-mode .blx-rv-gold{background:radial-gradient(ellipse at 50% 0%,rgba(244,199,69,.16),transparent 60%),linear-gradient(180deg,#071925,#04111a);}
+#body_home.blsn-mode .blx-rv-cold{background:radial-gradient(ellipse at 50% 0%,rgba(31,145,193,.14),transparent 60%),linear-gradient(180deg,#071925,#04111a);}
+#body_home.blsn-mode .blx-rv-label{font-size:9px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:#8fd3ef;margin-bottom:8px;}
+#body_home.blsn-mode .blx-rv-crests{display:flex;gap:6px;align-items:center;justify-content:center;min-height:44px;}
+#body_home.blsn-mode .blx-rv-crest{width:44px;height:44px;object-fit:contain;filter:drop-shadow(0 4px 5px rgba(0,0,0,.7));}
+#body_home.blsn-mode .blx-rv-crests .blx-rv-crest+.blx-rv-crest{margin-left:-4px;}
+#body_home.blsn-mode .blx-rv-big{
+  margin-top:8px;font-family:Impact,'Arial Black',Arial,sans-serif;font-size:26px;line-height:1;color:#ffe14d;font-variant-numeric:tabular-nums;
+  text-shadow:0 2px 0 rgba(0,0,0,.6),0 0 12px rgba(255,225,77,.35);
+}
+#body_home.blsn-mode .blx-rv-cold .blx-rv-big{color:#8fd3ef;text-shadow:0 2px 0 rgba(0,0,0,.6);}
+#body_home.blsn-mode .blx-rv-cap{margin-top:6px;font-size:10px;line-height:1.4;font-weight:700;letter-spacing:.04em;color:#cfe6f2;text-transform:uppercase;}
+#body_home.blsn-mode .blx-rv-cap b{color:#fff;}
+@media(max-width:1000px){#body_home.blsn-mode .blx-rv-grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
+@media(max-width:600px){#body_home.blsn-mode .blx-rv-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+
 /* ---- championship banners: hanging pennants, one per title ---- */
 .blx-banner-rod{
   height:8px;
