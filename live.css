@@ -1,0 +1,120 @@
+/* THE BIG LEAGUE — LIVE SCORING (ajax_ls)
+   MFL draws this page with its own script (mfl_live_scoring.js) and re-renders parts of it
+   every refresh, so everything here is CSS on MFL's own ids and classes: nothing depends on
+   our JS surviving a re-render. Scoped to body#body_ajax_ls. Structure (2026-09-10):
+     #ajax_ls.pagebody > table.report
+       row 1: #other_games  (five .ls_other_game tables: abbrev | points | game state)
+       row 2: td #marquee_away + #winprob_away + #roster_away | td #marquee_home + ...
+     marquee: #ficon_* crest, #fname_*.ls_team_name, #ffpts_*.ls_team_points,
+              rows .ls_marquee_label / .ls_marquee_value (#playing_*, #ytp_*, #pmr_*, #winprob_*)
+     roster:  tr.ls_starters (th row + player rows), td.ls_game_info, td.ls_player_stats,
+              td.ls_proj_points, last td .pfpts_* points */
+
+/* ---- page width ---- */
+#body_ajax_ls #ajax_ls.pagebody{max-width:1180px !important;width:100% !important;margin:0 auto;}
+#body_ajax_ls #ajax_ls > table.report{width:100% !important;border-collapse:separate;border-spacing:0 10px;background:transparent !important;border:0 !important;}
+#body_ajax_ls #ajax_ls > table.report > tbody > tr > td{vertical-align:top;background:transparent !important;border:0 !important;padding:0 6px !important;width:50%;}
+#body_ajax_ls #ajax_ls > table.report > tbody > tr.oddtablerow > td{width:auto;padding:0 6px 4px !important;}
+
+/* ---- five-game strip ---- */
+#body_ajax_ls #other_games{width:100% !important;background:transparent !important;border:0 !important;}
+#body_ajax_ls #other_games > tbody > tr > td{padding:0 !important;background:transparent !important;border:0 !important;display:flex;flex-wrap:wrap;gap:8px;}
+#body_ajax_ls .ls_other_game{
+  flex:1 1 0;min-width:150px;
+  border:1px solid #0e6794;border-radius:7px;overflow:hidden;
+  background:linear-gradient(180deg,#071823,#04111a);
+  box-shadow:0 4px 12px rgba(0,0,0,.35);
+  transition:border-color .15s ease,transform .15s ease;
+}
+#body_ajax_ls .ls_other_game:hover{border-color:#f4c745;transform:translateY(-1px);}
+#body_ajax_ls .ls_other_game table{width:100% !important;border:0 !important;background:transparent !important;}
+#body_ajax_ls .ls_other_game td{padding:5px 10px !important;border:0 !important;background:transparent !important;color:#eaf7fc;font-size:11px;}
+#body_ajax_ls .ls_other_game tr:first-child td{padding-top:8px !important;border-bottom:1px solid rgba(14,103,148,.35) !important;}
+#body_ajax_ls .ls_other_game tr:last-child td{padding-bottom:8px !important;}
+#body_ajax_ls .ls_other_game td.ls_og_cell{font-weight:900;letter-spacing:.08em;color:#8fd3ef;width:40%;}
+#body_ajax_ls .ls_other_game td.ls_og_cell a{color:#8fd3ef !important;text-decoration:none !important;}
+#body_ajax_ls .ls_other_game div[class^="ogffpts_"]{
+  font-family:Impact,'Arial Black',Arial,sans-serif;font-size:18px;line-height:1;color:#ffe14d;
+  font-variant-numeric:tabular-nums;text-shadow:0 2px 0 rgba(0,0,0,.6),0 0 10px rgba(255,225,77,.3);text-align:right;
+}
+#body_ajax_ls .ls_other_game div[class^="oggstat_"]{font-size:8.5px;color:#5fa9c9;letter-spacing:.06em;text-transform:uppercase;text-align:right;white-space:nowrap;}
+
+/* ---- team marquee ---- */
+#body_ajax_ls table[id^="marquee_"]{
+  width:100% !important;border:1px solid #17445c !important;border-top:3px solid #f4c745 !important;border-radius:9px;overflow:hidden;
+  background:
+    radial-gradient(circle at 12% 30%,rgba(244,199,69,.14),transparent 40%),
+    linear-gradient(110deg,#071821 0%,#06141d 55%,#02080d 100%) !important;
+  box-shadow:0 10px 26px rgba(0,0,0,.4);
+}
+#body_ajax_ls table[id^="marquee_"] td{background:transparent !important;border:0 !important;color:#eaf7fc;}
+#body_ajax_ls table[id^="marquee_"] > tbody > tr:first-child > td{padding:12px 14px 8px !important;vertical-align:middle;}
+#body_ajax_ls div[id^="ficon_"] img{
+  width:74px !important;height:74px !important;max-width:none !important;object-fit:contain;
+  filter:drop-shadow(0 8px 12px rgba(0,0,0,.65));
+}
+#body_ajax_ls .ls_team_name{
+  font-family:Impact,'Arial Black',Arial,sans-serif;font-style:italic;font-size:22px;line-height:.95;letter-spacing:.015em;
+  color:#fff;text-transform:uppercase;text-shadow:2px 2px 0 rgba(0,0,0,.55),0 6px 12px rgba(0,0,0,.5);
+}
+#body_ajax_ls .ls_team_name a{color:#fff !important;text-decoration:none !important;}
+#body_ajax_ls .ls_team_points{
+  font-family:Impact,'Arial Black',Arial,sans-serif;font-size:38px;line-height:1;color:#ffe14d;
+  font-variant-numeric:tabular-nums;text-shadow:0 3px 0 rgba(0,0,0,.6),0 0 16px rgba(255,225,77,.4);text-align:right;
+  padding-right:6px;
+}
+#body_ajax_ls td.ls_marquee_label{
+  padding:3px 14px !important;font-size:9px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:#8fd3ef;
+}
+#body_ajax_ls td.ls_marquee_value{padding:3px 14px !important;font-size:13px;font-weight:900;color:#fff;font-variant-numeric:tabular-nums;}
+#body_ajax_ls td.ls_marquee_value div{display:inline-block;}
+#body_ajax_ls table[id^="marquee_"] > tbody > tr:last-child > td{padding-bottom:10px !important;}
+#body_ajax_ls tr[id^="ls_row_winprob_"] td.ls_marquee_value{color:#f4c745;}
+#body_ajax_ls div[id^="winprob_"]{margin:6px 0 10px;}
+
+/* ---- roster tables ---- */
+#body_ajax_ls table[id^="roster_"]{
+  width:100% !important;border:1px solid #0e6794 !important;border-radius:7px;overflow:hidden;border-collapse:separate;border-spacing:0;
+  background:linear-gradient(180deg,#071823,#04111a) !important;box-shadow:0 5px 18px rgba(0,0,0,.3);
+}
+#body_ajax_ls table[id^="roster_"] th{
+  padding:8px 10px !important;background:linear-gradient(90deg,#083a5c,#0a4d78 50%,#083a5c) !important;
+  color:#fff !important;font-size:9px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;font-style:normal !important;
+  border:0 !important;border-bottom:1px solid #0e6794 !important;text-align:left;
+}
+#body_ajax_ls table[id^="roster_"] td{
+  padding:7px 10px !important;border:0 !important;border-bottom:1px solid rgba(14,103,148,.22) !important;
+  background:transparent !important;color:#eaf7fc;font-size:11.5px;vertical-align:middle;
+}
+#body_ajax_ls table[id^="roster_"] tr.oddtablerow td{background:rgba(255,255,255,.025) !important;}
+#body_ajax_ls table[id^="roster_"] tr:hover td{background:rgba(31,145,193,.10) !important;}
+#body_ajax_ls table[id^="roster_"] .reallysmall{font-size:11.5px !important;}
+#body_ajax_ls table[id^="roster_"] a.fp-player-link{color:#fff !important;font-weight:700;text-decoration:none !important;}
+#body_ajax_ls table[id^="roster_"] a.fp-player-link:hover{color:#ffe14d !important;}
+#body_ajax_ls table[id^="roster_"] td:first-child{white-space:nowrap;}
+#body_ajax_ls table[id^="roster_"] td:first-child br{display:none;}
+#body_ajax_ls table[id^="roster_"] td:first-child::after{content:"";}
+#body_ajax_ls table[id^="roster_"] td.ls_game_info{color:#8fd3ef;font-size:10.5px;white-space:nowrap;}
+#body_ajax_ls table[id^="roster_"] td.ls_game_info a{color:#8fd3ef !important;text-decoration:none !important;}
+#body_ajax_ls table[id^="roster_"] td.ls_player_stats{color:#9fb3bf;font-size:10.5px;}
+#body_ajax_ls table[id^="roster_"] td.ls_proj_points{color:#5fa9c9;font-style:italic;text-align:right;font-variant-numeric:tabular-nums;}
+#body_ajax_ls table[id^="roster_"] td:last-child{text-align:right;}
+#body_ajax_ls table[id^="roster_"] div[class^="pfpts_"]{
+  font-family:Impact,'Arial Black',Arial,sans-serif;font-size:16px !important;line-height:1;color:#ffe14d;font-variant-numeric:tabular-nums;
+  text-shadow:0 2px 0 rgba(0,0,0,.6);
+}
+/* bench / non-starter rows, if MFL shows them, sit back */
+#body_ajax_ls table[id^="roster_"] tr:not(.ls_starters) td{opacity:.6;}
+#body_ajax_ls table[id^="roster_"] tr:not(.ls_starters) th{opacity:1;}
+
+/* ---- bottom ticker table ---- */
+#body_ajax_ls #ls_ticker_tab_id{width:100% !important;margin-top:10px;border:1px solid #0e6794 !important;border-radius:7px;background:linear-gradient(180deg,#071823,#04111a) !important;}
+#body_ajax_ls #ls_ticker_tab_id td,#body_ajax_ls #ls_ticker_tab_id th{background:transparent !important;border:0 !important;color:#eaf7fc;font-size:11px;padding:6px 10px !important;}
+
+/* ---- MFL's page title under the nav ---- */
+#body_ajax_ls #ajax_ls h1,#body_ajax_ls .pagetitle{color:#fff;}
+
+@media(max-width:900px){
+  #body_ajax_ls #ajax_ls > table.report > tbody > tr > td{display:block;width:100%;}
+  #body_ajax_ls .ls_team_points{font-size:30px;}
+}
