@@ -723,7 +723,7 @@
      Week 1 is final it stays the generic "It's go time" callout. Data: liveScoring for the
      previous week (final when nobody is playing or yet to play). Console preview:
      BL_TOW_DEBUG('0003', 1, 142.35, 'Bristol Steampunks', 112.3) */
-  function renderTeamOfWeek(fid,week,pts,oppName,oppPts){
+  function renderTeamOfWeek(fid,week,pts,oppName,oppPts,record){
     var side=document.querySelector('.blsn-callout-side'), t=TEAMS[fid]; if(!side||!t) return false;
     side.classList.add('blsn-tow');
     side.style.setProperty('--t1',t.t1); side.style.setProperty('--t2',t.t2);
@@ -738,8 +738,31 @@
       '<div class="blsn-tow-eyebrow">★ TEAM OF THE WEEK • WEEK '+esc(week)+' ★</div>'+
       '<div class="blsn-tow-namerow"><img class="blsn-tow-crest" src="'+HOSTED+'assets/logos/'+t.slug+'.webp?v='+BLV+'" alt="">'+
       '<h2 class="blsn-tow-name" data-text="'+esc(t.name)+'">'+esc(t.name)+'</h2></div>'+
-      '<div class="blsn-tow-score"><b>'+(+pts).toFixed(2)+'</b><small>PTS</small>'+(oppName?'<span>def. '+esc(oppName)+' '+(+oppPts).toFixed(2)+'</span>':'')+'</div>';
+      '<div class="blsn-tow-score"><b>'+(+pts).toFixed(2)+'</b><small>PTS</small>'+(oppName?'<span>def. '+esc(oppName)+' '+(+oppPts).toFixed(2)+'</span>':'')+'</div>'+
+      (record?(record.fid===fid&&record.week===week
+        ?'<div class="blsn-tow-record blsn-tow-record-new">★ NEW SEASON HIGH</div>'
+        :'<div class="blsn-tow-record">SEASON HIGH <b>'+esc((TEAMS[record.fid]||{}).name||'')+'</b> '+(+record.pts).toFixed(2)+' <small>WK '+esc(record.week)+'</small></div>'):'');
     return true;
+  }
+  /* highest single-week score of the season so far: liveScoring per completed week,
+     cached in localStorage since a finished week never changes */
+  function weekScores(w,cb){
+    var key='bl_wk_'+YEAR+'_'+w, c=null; try{c=JSON.parse(localStorage.getItem(key)||'null');}catch(e){}
+    if(c) return cb(c);
+    fetch(EXPORT+'liveScoring&W='+w,{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(j){
+      var out=[], done=true; (j.liveScoring&&j.liveScoring.matchup||[]).forEach(function(mu){mu.franchise.forEach(function(f){
+        if(+f.playersYetToPlay>0||+f.playersCurrentlyPlaying>0) done=false; out.push({fid:f.id,pts:parseFloat(f.score||0)});});});
+      if(done&&out.length){try{localStorage.setItem(key,JSON.stringify(out));}catch(e){}}
+      cb(done?out:null);
+    }).catch(function(){cb(null);});
+  }
+  function seasonHigh(lastWeek,cb){
+    var best=null, pending=lastWeek;
+    if(lastWeek<1) return cb(null);
+    for(var w=1;w<=lastWeek;w++)(function(w){weekScores(w,function(list){
+      (list||[]).forEach(function(x){if(!best||x.pts>best.pts) best={fid:x.fid,pts:x.pts,week:w};});
+      if(--pending===0) cb(best);
+    });})(w);
   }
   function buildTeamOfWeek(){
     if(!document.querySelector('.blsn-callout-side')) return false;
@@ -756,7 +779,7 @@
             if(!best||s>best.pts){var opp=mu.franchise.filter(function(x){return x.id!==f.id;})[0];best={fid:f.id,pts:s,opp:opp?TEAMS[opp.id]&&TEAMS[opp.id].name:'',oppPts:opp?parseFloat(opp.score||0):0};}
           });});
           if(!done||!best||best.pts<=0){ if(w===wk) tryWeek(w-1); return; }
-          renderTeamOfWeek(best.fid,w,best.pts,best.opp,best.oppPts);
+          seasonHigh(w,function(rec){renderTeamOfWeek(best.fid,w,best.pts,best.opp,best.oppPts,rec);});
         }).catch(function(){});
       }
       /* the current week if it is already final (Tuesday onward), else the one before */
@@ -764,7 +787,7 @@
     }).catch(function(){});
     return true;
   }
-  window.BL_TOW_DEBUG=function(fid,week,pts,opp,oppPts){return renderTeamOfWeek(fid||'0003',week||1,pts||142.35,opp||'Bristol Steampunks',oppPts||112.3);};
+  window.BL_TOW_DEBUG=function(fid,week,pts,opp,oppPts,rec){return renderTeamOfWeek(fid||'0003',week||1,pts||142.35,opp||'Bristol Steampunks',oppPts||112.3,rec===undefined?{fid:'0002',pts:151.8,week:1}:rec);};
   function loadScores(){
     if(!document.querySelector('#next_weeks_fantasy_schedule')) return;
     Promise.all([
