@@ -616,8 +616,11 @@
   }
   window.BL_TD_TEST=function(pid,week){return fetchPlayerWeek(pid,week||'1');}; /* console: await BL_TD_TEST('16580') */
   function posGroup(pos){pos=String(pos||'').toUpperCase(); return TD_RULES.hasOwnProperty(pos)?pos:(pos==='DEF'||pos.indexOf('TM')===0?'Def':null);}
+  var TD_BUSY=false;
   function tickTds(live){
     var ls=live&&live.liveScoring; if(!ls||!ls.matchup) return;
+    if(TD_BUSY) return; /* a poll's page fetches are still in flight; skip this tick */
+    TD_BUSY=true;
     var week=ls.week, st=tdStore(week); st.snap=st.snap||{}; st.counts=st.counts||{}; st.events=st.events||[];
     loadPlayers(function(map){
       var checks=[];
@@ -632,7 +635,7 @@
           if(jump>=minTd && checks.length<4) checks.push({pid:p.id,fid:f.id,jump:jump,rules:rules,name:info[0],nfl:info[1],pos:info[2],team:parseFloat(f.score||0)});
         });
       });});
-      if(!checks.length){tdSave(week,st);renderTdTicker(week,st);return;}
+      if(!checks.length){tdSave(week,st);renderTdTicker(week,st);TD_BUSY=false;return;}
       Promise.all(checks.map(function(c){
         return fetchPlayerWeek(c.pid,week);
       })).then(function(results){
@@ -655,9 +658,11 @@
           if(yds!=null&&(yds<1||yds>99)) yds=null;
           st.events.push({t:Date.now(),pid:c.pid,fid:c.fid,name:c.name,nfl:c.nfl,pos:c.pos,kind:TD_TYPE[type],yds:yds,sure:true,team:c.team});
         });
-        st.events=st.events.slice(-200);
-        tdSave(week,st); renderTdTicker(week,st);
-      });
+        /* read-merge-write: never clobber what another save put there meanwhile */
+        var cur=tdStore(week); cur.snap=Object.assign(cur.snap||{},st.snap); cur.counts=Object.assign(cur.counts||{},st.counts);
+        cur.events=(cur.events||[]).concat(st.events.slice((cur.events||[]).length)).slice(-200);
+        tdSave(week,cur); renderTdTicker(week,cur); TD_BUSY=false;
+      }).catch(function(){TD_BUSY=false;});
     });
   }
   function renderTdTicker(week,st){
