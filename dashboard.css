@@ -413,7 +413,7 @@
 }
 #body_home.blsn-mode .bl-td-empty .bl-td-label{background:linear-gradient(180deg,#0a4d78,#083a5c);}
 #body_home.blsn-mode .bl-td-track{flex:1 1 auto;min-width:0;overflow:hidden;white-space:nowrap;}
-#body_home.blsn-mode .bl-td-run{display:inline-block;padding-left:100%;animation:bl-td-scroll 30s linear infinite;}
+#body_home.blsn-mode .bl-td-run{display:inline-flex;align-items:center;padding-left:100%;animation:bl-td-scroll 30s linear infinite;}
 #body_home.blsn-mode .bl-td-empty .bl-td-run{padding-left:14px;animation:none;}
 #body_home.blsn-mode .bl-td-ticker:hover .bl-td-run{animation-play-state:paused;}
 @keyframes bl-td-scroll{from{transform:translateX(0)}to{transform:translateX(-100%)}}
@@ -425,7 +425,7 @@
 #body_home.blsn-mode .bl-td-item small{color:#5fa9c9;font-size:11px;}
 #body_home.blsn-mode .bl-td-maybe b::after{content:" ?";color:#8fd3ef;}
 #body_home.blsn-mode .bl-td-none{color:#8fd3ef;font-size:12px;letter-spacing:.08em;text-transform:uppercase;}
-#body_home.blsn-mode .bl-td-sep{display:inline-block;margin:0 14px;color:#f4c745;font-size:9px;}
+#body_home.blsn-mode .bl-td-sep{display:inline-flex;align-items:center;align-self:center;margin:0 14px;color:#f4c745;font-size:9px;line-height:1;}
 
 /* ---- Week in Review card ---- */
 #body_home.blsn-mode .blx-review{margin:12px 4px 12px;border-color:#a07a22;}

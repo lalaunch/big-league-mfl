@@ -673,7 +673,7 @@
       /* "JUSTIN JEFFERSON 30 YD REC" - crest, name, TD length when known, type */
       return '<span class="bl-td-item'+(e.sure?'':' bl-td-maybe')+'" title="'+esc((t?t.name+' ':'')+(e.nfl?e.nfl+' '+e.pos+' ':'')+when)+'">'+
         (t?'<img src="'+HOSTED+'assets/logos/'+t.slug+'.webp?v='+BLV+'" alt="">':'')+
-        '<b>'+esc(e.name)+'</b> <em>'+(e.yds!=null&&e.yds>0?e.yds+' YD ':'')+esc(e.kind)+'</em></span>';
+        '<b>'+esc(e.name)+'</b> <em>'+(e.yds!=null&&e.yds>0?e.yds+' YD ':'')+esc(e.kind)+(e.kind==='TD'?'':' TD')+'</em></span>';
     }).join('<span class="bl-td-sep">◆</span>');
     run.innerHTML=items+'<span class="bl-td-sep">◆</span>'+items; /* doubled so the loop is seamless */
     run.style.animationDuration=Math.max(18,evs.length*6)+'s';
