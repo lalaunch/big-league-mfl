@@ -854,7 +854,7 @@
   function startScores(){
     loadScores();
     if(window.__blScoreTimer) clearInterval(window.__blScoreTimer);
-    window.__blScoreTimer=setInterval(function(){if(document.visibilityState==='visible') loadScores();},30000);
+    window.__blScoreTimer=setInterval(loadScores,30000); /* background tabs too: browsers slow the timer to about once a minute there, which is still fine for the TD log */
   }
   function findChampionAnchor(){
     var nodes=Array.from(document.querySelectorAll('#tabcontent0 div,#tabcontent0 table,#tabcontent0 td'));
