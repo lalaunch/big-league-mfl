@@ -568,26 +568,20 @@
       cap.innerHTML=(anyLive?'<span class="bl-mu-livedot">● LIVE</span> ':allFinal?'FINAL • ':'')+esc(cap.getAttribute('data-bl-orig'))+' <span class="bl-mu-stamp">as of '+stamp+'</span>';
     }
   }
-  /* ---- touchdown ticker (2026-09-09, rebuilt the same night) ----
-     MFL's liveScoring feed carries no stat line (updatedStats is literally "1\r"), so a
-     TD is found in two steps on the 30s poll:
-       1. a starter's score jumps by at least a TD's worth for their position
-          (pass TD 4, rush/rec TD 6, minus a little slack);
-       2. that player's own page (player?L=..&P=id, same origin) is fetched and its week
-          row read: passing / rushing / receiving TD counts. Whichever counter rose
-          since the last read names the type. The TD length comes from the points:
-          (jump - TD points) / yards-per-point for that type, from the league rules.
-     Events persist per week in localStorage; the day's list is what the ticker shows.
-     Player names and positions come from the players export, fetched once and cached. */
+  /* ---- touchdown ticker (v3, 2026-09-11) ----
+     Source: MFL's own live stats feed, the file its Live Scoring page reads:
+       /fflnetdynamic<year>/live_stats_<WW>.txt   (same origin, needs the browser's session)
+     One line per NFL player: "15698|#P 3|PS 39,2,15|PY 205|...". The TD codes and their
+     length lists are exact:  #P / PS = passing TDs,  #R / RS = rushing,  #C / RC = receiving.
+     Every 30s the lists for each Big League starter are compared with the stored lists; a
+     longer list means new TDs, one event per new entry with its real yardage. Handles MFL
+     delivering a whole drive at once (the 2026-09-10 "65 YD RUSH" that was really 5).
+     First sighting of a player whose game is in progress backfills what he already has,
+     so a tab opened at halftime still lists the first-half scores. Players whose game is
+     already final on first sighting are stored silently. */
   var TD_PLAYERS=null;
-  /* league scoring by position group, from export TYPE=rules 2026-09-09 */
-  var TD_RULES={
-    QB:{P:[4,.04],R:[6,.1],C:[6,.1]}, RB:{P:[4,.04],R:[6,.1],C:[6,.1]}, PK:null, Def:null,
-    WR:{P:[4,.05],R:[6,.1],C:[6,.125]}, TE:{P:[4,.04],R:[6,.1],C:[6,.125]}
-  };
-  var TD_TYPE={P:'PASS',R:'RUSH',C:'REC'};
-  function tdStore(week){try{return JSON.parse(localStorage.getItem('bl_td_'+YEAR+'_'+week)||'{}');}catch(e){return {};}}
-  function tdSave(week,st){try{localStorage.setItem('bl_td_'+YEAR+'_'+week,JSON.stringify(st));}catch(e){}}
+  function tdStore(week){try{return JSON.parse(localStorage.getItem('bl_td3_'+YEAR+'_'+week)||'{}');}catch(e){return {};}}
+  function tdSave(week,st){try{localStorage.setItem('bl_td3_'+YEAR+'_'+week,JSON.stringify(st));}catch(e){}}
   function loadPlayers(cb){
     if(TD_PLAYERS) return cb(TD_PLAYERS);
     try{var c=localStorage.getItem('bl_players2_'+YEAR); if(c){TD_PLAYERS=JSON.parse(c); return cb(TD_PLAYERS);}}catch(e){}
@@ -596,79 +590,74 @@
       TD_PLAYERS=map; try{localStorage.setItem('bl_players2_'+YEAR,JSON.stringify(map));}catch(e){} cb(map);
     }).catch(function(){cb({});});
   }
-  /* read the week row of a player page's stats table: {P:tds,R:tds,C:tds} */
-  function parsePlayerWeek(html,week){
-    var m=html.match(/<table[^>]*id="player_stats_table"[^>]*>[\s\S]*?<\/table>/); if(!m) return null;
-    var t=m[0], ths=[], mm, re=/<th([^>]*)>([\s\S]*?)<\/th>/g;
-    while((mm=re.exec(t))){var tt=/title="([^"]*)"/.exec(mm[1]); ths.push(tt?tt[1]:clean(mm[2].replace(/<[^>]+>/g,'')));}
-    var start=ths.indexOf('Week'); if(start<0) return null;
-    var heads=ths.slice(start);
-    var rows=t.match(/<tr[^>]*>[\s\S]*?<\/tr>/g)||[];
-    for(var r=0;r<rows.length;r++){
-      var cells=(rows[r].match(/<td[^>]*>[\s\S]*?<\/td>/g)||[]).map(function(c){return clean(c.replace(/<[^>]+>/g,'').replace(/&nbsp;/g,''));});
-      if(!cells.length||cells[0]!==String(week)) continue;
-      var out={P:0,R:0,C:0};
-      heads.forEach(function(h,k){
-        var v=parseInt(cells[k]||'0',10)||0;
-        if(h==='Number of Passing TDs') out.P=v; else if(h==='Number of Rushing TDs') out.R=v; else if(h==='Number of Receiving TDs') out.C=v;
-      });
-      return out;
+  /* live_stats line -> {P:[yds],R:[yds],C:[yds]} */
+  function parseStatLine(line){
+    var out={P:[],R:[],C:[]}, f=line.split('|');
+    for(var k=1;k<f.length;k++){
+      var sp=f[k].indexOf(' '); if(sp<0) continue;
+      var code=f[k].slice(0,sp), val=f[k].slice(sp+1);
+      if(code==='PS') out.P=val.split(',').map(Number).filter(function(n){return !isNaN(n);});
+      else if(code==='RS') out.R=val.split(',').map(Number).filter(function(n){return !isNaN(n);});
+      else if(code==='RC') out.C=val.split(',').map(Number).filter(function(n){return !isNaN(n);});
     }
-    return {P:0,R:0,C:0};
+    return out;
   }
-  function fetchPlayerWeek(pid,week){
-    return fetch(BASE+'/player?L='+LEAGUE+'&P='+pid,{credentials:'same-origin'}).then(function(r){return r.text();}).then(function(html){return parsePlayerWeek(html,week);}).catch(function(e){window.__blTdErr=String(e);return null;});
+  function parseLiveStats(text){
+    var map={};
+    String(text||'').split(/\r?\n/).forEach(function(line){
+      var bar=line.indexOf('|'); if(bar<=0) return;
+      var id=line.slice(0,bar); if(!/^\d+$/.test(id)) return;
+      if(line.indexOf('|#P ')<0&&line.indexOf('|#R ')<0&&line.indexOf('|#C ')<0) return;
+      map[id]=parseStatLine(line);
+    });
+    return map;
   }
-  window.BL_TD_TEST=function(pid,week){return fetchPlayerWeek(pid,week||'1');}; /* console: await BL_TD_TEST('16580') */
-  function posGroup(pos){pos=String(pos||'').toUpperCase(); return TD_RULES.hasOwnProperty(pos)?pos:(pos==='DEF'||pos.indexOf('TM')===0?'Def':null);}
+  var TD_TYPE={P:'PASS',R:'RUSH',C:'REC'};
+  function fetchLiveStats(week){
+    var ww=('0'+week).slice(-2);
+    return fetch('/fflnetdynamic'+YEAR+'/live_stats_'+ww+'.txt?RANDOM='+Date.now(),{credentials:'same-origin'}).then(function(r){return r.ok?r.text():'';}).catch(function(){return '';});
+  }
+  window.BL_TD_TEST=function(pid,week){return fetchLiveStats(week||'1').then(function(t){var m=parseLiveStats(t);return pid?m[pid]:Object.keys(m).length;});};
   var TD_BUSY=false;
   function tickTds(live){
     var ls=live&&live.liveScoring; if(!ls||!ls.matchup) return;
-    if(TD_BUSY) return; /* a poll's page fetches are still in flight; skip this tick */
-    TD_BUSY=true;
-    var week=ls.week, st=tdStore(week); st.snap=st.snap||{}; st.counts=st.counts||{}; st.events=st.events||[];
-    loadPlayers(function(map){
-      var checks=[];
-      ls.matchup.forEach(function(mu){mu.franchise.forEach(function(f){
-        (f.players&&f.players.player||[]).forEach(function(p){
-          if(p.status!=='starter') return;
-          var info=(map[p.id]||'||').split('|'), grp=posGroup(info[2]), rules=grp&&TD_RULES[grp];
-          var score=parseFloat(p.score||0), prev=st.snap[p.id];
-          st.snap[p.id]=score;
-          if(!rules||prev==null) return;
-          var jump=score-prev, minTd=Math.min(rules.P[0],rules.R[0],rules.C[0])-0.15;
-          if(jump>=minTd && checks.length<4) checks.push({pid:p.id,fid:f.id,jump:jump,rules:rules,name:info[0],nfl:info[1],pos:info[2],team:parseFloat(f.score||0)});
-        });
-      });});
-      if(!checks.length){tdSave(week,st);renderTdTicker(week,st);TD_BUSY=false;return;}
-      Promise.all(checks.map(function(c){
-        return fetchPlayerWeek(c.pid,week);
-      })).then(function(results){
-        results.forEach(function(now,k){
-          var c=checks[k], before=st.counts[c.pid];
-          if(!now){ st.events.push({t:Date.now(),pid:c.pid,fid:c.fid,name:c.name,nfl:c.nfl,pos:c.pos,kind:'TD',yds:null,sure:false,team:c.team}); return; }
-          var rose=[];
-          ['P','R','C'].forEach(function(k2){
-            var b=before?before[k2]:null;
-            if(b==null){ if(now[k2]>0) rose.push(k2); } else if(now[k2]>b) rose.push(k2);
+    if(TD_BUSY) return; TD_BUSY=true;
+    var week=ls.week;
+    fetchLiveStats(week).then(function(text){
+      var stats=parseLiveStats(text);
+      if(!Object.keys(stats).length){TD_BUSY=false;return;}
+      loadPlayers(function(map){
+        var st=tdStore(week); st.lists=st.lists||{}; st.events=st.events||[];
+        var fresh=[];
+        ls.matchup.forEach(function(mu){mu.franchise.forEach(function(f){
+          var fscore=parseFloat(f.score||0);
+          (f.players&&f.players.player||[]).forEach(function(p){
+            if(p.status!=='starter') return;
+            var now=stats[p.id]; if(!now) return;
+            var before=st.lists[p.id];
+            var gsr=+p.gameSecondsRemaining, inProgress=gsr>0&&gsr<3600;
+            if(!before){
+              /* first sighting: backfill a game in progress, store a finished or unstarted one quietly */
+              if(inProgress){ ['P','R','C'].forEach(function(k){now[k].forEach(function(y){fresh.push({pid:p.id,fid:f.id,type:k,yds:y,team:fscore});});}); }
+            }else{
+              ['P','R','C'].forEach(function(k){
+                var b=before[k]||[], n=now[k]||[];
+                for(var x=b.length;x<n.length;x++) fresh.push({pid:p.id,fid:f.id,type:k,yds:n[x],team:fscore});
+              });
+            }
+            st.lists[p.id]=now;
           });
-          st.counts[c.pid]=now;
-          if(!rose.length) return; /* a big play, not a TD */
-          if(!before && rose.length>1){ /* no baseline: keep the type whose points fit the jump */
-            rose=rose.filter(function(k2){var rem=c.jump-c.rules[k2][0];return rem>=-0.2&&rem<=99*c.rules[k2][1];});
-            if(!rose.length) rose=['C'];
-          }
-          var type=rose[0], tdPts=c.rules[type][0], rate=c.rules[type][1];
-          var yds=rose.length===1?Math.round((c.jump-tdPts)/rate):null;
-          if(yds!=null&&(yds<1||yds>99)) yds=null;
-          st.events.push({t:Date.now(),pid:c.pid,fid:c.fid,name:c.name,nfl:c.nfl,pos:c.pos,kind:TD_TYPE[type],yds:yds,sure:true,team:c.team});
+        });});
+        fresh.forEach(function(e){
+          var info=(map[e.pid]||'||').split('|');
+          st.events.push({t:Date.now(),pid:e.pid,fid:e.fid,name:info[0]||('#'+e.pid),nfl:info[1]||'',pos:info[2]||'',kind:TD_TYPE[e.type],yds:e.yds,sure:true,team:e.team});
         });
-        /* read-merge-write: never clobber what another save put there meanwhile */
-        var cur=tdStore(week); cur.snap=Object.assign(cur.snap||{},st.snap); cur.counts=Object.assign(cur.counts||{},st.counts);
+        st.events=st.events.slice(-200);
+        var cur=tdStore(week); cur.lists=Object.assign(cur.lists||{},st.lists);
         cur.events=(cur.events||[]).concat(st.events.slice((cur.events||[]).length)).slice(-200);
         tdSave(week,cur); renderTdTicker(week,cur); TD_BUSY=false;
-      }).catch(function(){TD_BUSY=false;});
-    });
+      });
+    }).catch(function(){TD_BUSY=false;});
   }
   function renderTdTicker(week,st){
     var table=document.querySelector('#next_weeks_fantasy_schedule'); if(!table) return;
