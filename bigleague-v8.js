@@ -7,7 +7,7 @@
 (function(){
   'use strict';
 
-  var V='20260911b';
+  var V='20260911c';
   var YEAR=2026;
   var LEAGUE='73086';
   var BASE='https://www42.myfantasyleague.com/'+YEAR;
@@ -156,10 +156,38 @@
     }
     return null;
   }
+  /* ---- schedule-driven kickoff target (2026-09-11) ----
+     MFL publishes the whole season at /fflnetdynamic<year>/nfl_sched.json
+     (fullNflSchedule.nflSchedule[] -> {week, matchup[] -> {kickoff epoch, status SCHED|INPROG|FINAL}}).
+     The clock uses it: any game live -> GAME DAY; otherwise count to the earliest kickoff still
+     ahead, across weeks. Refetched every 5 minutes. The weekday slot table above stays as the
+     fallback if the file cannot be read. A stale INPROG (MFL left SFO-LAR "in progress" nine
+     hours after it ended) only counts as live within five hours of its kickoff. */
+  var SCHED={games:null,at:0};
+  function refreshSched(){
+    if(Date.now()-SCHED.at<300000) return;
+    SCHED.at=Date.now();
+    fetch('/fflnetdynamic'+YEAR+'/nfl_sched.json?r='+Math.floor(Date.now()/300000)).then(function(r){return r.ok?r.json():null;}).then(function(j){
+      var weeks=j&&j.fullNflSchedule&&j.fullNflSchedule.nflSchedule; if(!weeks) return;
+      var games=[];
+      weeks.forEach(function(w){(w.matchup||[]).forEach(function(m){games.push({k:parseInt(m.kickoff,10)*1000,st:m.status,week:w.week});});});
+      if(games.length) SCHED.games=games;
+    }).catch(function(){});
+  }
+  function schedTarget(now){
+    if(!SCHED.games) return null;
+    var live=SCHED.games.some(function(g){return g.st==='INPROG'&&now>=g.k&&now<g.k+5*3600000;});
+    if(live) return {label:'GAME DAY',at:null};
+    var next=null; SCHED.games.forEach(function(g){ if(g.k>now&&g.st!=='FINAL'&&(!next||g.k<next.k)) next=g; });
+    if(!next) return null;
+    var names={Thu:'THURSDAY',Sun:'SUNDAY',Mon:'MONDAY',Sat:'SATURDAY',Fri:'FRIDAY',Wed:'WEDNESDAY',Tue:'TUESDAY'};
+    return {label:(names[ctParts(next.k).weekday]||'NEXT')+' KICKOFF IN',at:next.k};
+  }
   function pad(n){return (n<10?'0':'')+n;}
   function tickClock(){
     var el=document.querySelector('.blsn-callout-clock'); if(!el) return;
-    var t=nextTarget(Date.now());
+    refreshSched();
+    var t=schedTarget(Date.now())||nextTarget(Date.now());
     if(!t){el.style.display='none';return;}
     el.style.display='';
     el.querySelector('.blsn-clock-label').textContent=t.label;
