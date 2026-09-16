@@ -547,11 +547,15 @@
       if(!f){sc.textContent='';st.textContent='';return;}
       var mine=parseFloat(f.score||0), theirs=opp?parseFloat(opp.score||0):0;
       var isLive=+f.playersCurrentlyPlaying>0||(opp&&+opp.playersCurrentlyPlaying>0);
-      var done=+f.playersYetToPlay===0&&+f.playersCurrentlyPlaying===0&&(!opp||(+opp.playersYetToPlay===0&&+opp.playersCurrentlyPlaying===0));
+      /* a team with no lineup submitted yet reports 0 to play and 0 playing, exactly like a
+         finished team (seen Wed 09/16 before Week 2 kickoff). A real final has points on at
+         least one side; a 0.00 / 0.00 pairing with nobody to play is two empty lineups. */
+      var noLineup=+f.playersYetToPlay===0&&+f.playersCurrentlyPlaying===0&&mine===0;
+      var done=+f.playersYetToPlay===0&&+f.playersCurrentlyPlaying===0&&(!opp||(+opp.playersYetToPlay===0&&+opp.playersCurrentlyPlaying===0))&&(mine>0||theirs>0);
       if(isLive) anyLive=true; if(!done) allFinal=false;
       sc.textContent=fmtScore(f.score);
       sc.classList.toggle('bl-mu-lead',mine>theirs&&(isLive||done||mine>0));
-      st.textContent=done?'FINAL':(+f.playersCurrentlyPlaying>0?f.playersCurrentlyPlaying+' playing':f.playersYetToPlay+' to play');
+      st.textContent=done?'FINAL':(+f.playersCurrentlyPlaying>0?f.playersCurrentlyPlaying+' playing':noLineup?'no lineup':f.playersYetToPlay+' to play');
       st.className='bl-mu-state'+(done?' bl-mu-final':isLive?' bl-mu-live':'');
       tr.classList.toggle('bl-mu-row-live',!!isLive);
     });
