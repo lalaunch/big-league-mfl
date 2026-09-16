@@ -844,10 +844,38 @@
       close:{w:'0002',l:'0004',wp:118.4,lp:116.9,margin:1.5},blow:{w:'0003',l:'0010',wp:142.35,lp:88.05,margin:54.3},
       player:{fid:'0002',pid:'0',pts:34.6,name:'Justin Jefferson',nfl:'MIN',pos:'WR'}});
   };
+  /* ---- which week is the matchup table? (2026-09-16) ----
+     MFL's caption reads "Week N Head-To-Head Matchups" and MFL flips it to the next week on
+     its own (Wed 09/16 03:55 CT it already said Week 2 while the liveScoring export, asked
+     without W, still answered week 1). Read N from the caption once, before we clear it,
+     and ask liveScoring for THAT week, so Week 1 finals never get stamped on Week 2 pairings. */
+  var TABLE_WEEK=null;
+  function tableWeek(){
+    if(TABLE_WEEK) return TABLE_WEEK;
+    var span=document.querySelector('#next_weeks_fantasy_schedule caption span'); if(!span) return null;
+    var w=span.getAttribute('data-blsn-week');
+    if(!w){var m=/Week\s+(\d+)/i.exec(span.textContent||''); if(m){w=m[1]; span.setAttribute('data-blsn-week',w);}}
+    if(w) TABLE_WEEK=w;
+    return TABLE_WEEK;
+  }
+  /* "SEP 17 – SEP 21" for a week, from the same season file the kickoff clock reads */
+  var SCHED_P=null;
+  function weekRange(week,cb){
+    if(!week) return cb('');
+    if(!SCHED_P) SCHED_P=fetch('/fflnetdynamic'+YEAR+'/nfl_sched.json?r='+Math.floor(Date.now()/300000),{credentials:'same-origin'}).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;});
+    SCHED_P.then(function(j){
+      var weeks=j&&j.fullNflSchedule&&j.fullNflSchedule.nflSchedule||[];
+      var wk=weeks.filter(function(x){return String(x.week)===String(week);})[0]; if(!wk) return cb('');
+      var ks=(wk.matchup||[]).map(function(m){return parseInt(m.kickoff,10)*1000;}).filter(function(n){return n>0;}); if(!ks.length) return cb('');
+      var f=new Intl.DateTimeFormat('en-US',{timeZone:'America/Chicago',month:'short',day:'numeric'});
+      cb((f.format(new Date(Math.min.apply(null,ks)))+' – '+f.format(new Date(Math.max.apply(null,ks)))).toUpperCase());
+    });
+  }
   function loadScores(){
     if(!document.querySelector('#next_weeks_fantasy_schedule')) return;
+    var wk=tableWeek();
     Promise.all([
-      fetch(EXPORT+'liveScoring&DETAILS=1',{credentials:'same-origin'}).then(function(r){return r.json();}),
+      fetch(EXPORT+'liveScoring&DETAILS=1'+(wk?'&W='+wk:''),{credentials:'same-origin'}).then(function(r){return r.json();}),
       fetch(EXPORT+'leagueStandings',{credentials:'same-origin'}).then(function(r){return r.json();}).catch(function(){return null;})
     ]).then(function(res){renderMatchupTable(res[0],res[1]);try{tickTds(res[0]);}catch(e){}}).catch(function(){});
   }
@@ -948,6 +976,7 @@
   function decorateMatchups(){
     var span=document.querySelector('#next_weeks_fantasy_schedule caption span');
     if(span && span.getAttribute('data-blsn-caption')!=='1'){
+      var wk=tableWeek();
       span.setAttribute('data-blsn-caption','1');
       span.textContent='';
       span.style.setProperty('display','flex','important');
@@ -955,13 +984,14 @@
       span.style.setProperty('justify-content','space-between','important');
       span.style.setProperty('gap','12px','important');
       var left=document.createElement('strong');
-      left.textContent='WEEK 1 MATCHUPS';
+      left.textContent=wk?'WEEK '+wk+' MATCHUPS':'MATCHUPS';
       left.style.cssText='font-size:22px;color:#fff;letter-spacing:.02em;';
       var right=document.createElement('strong');
-      right.textContent='SEP 10 – SEP 14';
+      right.textContent='';
       right.style.cssText='font-size:13px;color:#eef8ff;letter-spacing:.04em;white-space:nowrap;';
       span.appendChild(left);
       span.appendChild(right);
+      weekRange(wk,function(txt){ if(!txt) return; right.setAttribute('data-bl-orig',txt); if(!right.querySelector('.bl-mu-stamp')) right.textContent=txt; });
     }
   }
 
