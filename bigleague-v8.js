@@ -7,7 +7,7 @@
 (function(){
   'use strict';
 
-  var V='20260923a';
+  var V='20260923b';
   var YEAR=2026;
   var LEAGUE='73086';
   var BASE='https://www42.myfantasyleague.com/'+YEAR;
