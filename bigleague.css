@@ -574,7 +574,11 @@ body{
 #body_home #transactions .timestamp{width:22%;font-size:9px !important;}
 #body_home #transactions td.transaction ul,
 #body_home #transactions td ul{margin:0 !important;padding:0 !important;list-style:none !important;}
-#body_home #transactions tbody > tr:nth-child(n+7):not(.reportfooter){display:none !important;}
+#body_home #transactions:not([data-bl-all]) tbody > tr:nth-child(n+7):not(.reportfooter){display:none !important;}
+/* full list loaded (core: loadAllTransactions): every move type, so the Type column comes back */
+#body_home #transactions[data-bl-all] .transactiontype{display:table-cell !important;width:13%;font-size:10px !important;}
+#body_home #transactions[data-bl-all] .transaction{width:46%;}
+#body_home #transactions[data-bl-all] .timestamp{width:18%;}
 #body_home #transactions .reportfooter td{text-align:right !important;padding:6px 10px !important;}
 
 /* =========================================================

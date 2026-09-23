@@ -131,6 +131,10 @@
 .blsn-news-row > *{min-width:0;}
 .blsn-news-row .mobile-wrap:has(> #transactions){width:100% !important;}
 .blsn-news-row #transactions{margin:0 !important;height:100%;}
+/* all transactions: the card keeps the row's height (set by its two neighbors) and scrolls.
+   contain:size stops the long list from growing the row; min-height covers the stacked phone layout. */
+.blsn-news-row .mobile-wrap:has(> #transactions[data-bl-all]){contain:size;min-height:320px;overflow-y:auto;}
+.blsn-news-row #transactions[data-bl-all] th{position:sticky;top:0;z-index:1;background:rgb(9,32,46) !important;}
 .blsn-news-row .blx-card{margin:0;height:100%;}
 .blsn-news-row .blx-title{font-size:15px;}
 .blsn-news-row .blx-body{padding:10px 12px;}

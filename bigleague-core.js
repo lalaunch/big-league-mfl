@@ -70,9 +70,9 @@
     var rows=Array.from(table.querySelectorAll('tr'));
     for(var i=0;i<rows.length;i++){
       var text=clean(rows[i].textContent);
-      if(!/\b(acquired|dropped|traded|claimed|waived|activated|signed|released)\b|gave up|picked up/i.test(text)) continue;
+      if(!/\b(acquired|dropped|traded|claimed|waived|activated|deactivated|promoted|demoted|signed|released)\b|gave up|picked up/i.test(text)) continue;
       var cells=Array.from(rows[i].querySelectorAll('td'));
-      var tx=cells.find(function(c){return /\b(acquired|dropped|traded|claimed|waived|activated|signed|released)\b|gave up|picked up/i.test(clean(c.textContent));});
+      var tx=cells.find(function(c){return /\b(acquired|dropped|traded|claimed|waived|activated|deactivated|promoted|demoted|signed|released)\b|gave up|picked up/i.test(clean(c.textContent));});
       var teamEl=rows[i].querySelector('a[class*="franchise_"]')||rows[i].querySelector('td.franchisename,td.franchise');
       var dateEl=rows[i].querySelector('td.timestamp,td.date');
       return {team:clean(teamEl&&teamEl.textContent),text:clean(tx?tx.textContent:text),date:clean(dateEl&&dateEl.textContent)};
@@ -1010,6 +1010,31 @@
     });
   }
 
+  /* ---- every transaction type in RECENT TRANSACTIONS (2026-09-23) ----
+     MFL's home module only carries waiver pickups (8 rows, no IR or taxi moves). Its footer
+     link, the transactions report (O=03, default view), lists every real move — IR, taxi,
+     waivers, trades — newest first, with no system rows. Its rows replace the module's,
+     markup unchanged; relative player links are made absolute so they survive the move. */
+  function loadAllTransactions(){
+    var table=document.querySelector('#transactions');
+    if(!table||table.getAttribute('data-bl-all')) return;
+    table.setAttribute('data-bl-all','loading');
+    var url=BASE+'/options?L='+LEAGUE+'&O=03';
+    fetch(url,{credentials:'include'}).then(function(r){return r.text();}).then(function(h){
+      var src=new DOMParser().parseFromString(h,'text/html').querySelector('table.report');
+      var rows=src?Array.from(src.rows).filter(function(tr){return tr.querySelector('td.timestamp');}):[];
+      if(!rows.length){table.removeAttribute('data-bl-all');return;}
+      var body=table.tBodies[0], footer=body.querySelector('tr.reportfooter');
+      Array.from(body.rows).forEach(function(tr){ if(tr.querySelector('td.timestamp')) tr.remove(); });
+      rows.forEach(function(tr){
+        Array.from(tr.querySelectorAll('a[href]')).forEach(function(a){a.setAttribute('href',new URL(a.getAttribute('href'),url).href);});
+        body.insertBefore(document.importNode(tr,true),footer);
+      });
+      table.setAttribute('data-bl-all',String(rows.length));
+      refreshLatest();
+    }).catch(function(){table.removeAttribute('data-bl-all');});
+  }
+
   function refreshLatest(){
     var main=document.querySelector('[data-blx-latest-main]');
     var sub=document.querySelector('[data-blx-latest-sub]');
@@ -1047,6 +1072,7 @@
         upgradeNav();
         decorateMatchups();
         swapStandings();
+        loadAllTransactions();
         [250,900,1800,3500].forEach(function(ms){setTimeout(refreshLatest,ms);});
         upgradeRingRace();
         [500,1500].forEach(function(ms){setTimeout(function(){decorateMatchups();swapStandings();upgradeNav();},ms);});
