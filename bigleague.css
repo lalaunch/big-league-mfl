@@ -559,12 +559,17 @@ body{
 #body_home #transactions caption span{font-size:0 !important;}
 #body_home #transactions caption span:before{
   content:"↔  RECENT TRANSACTIONS";
-  font-size:14px !important;
+  font-size:22px !important;
   line-height:1.2;
   font-weight:900;
   letter-spacing:.04em;
-  color:#fff;
+  color:#ff2b2b;
+  text-shadow:0 0 10px rgba(255,43,43,.85);
+  animation:bl-tx-flash 1s steps(1,end) infinite;
 }
+/* flashing red heading (2026-09-24): full red with glow, then dim, once a second */
+@keyframes bl-tx-flash{0%,100%{color:#ff2b2b;text-shadow:0 0 10px rgba(255,43,43,.85);}50%{color:#5a0b0b;text-shadow:none;}}
+@media (prefers-reduced-motion:reduce){#body_home #transactions caption span:before{animation:none;}}
 #body_home #transactions .rank,
 #body_home #transactions .transactiontype{display:none !important;}
 #body_home #transactions th,
