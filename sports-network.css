@@ -158,6 +158,9 @@
 @media(max-width:950px){
   .blsn-matchups-row,.blsn-standings-power{grid-template-columns:1fr;}
   .blsn-news-row{grid-template-columns:1fr;}
+  /* stacked, the deadlines panel is full width and the picture grew to 648x401 on a phone;
+     cap its height and center it, aspect kept */
+  .blsn-deadline-pic{width:auto;max-width:100%;max-height:220px;margin:11px auto 0;}
 }
 
 @media(max-width:620px){
