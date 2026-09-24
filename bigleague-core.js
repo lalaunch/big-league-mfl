@@ -508,14 +508,61 @@
     var div=document.createElement('aside');
     div.className='blsn-deadlines';
     div.innerHTML='<div class="blsn-panel-title">▣ Big League Deadlines</div><div class="blsn-deadline-body">'+
-      '<div class="blsn-deadline-row"><div class="blsn-deadline-when">Wed</div><div class="blsn-deadline-date">Sep 9</div><div class="blsn-deadline-what">Waivers Process</div></div>'+
-      '<div class="blsn-deadline-row"><div class="blsn-deadline-when">Thu</div><div class="blsn-deadline-date">Sep 10</div><div class="blsn-deadline-what">TNF Lineup Deadline</div></div>'+
-      '<div class="blsn-deadline-row"><div class="blsn-deadline-when">Sun</div><div class="blsn-deadline-date">Sep 13</div><div class="blsn-deadline-what">All Lineups Due</div></div>'+
-      '<div class="blsn-deadline-row"><div class="blsn-deadline-when">Week 11</div><div class="blsn-deadline-date">—</div><div class="blsn-deadline-what">Trade Deadline</div></div>'+
+      '<div class="blsn-deadline-row" data-dl="waiver"><div class="blsn-deadline-when">—</div><div class="blsn-deadline-date">—</div><div class="blsn-deadline-what">Waivers Process</div></div>'+
+      '<div class="blsn-deadline-row" data-dl="tnf"><div class="blsn-deadline-when">—</div><div class="blsn-deadline-date">—</div><div class="blsn-deadline-what">TNF Lineup Deadline</div></div>'+
+      '<div class="blsn-deadline-row" data-dl="sun"><div class="blsn-deadline-when">Sun</div><div class="blsn-deadline-date">—</div><div class="blsn-deadline-what">All Lineups Due</div></div>'+
+      '<div class="blsn-deadline-row" data-dl="trade"><div class="blsn-deadline-when">Week 11</div><div class="blsn-deadline-date">—</div><div class="blsn-deadline-what">Trade Deadline</div></div>'+
       '<a class="blsn-calendar-btn" href="'+BASE+'/options?L='+LEAGUE+'&O=123">View Full Calendar</a>'+
       /* 2026-09-23: fills the space the matchups row leaves under the button */
       '<img class="blsn-deadline-pic" src="'+HOSTED+'assets/never-forget-2026-09-20.webp?v='+(window.BL_VERSION||'0')+'" alt="09/20/26 Never Forget!"></div>';
+    fillDeadlines(div);
     return div;
+  }
+
+  /* ---- deadlines from MFL, not hand-typed (2026-09-23) ----
+     Waivers and the trade deadline come from the league calendar export. A WAIVER_BBID event
+     repeats weekly `happens` times from start_time; checked against the waiver runs in the
+     transaction log (5 of 5 on a calendar slot). The calendar needs a logged-in owner, so a
+     visitor keeps the dashes and "Week 11". TNF and Sunday are the first kickoffs still ahead,
+     from the NFL schedule the matchup caption already reads. All times Central. */
+  function fillDeadlines(div){
+    function put(key,when,date,what){
+      var row=div.querySelector('[data-dl="'+key+'"]'); if(!row) return;
+      row.children[0].textContent=when; row.children[1].textContent=date;
+      if(what) row.children[2].textContent=what;
+    }
+    function fmt(ms,o){return new Intl.DateTimeFormat('en-US',Object.assign({timeZone:'America/Chicago'},o)).format(new Date(ms));}
+    function day(ms){return fmt(ms,{weekday:'short'});}
+    function date(ms){return fmt(ms,{month:'short',day:'numeric'});}
+    function time(ms){return fmt(ms,{hour:'numeric',minute:'2-digit'})+' CT';}
+    var now=Date.now();
+
+    fetch(EXPORT+'calendar',{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(j){
+      var ev=[].concat(j&&j.calendar&&j.calendar.event||[]), next=[], trade=null;
+      ev.forEach(function(e){
+        var t=parseInt(e.start_time,10)*1000; if(!t) return;
+        if(e.type==='WAIVER_BBID'){ var n=parseInt(e.happens,10)||1; for(var i=0;i<n;i++) next.push(t+i*604800000); }
+        if(e.type==='TRADE') trade=t;
+      });
+      next=next.filter(function(t){return t>now;}).sort(function(a,b){return a-b;});
+      if(next.length) put('waiver',day(next[0]),date(next[0]),'Waivers Process · '+time(next[0]));
+      if(trade) put('trade',trade>now?day(trade):'Closed',date(trade),'Trade Deadline'+(trade>now?' · '+time(trade):''));
+    }).catch(function(){});
+
+    if(!SCHED_P) SCHED_P=fetch('/fflnetdynamic'+YEAR+'/nfl_sched.json?r='+Math.floor(Date.now()/300000),{credentials:'same-origin'}).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;});
+    SCHED_P.then(function(j){
+      var weeks=j&&j.fullNflSchedule&&j.fullNflSchedule.nflSchedule||[], firsts=[], sundays=[];
+      weeks.forEach(function(w){
+        var ks=(w.matchup||[]).map(function(m){return parseInt(m.kickoff,10)*1000;}).filter(function(n){return n>0;});
+        if(!ks.length) return;
+        firsts.push(Math.min.apply(null,ks));
+        ks.forEach(function(k){ if(day(k)==='Sun') sundays.push(k); });
+      });
+      var tnf=firsts.filter(function(t){return t>now;}).sort(function(a,b){return a-b;})[0];
+      var sun=sundays.filter(function(t){return t>now;}).sort(function(a,b){return a-b;})[0];
+      if(tnf) put('tnf',day(tnf),date(tnf),(day(tnf)==='Thu'?'TNF':'First Game')+' Lineup Deadline · '+time(tnf));
+      if(sun) put('sun','Sun',date(sun),'All Lineups Due · '+time(sun));
+    });
   }
 
   /* ---- live scores in the WEEK N MATCHUPS table (2026-09-09) ----
