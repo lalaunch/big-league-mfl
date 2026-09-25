@@ -81,8 +81,18 @@
      Each honk is a buzzy square wave swooping up then down, pushed through a narrow band
      filter for the rubber-bulb nasal tone. Runs inside the click, so browsers allow the sound.
      Gain 1.8 peaks at 0.91 of full scale (measured offline 2026-09-25): loud, not clipping. */
-  var AUDIO=null;
+  /* 2026-09-25: Dan's clown-horn MP3 is the sound; the Web Audio horn below is only the
+     fallback if the file can't play. The file is preloaded so the honk lands on the hit. */
+  var HORN=null;
   function honk(){
+    try{
+      if(!HORN){ HORN=new Audio(HOST+'assets/clown-horn.mp3?v='+(window.BL_VERSION||'0')); HORN.preload='auto'; }
+      HORN.currentTime=0; HORN.volume=1;
+      var p=HORN.play(); if(p&&p.catch) p.catch(synthHonk);
+    }catch(e){ synthHonk(); }
+  }
+  var AUDIO=null;
+  function synthHonk(){
     try{
       var Ctx=window.AudioContext||window.webkitAudioContext; if(!Ctx) return;
       AUDIO=AUDIO||new Ctx(); if(AUDIO.state==='suspended') AUDIO.resume();
@@ -114,6 +124,8 @@
       d.style.width=d.style.height=(r[0]*2)+'%';
       wrap.querySelector('.bl-dt-disc').appendChild(d);
     });
+
+    try{ HORN=new Audio(HOST+'assets/clown-horn.mp3?v='+(window.BL_VERSION||'0')); HORN.preload='auto'; }catch(e){}
 
     var side=wrap.closest('.blsn-champ-side');
     if(side && !side.classList.contains('bl-carnival')){
