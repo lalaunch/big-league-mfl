@@ -79,7 +79,8 @@
 
   /* honk-honk at full clown (2026-09-25): a bulb horn made in Web Audio, no sound file.
      Each honk is a buzzy square wave swooping up then down, pushed through a narrow band
-     filter for the rubber-bulb nasal tone. Runs inside the click, so browsers allow the sound. */
+     filter for the rubber-bulb nasal tone. Runs inside the click, so browsers allow the sound.
+     Gain 1.8 peaks at 0.91 of full scale (measured offline 2026-09-25): loud, not clipping. */
   var AUDIO=null;
   function honk(){
     try{
@@ -90,7 +91,7 @@
         o.type='square';
         o.frequency.setValueAtTime(330,t); o.frequency.linearRampToValueAtTime(420,t+.05); o.frequency.exponentialRampToValueAtTime(300,t+.18);
         f.type='bandpass'; f.frequency.value=1100; f.Q.value=4;
-        g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.35,t+.02); g.gain.exponentialRampToValueAtTime(.0001,t+.2);
+        g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(1.8,t+.02); g.gain.exponentialRampToValueAtTime(.0001,t+.2);
         o.connect(f); f.connect(g); g.connect(AUDIO.destination);
         o.start(t); o.stop(t+.22);
       });
