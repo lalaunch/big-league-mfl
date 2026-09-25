@@ -50,6 +50,16 @@
       '.bl-carnival .bl-cv-rules b{color:#ffd54a;}',
       '.bl-carnival .bl-cv-prize{margin-top:8px;color:#efe2c2;font-size:11px;font-style:italic;}',
       '@media(max-width:1200px){.bl-carnival .bl-cv-title{font-size:32px;}.bl-carnival .bl-cv-rules{font-size:11px;}#body_home.blsn-mode .blsn-champ-side.bl-carnival .blsn-champ-logo-wrap{width:205px !important;height:205px !important;}}',
+      /* compact booth, 901-1400px wide (2026-09-25): the box is only 416-590px there, too narrow
+         for sign | target | rules (measured: 523px box at 1280 stretched to 472 tall). The sign
+         becomes one line across the top; target left, rules right. */
+      '@media(min-width:901px) and (max-width:1400px){'+
+        '#body_home.blsn-mode .blsn-champ-side.bl-carnival{grid-template-columns:auto minmax(0,1fr) !important;justify-items:start;gap:8px 18px !important;padding:20px 22px 22px !important;text-align:left;}'+
+        '.bl-carnival .bl-cv-sign{grid-column:1/-1;justify-self:center;text-align:center;}'+
+        '.bl-carnival .bl-cv-title{font-size:26px !important;margin:4px 0 0;}.bl-carnival .bl-cv-title br,.bl-carnival .bl-cv-tag{display:none;}'+
+        '#body_home.blsn-mode .blsn-champ-side.bl-carnival .blsn-champ-logo-wrap{width:170px !important;height:170px !important;margin-bottom:30px;}'+
+        '.bl-carnival .bl-cv-rules{font-size:11px;max-width:none;}'+
+      '}',
       '@media(max-width:650px){#body_home.blsn-mode .blsn-champ-side.bl-carnival{grid-template-columns:1fr !important;padding:26px 18px 48px !important;}.bl-carnival .blsn-champ-logo-wrap{margin:0 auto 30px !important;}}',
       '@media (prefers-reduced-motion:reduce){.bl-darts .bl-dt-dart,.bl-darts .bl-dt-pop,#body_home.blsn-mode .blsn-champ-side.bl-carnival:after{animation:none;}}'
     ].join('\n');
@@ -134,7 +144,7 @@
       side.classList.add('bl-carnival');
       var sign=document.createElement('div');
       sign.className='bl-cv-sign';
-      sign.innerHTML='<div class="bl-cv-step">🎪 Step right up! 🎪</div><div class="bl-cv-title">Big League<br>Dart Toss</div><div class="bl-cv-tag">Three darts. One smile.<br>Wipe it off.</div>';
+      sign.innerHTML='<div class="bl-cv-step">🎪 Step right up! 🎪</div><div class="bl-cv-title">Big League <br>Dart Toss</div><div class="bl-cv-tag">Three darts. One smile.<br>Wipe it off.</div>';
       var rules=document.createElement('div');
       rules.className='bl-cv-rules';
       rules.innerHTML='Click or tap the board to let a dart fly. Aim for the nose — the red bull is worth <b>50</b>; the rings pay <b>25</b>, <b>15</b>, <b>10</b> and <b>5</b>. Off the board is a miss. Every hit paints on more clown; three hits and he is the full circus. Three darts a round; your best round is kept on this device.'+
