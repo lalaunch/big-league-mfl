@@ -7,7 +7,7 @@
 (function(){
   'use strict';
 
-  var V='20260925g';
+  var V='20260925h';
   var DARTS=true; /* 2026-09-25, temporary: darts.js swaps the champion crest for the dart target. false = crest back */
   var YEAR=2026;
   var LEAGUE='73086';

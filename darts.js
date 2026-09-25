@@ -38,6 +38,8 @@
          target dead center; tent stripes under a dark wash, marquee bulbs chasing round the edge */
       '#body_home.blsn-mode .blsn-champ-side.bl-carnival{display:grid !important;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) !important;justify-items:center;align-items:center;gap:20px !important;padding:22px 26px 44px !important;text-align:center;background:linear-gradient(rgba(4,16,24,.60),rgba(4,16,24,.70)),repeating-linear-gradient(90deg,#a8141c 0 26px,#efe2c2 26px 52px) !important;}',
       '#body_home.blsn-mode .blsn-champ-side.bl-carnival .blsn-champ-copy{display:none !important;}',
+      /* bigger target (2026-09-25): 240 on desktop fits the 318px-tall box with the scoreboard under it */
+      '#body_home.blsn-mode .blsn-champ-side.bl-carnival .blsn-champ-logo-wrap{width:240px !important;height:240px !important;}',
       '#body_home.blsn-mode .blsn-champ-side.bl-carnival:after{content:"";position:absolute;inset:6px;pointer-events:none;z-index:1;border-radius:6px;background:radial-gradient(circle,#ffd54a 0 2.5px,rgba(255,213,74,.25) 3.5px,transparent 4.5px) 0 0/22px 12px repeat-x,radial-gradient(circle,#ffd54a 0 2.5px,rgba(255,213,74,.25) 3.5px,transparent 4.5px) 11px 100%/22px 12px repeat-x;animation:bl-cv-bulbs .7s steps(1,end) infinite;}',
       '@keyframes bl-cv-bulbs{50%{background-position:11px 0,0 100%;}}',
       '.bl-carnival .bl-cv-sign,.bl-carnival .bl-cv-rules{position:relative;z-index:3;min-width:0;}',
@@ -47,7 +49,7 @@
       '.bl-carnival .bl-cv-rules{color:#e8f5fa;font:600 12px/1.45 Arial,sans-serif;max-width:230px;}',
       '.bl-carnival .bl-cv-rules b{color:#ffd54a;}',
       '.bl-carnival .bl-cv-prize{margin-top:8px;color:#efe2c2;font-size:11px;font-style:italic;}',
-      '@media(max-width:1200px){.bl-carnival .bl-cv-title{font-size:32px;}.bl-carnival .bl-cv-rules{font-size:11px;}}',
+      '@media(max-width:1200px){.bl-carnival .bl-cv-title{font-size:32px;}.bl-carnival .bl-cv-rules{font-size:11px;}#body_home.blsn-mode .blsn-champ-side.bl-carnival .blsn-champ-logo-wrap{width:205px !important;height:205px !important;}}',
       '@media(max-width:650px){#body_home.blsn-mode .blsn-champ-side.bl-carnival{grid-template-columns:1fr !important;padding:26px 18px 48px !important;}.bl-carnival .blsn-champ-logo-wrap{margin:0 auto 30px !important;}}',
       '@media (prefers-reduced-motion:reduce){.bl-darts .bl-dt-dart,.bl-darts .bl-dt-pop,#body_home.blsn-mode .blsn-champ-side.bl-carnival:after{animation:none;}}'
     ].join('\n');
