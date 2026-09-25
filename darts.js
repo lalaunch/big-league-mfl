@@ -77,6 +77,26 @@
   }).join('');
   var CLOWN_STAGES=STAGES.length;
 
+  /* honk-honk at full clown (2026-09-25): a bulb horn made in Web Audio, no sound file.
+     Each honk is a buzzy square wave swooping up then down, pushed through a narrow band
+     filter for the rubber-bulb nasal tone. Runs inside the click, so browsers allow the sound. */
+  var AUDIO=null;
+  function honk(){
+    try{
+      var Ctx=window.AudioContext||window.webkitAudioContext; if(!Ctx) return;
+      AUDIO=AUDIO||new Ctx(); if(AUDIO.state==='suspended') AUDIO.resume();
+      [0,.24].forEach(function(at){
+        var t=AUDIO.currentTime+at, o=AUDIO.createOscillator(), f=AUDIO.createBiquadFilter(), g=AUDIO.createGain();
+        o.type='square';
+        o.frequency.setValueAtTime(330,t); o.frequency.linearRampToValueAtTime(420,t+.05); o.frequency.exponentialRampToValueAtTime(300,t+.18);
+        f.type='bandpass'; f.frequency.value=1100; f.Q.value=4;
+        g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.35,t+.02); g.gain.exponentialRampToValueAtTime(.0001,t+.2);
+        o.connect(f); f.connect(g); g.connect(AUDIO.destination);
+        o.start(t); o.stop(t+.22);
+      });
+    }catch(e){}
+  }
+
   function best(){ try{return parseInt(localStorage.getItem(KEY),10)||0;}catch(e){return 0;} }
   function saveBest(n){ try{localStorage.setItem(KEY,String(n));}catch(e){} }
 
@@ -143,6 +163,7 @@
         clowned++;
         var layer=wrap.querySelector('.bl-dt-stage[data-stage="'+clowned+'"]');
         if(layer) layer.classList.add('on');
+        if(clowned===CLOWN_STAGES) honk();
       }
 
       round+=pts;
