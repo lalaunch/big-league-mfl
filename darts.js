@@ -32,6 +32,10 @@
       '@keyframes bl-dt-pop{from{opacity:1;margin-top:0;}to{opacity:0;margin-top:-26px;}}',
       '.bl-darts .bl-dt-board{position:absolute;left:50%;bottom:-30px;transform:translateX(-50%);padding:3px 10px;border:1px solid #155b80;border-radius:12px;background:#041018;color:#e8f5fa;font:700 11px/1.4 Arial,sans-serif;white-space:nowrap;z-index:5;pointer-events:none;}',
       '.bl-darts .bl-dt-board b{color:#f5c72f;}',
+      '.bl-darts .bl-dt-clown{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;}',
+      '.bl-darts .bl-cl{opacity:0;transform-box:fill-box;transform-origin:center;transform:scale(.2);transition:opacity .25s ease,transform .35s cubic-bezier(.3,1.6,.5,1);}',
+      '.bl-darts .bl-cl.on{opacity:1;transform:scale(1);}',
+      '.bl-darts .bl-cl[data-stage="2"].on{opacity:.6;}',
       /* carnival booth (2026-09-25): the hero's champion side becomes sign | target | rules,
          target dead center; tent stripes under a dark wash, marquee bulbs chasing round the edge */
       '#body_home.blsn-mode .blsn-champ-side.bl-carnival{display:grid !important;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) !important;justify-items:center;align-items:center;gap:20px !important;padding:22px 26px 44px !important;text-align:center;background:linear-gradient(rgba(4,16,24,.60),rgba(4,16,24,.70)),repeating-linear-gradient(90deg,#a8141c 0 26px,#efe2c2 26px 52px) !important;}',
@@ -58,6 +62,24 @@
     '<line x1="13" y1="13" x2="24" y2="24" stroke="#b71c1c" stroke-width="4" stroke-linecap="round"/>'+
     '<path d="M22 22 L33 20 L27 27 L20 33 Z" fill="#f5c72f" stroke="#041018" stroke-width="1"/></svg>';
 
+  /* clown makeover (2026-09-25): every scoring dart reveals the next layer, nose first.
+     Drawn in disc coordinates (0-100 both ways) over the photo as framed above
+     (object-position 41% 30%); landmarks were read off the photo, then checked on screen.
+     It builds up for the visit and starts clean on reload. */
+  var FACE={nose:[50,47],eyeL:[37,39],eyeR:[60,39],cheekL:[33,52],cheekR:[65,52],mouthL:[38,58],mouthR:[61,58],mouthY:66};
+  var CLOWN='<svg class="bl-dt-clown" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">'+
+    '<defs><radialGradient id="bl-cl-nose" cx="38%" cy="35%" r="70%"><stop offset="0" stop-color="#ff8a8a"/><stop offset=".45" stop-color="#e3121b"/><stop offset="1" stop-color="#8c0006"/></radialGradient></defs>'+
+    '<g class="bl-cl" data-stage="1"><circle cx="'+FACE.nose[0]+'" cy="'+FACE.nose[1]+'" r="6.2" fill="url(#bl-cl-nose)"/><ellipse cx="'+(FACE.nose[0]-2)+'" cy="'+(FACE.nose[1]-2.4)+'" rx="1.6" ry="1" fill="#fff" opacity=".8"/></g>'+
+    '<g class="bl-cl" data-stage="2" fill="#ff3d6e" opacity=".6"><circle cx="'+FACE.cheekL[0]+'" cy="'+FACE.cheekL[1]+'" r="6"/><circle cx="'+FACE.cheekR[0]+'" cy="'+FACE.cheekR[1]+'" r="6"/></g>'+
+    '<g class="bl-cl" data-stage="3" fill="rgba(255,255,255,.55)" stroke="#1e63ff" stroke-width="1.3">'+
+      [FACE.eyeL,FACE.eyeR].map(function(e){return '<polygon points="'+e[0]+','+(e[1]-8)+' '+(e[0]+5.5)+','+e[1]+' '+e[0]+','+(e[1]+7)+' '+(e[0]-5.5)+','+e[1]+'"/>';}).join('')+'</g>'+
+    '<g class="bl-cl" data-stage="4" fill="none" stroke-linecap="round"><path d="M'+FACE.mouthL+' Q'+((FACE.mouthL[0]+FACE.mouthR[0])/2)+','+(FACE.mouthY+9)+' '+FACE.mouthR+'" stroke="#fff" stroke-width="5"/><path d="M'+FACE.mouthL+' Q'+((FACE.mouthL[0]+FACE.mouthR[0])/2)+','+(FACE.mouthY+9)+' '+FACE.mouthR+'" stroke="#d0021b" stroke-width="2.6"/></g>'+
+    '<g class="bl-cl" data-stage="5">'+
+      [[18,40,'#ff2b2b'],[21,30,'#ffd54a'],[17,50,'#2bb4ec'],[25,22,'#7ed321'],[82,40,'#ff2b2b'],[79,30,'#ffd54a'],[83,50,'#2bb4ec'],[75,22,'#7ed321']].map(function(t){return '<circle cx="'+t[0]+'" cy="'+t[1]+'" r="7.5" fill="'+t[2]+'"/>';}).join('')+'</g>'+
+    '<g class="bl-cl" data-stage="6"><polygon points="41,15 59,15 50,-6" fill="#7b2cff" stroke="#ffd54a" stroke-width="1.2"/><circle cx="45" cy="9" r="1.4" fill="#ffd54a"/><circle cx="53" cy="4" r="1.4" fill="#ffd54a"/><circle cx="50" cy="-5" r="3.2" fill="#ffd54a"/></g>'+
+    '</svg>';
+  var CLOWN_STAGES=6;
+
   function best(){ try{return parseInt(localStorage.getItem(KEY),10)||0;}catch(e){return 0;} }
   function saveBest(n){ try{localStorage.setItem(KEY,String(n));}catch(e){} }
 
@@ -66,7 +88,7 @@
     wrap.setAttribute('data-bl-darts','1');
     wrap.classList.add('bl-darts');
     wrap.setAttribute('title','Click to throw a dart');
-    wrap.innerHTML='<div class="bl-dt-disc"><img class="bl-dt-photo" src="'+IMG+'" alt="Dart target" draggable="false"></div><div class="bl-dt-board"></div>';
+    wrap.innerHTML='<div class="bl-dt-disc"><img class="bl-dt-photo" src="'+IMG+'" alt="Dart target" draggable="false">'+CLOWN+'</div><div class="bl-dt-board"></div>';
     RINGS.slice().reverse().forEach(function(r,i){
       var d=document.createElement('div');
       d.className='bl-dt-ring'+(i===RINGS.length-1?' bull':'');
@@ -83,13 +105,13 @@
       sign.innerHTML='<div class="bl-cv-step">🎪 Step right up! 🎪</div><div class="bl-cv-title">Big League<br>Dart Toss</div><div class="bl-cv-tag">Three darts. One smile.<br>Wipe it off.</div>';
       var rules=document.createElement('div');
       rules.className='bl-cv-rules';
-      rules.innerHTML='Click or tap the board to let a dart fly. Aim for the nose — the red bull is worth <b>50</b>; the rings pay <b>25</b>, <b>15</b>, <b>10</b> and <b>5</b>. Off the board is a miss. Three darts a round; your best round is kept on this device.'+
+      rules.innerHTML='Click or tap the board to let a dart fly. Aim for the nose — the red bull is worth <b>50</b>; the rings pay <b>25</b>, <b>15</b>, <b>10</b> and <b>5</b>. Off the board is a miss. Every hit gives him more clown. Three darts a round; your best round is kept on this device.'+
         '<div class="bl-cv-prize">🎟️ Every player a winner.* <br>*Prizes not available in Wisconsin.</div>';
       side.insertBefore(sign,wrap);
       if(wrap.nextSibling) side.insertBefore(rules,wrap.nextSibling); else side.appendChild(rules);
     }
 
-    var board=wrap.querySelector('.bl-dt-board'), darts=[], round=0;
+    var board=wrap.querySelector('.bl-dt-board'), darts=[], round=0, clowned=0;
     function show(){ board.innerHTML='🎯 Darts <b>'+darts.length+'/'+PER_ROUND+'</b> · Round <b>'+round+'</b> · Best <b>'+best()+'</b>'; }
     show();
 
@@ -116,6 +138,12 @@
       pop.style.left=x+'%'; pop.style.top=y+'%';
       wrap.appendChild(pop);
       setTimeout(function(){pop.remove();},950);
+
+      if(pts && clowned<CLOWN_STAGES){
+        clowned++;
+        var layer=wrap.querySelector('.bl-cl[data-stage="'+clowned+'"]');
+        if(layer) layer.classList.add('on');
+      }
 
       round+=pts;
       if(darts.length===PER_ROUND && round>best()) saveBest(round);
