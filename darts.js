@@ -32,7 +32,22 @@
       '@keyframes bl-dt-pop{from{opacity:1;margin-top:0;}to{opacity:0;margin-top:-26px;}}',
       '.bl-darts .bl-dt-board{position:absolute;left:50%;bottom:-30px;transform:translateX(-50%);padding:3px 10px;border:1px solid #155b80;border-radius:12px;background:#041018;color:#e8f5fa;font:700 11px/1.4 Arial,sans-serif;white-space:nowrap;z-index:5;pointer-events:none;}',
       '.bl-darts .bl-dt-board b{color:#f5c72f;}',
-      '@media (prefers-reduced-motion:reduce){.bl-darts .bl-dt-dart,.bl-darts .bl-dt-pop{animation:none;}}'
+      /* carnival booth (2026-09-25): the hero's champion side becomes sign | target | rules,
+         target dead center; tent stripes under a dark wash, marquee bulbs chasing round the edge */
+      '#body_home.blsn-mode .blsn-champ-side.bl-carnival{display:grid !important;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) !important;justify-items:center;align-items:center;gap:20px !important;padding:22px 26px 44px !important;text-align:center;background:linear-gradient(rgba(4,16,24,.60),rgba(4,16,24,.70)),repeating-linear-gradient(90deg,#a8141c 0 26px,#efe2c2 26px 52px) !important;}',
+      '#body_home.blsn-mode .blsn-champ-side.bl-carnival .blsn-champ-copy{display:none !important;}',
+      '#body_home.blsn-mode .blsn-champ-side.bl-carnival:after{content:"";position:absolute;inset:6px;pointer-events:none;z-index:1;border-radius:6px;background:radial-gradient(circle,#ffd54a 0 2.5px,rgba(255,213,74,.25) 3.5px,transparent 4.5px) 0 0/22px 12px repeat-x,radial-gradient(circle,#ffd54a 0 2.5px,rgba(255,213,74,.25) 3.5px,transparent 4.5px) 11px 100%/22px 12px repeat-x;animation:bl-cv-bulbs .7s steps(1,end) infinite;}',
+      '@keyframes bl-cv-bulbs{50%{background-position:11px 0,0 100%;}}',
+      '.bl-carnival .bl-cv-sign,.bl-carnival .bl-cv-rules{position:relative;z-index:3;min-width:0;}',
+      '.bl-carnival .bl-cv-step{color:#efe2c2;font:900 11px/1.2 Arial,sans-serif;letter-spacing:.08em;white-space:nowrap;text-transform:uppercase;}',
+      '.bl-carnival .bl-cv-title{margin:8px 0 6px;color:#ffc62d;font-family:Impact,"Arial Black",Arial,sans-serif;font-style:italic;font-weight:900;font-size:40px;line-height:.9;text-transform:uppercase;text-shadow:2px 2px 0 #a8141c,4px 4px 0 #5c0a0e,6px 6px 10px rgba(0,0,0,.6);}',
+      '.bl-carnival .bl-cv-tag{color:#fff;font:italic 800 14px/1.25 Arial,sans-serif;}',
+      '.bl-carnival .bl-cv-rules{color:#e8f5fa;font:600 12px/1.45 Arial,sans-serif;max-width:230px;}',
+      '.bl-carnival .bl-cv-rules b{color:#ffd54a;}',
+      '.bl-carnival .bl-cv-prize{margin-top:8px;color:#efe2c2;font-size:11px;font-style:italic;}',
+      '@media(max-width:1200px){.bl-carnival .bl-cv-title{font-size:32px;}.bl-carnival .bl-cv-rules{font-size:11px;}}',
+      '@media(max-width:650px){#body_home.blsn-mode .blsn-champ-side.bl-carnival{grid-template-columns:1fr !important;padding:26px 18px 48px !important;}.bl-carnival .blsn-champ-logo-wrap{margin:0 auto 30px !important;}}',
+      '@media (prefers-reduced-motion:reduce){.bl-darts .bl-dt-dart,.bl-darts .bl-dt-pop,#body_home.blsn-mode .blsn-champ-side.bl-carnival:after{animation:none;}}'
     ].join('\n');
     document.head.appendChild(s);
   }
@@ -59,6 +74,20 @@
       d.style.width=d.style.height=(r[0]*2)+'%';
       wrap.querySelector('.bl-dt-disc').appendChild(d);
     });
+
+    var side=wrap.closest('.blsn-champ-side');
+    if(side && !side.classList.contains('bl-carnival')){
+      side.classList.add('bl-carnival');
+      var sign=document.createElement('div');
+      sign.className='bl-cv-sign';
+      sign.innerHTML='<div class="bl-cv-step">🎪 Step right up! 🎪</div><div class="bl-cv-title">Big League<br>Dart Toss</div><div class="bl-cv-tag">Three darts. One smile.<br>Wipe it off.</div>';
+      var rules=document.createElement('div');
+      rules.className='bl-cv-rules';
+      rules.innerHTML='Click or tap the board to let a dart fly. Aim for the nose — the red bull is worth <b>50</b>; the rings pay <b>25</b>, <b>15</b>, <b>10</b> and <b>5</b>. Off the board is a miss. Three darts a round; your best round is kept on this device.'+
+        '<div class="bl-cv-prize">🎟️ Every player a winner.* <br>*Prizes not available in Wisconsin.</div>';
+      side.insertBefore(sign,wrap);
+      if(wrap.nextSibling) side.insertBefore(rules,wrap.nextSibling); else side.appendChild(rules);
+    }
 
     var board=wrap.querySelector('.bl-dt-board'), darts=[], round=0;
     function show(){ board.innerHTML='🎯 Darts <b>'+darts.length+'/'+PER_ROUND+'</b> · Round <b>'+round+'</b> · Best <b>'+best()+'</b>'; }
