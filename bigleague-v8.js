@@ -7,7 +7,8 @@
 (function(){
   'use strict';
 
-  var V='20260924a';
+  var V='20260925a';
+  var DARTS=true; /* 2026-09-25, temporary: darts.js swaps the champion crest for the dart target. false = crest back */
   var YEAR=2026;
   var LEAGUE='73086';
   var BASE='https://www42.myfantasyleague.com/'+YEAR;
@@ -267,6 +268,7 @@
   if(location.pathname.indexOf('/ajax_ls')>=0) addStyle('bl-live-css','live.css'); /* live scoring page only; body may not exist yet when this runs */
   addScript('bl-team-logos-script','team-logos.js');
   addScript('bl-core-script','bigleague-core.js',watch);
+  if(DARTS && /\/home\//.test(location.pathname)) addScript('bl-darts-script','darts.js');
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',watch);
   else watch();
