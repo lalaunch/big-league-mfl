@@ -513,10 +513,57 @@
       '<div class="blsn-deadline-row" data-dl="sun"><div class="blsn-deadline-when">Sun</div><div class="blsn-deadline-date">—</div><div class="blsn-deadline-what">All Lineups Due</div></div>'+
       '<div class="blsn-deadline-row" data-dl="trade"><div class="blsn-deadline-when">Week 11</div><div class="blsn-deadline-date">—</div><div class="blsn-deadline-what">Trade Deadline</div></div>'+
       '<a class="blsn-calendar-btn" href="'+BASE+'/options?L='+LEAGUE+'&O=123">View Full Calendar</a>'+
-      /* 2026-09-23: fills the space the matchups row leaves under the button */
-      '<img class="blsn-deadline-pic" src="'+HOSTED+'assets/never-forget-2026-09-20.webp?v='+(window.BL_VERSION||'0')+'" alt="09/20/26 Never Forget!"></div>';
+      /* 2026-09-23: fills the space the matchups row leaves under the button.
+         2026-09-25: the picture is now a waving Brewers flag (was the 09/20/26 "Never Forget" image) */
+      '<canvas class="blsn-deadline-pic blsn-flag" width="600" height="440" role="img" aria-label="Milwaukee Brewers flag"></canvas></div>';
     fillDeadlines(div);
+    startFlag(div.querySelector('.blsn-flag'));
     return div;
+  }
+
+  /* ---- waving Brewers flag (2026-09-25) ----
+     The flag image is drawn onto a canvas in 2px vertical strips, each shifted by a sine wave
+     whose height grows with distance from the pole (the hoist edge stays put), and shaded by the
+     wave's slope so the folds catch light. A pole with a gold ball stands at the left. Animates
+     only while on screen and the tab is visible; reduced motion gets one still, rippled frame. */
+  function startFlag(canvas){
+    if(!canvas||!canvas.getContext) return;
+    var img=new Image(), ctx=canvas.getContext('2d'), RATIO=440/600, t0=null, raf=0, visible=true;
+    var still=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    img.src=HOSTED+'assets/brewers-flag.webp?v='+(window.BL_VERSION||'0');
+    function size(){
+      var w=Math.round((canvas.clientWidth||300)*(window.devicePixelRatio||1));
+      if(w>0 && canvas.width!==w){ canvas.width=w; canvas.height=Math.round(w*RATIO); }
+    }
+    function draw(ms){
+      size();
+      var W=canvas.width, H=canvas.height, t=(ms||0)/1000;
+      var poleX=W*.035, poleW=Math.max(3,W*.018), fx=poleX+poleW, fw=W-fx-W*.02, fh=fw*.6, fy=H*.07, amp=fh*.07;
+      ctx.clearRect(0,0,W,H);
+      /* pole and finial */
+      var pg=ctx.createLinearGradient(poleX,0,poleX+poleW,0); pg.addColorStop(0,'#6b7a86'); pg.addColorStop(.45,'#e8eef2'); pg.addColorStop(1,'#56626c');
+      ctx.fillStyle=pg; ctx.fillRect(poleX,fy*.55,poleW,H-fy*.55);
+      var bg=ctx.createRadialGradient(poleX+poleW*.35,fy*.35,1,poleX+poleW/2,fy*.5,poleW*1.3); bg.addColorStop(0,'#fff3b0'); bg.addColorStop(.5,'#ffc52f'); bg.addColorStop(1,'#a87900');
+      ctx.fillStyle=bg; ctx.beginPath(); ctx.arc(poleX+poleW/2,fy*.5,poleW*1.15,0,Math.PI*2); ctx.fill();
+      if(!img.complete||!img.naturalWidth) return;
+      /* cloth: strips of the image, shifted and shaded along the wave */
+      var strip=Math.max(2,Math.round(W/300)), k=Math.PI*2/(fw*.55), sp=still?0:3.2;
+      for(var x=0;x<fw;x+=strip){
+        var grow=Math.min(1,x/(fw*.35))*.65+(x/fw)*.35, ph=k*x-sp*t;
+        var dy=Math.sin(ph)*amp*grow, slope=Math.cos(ph)*grow;
+        var sx=x/fw*img.naturalWidth, sw=strip/fw*img.naturalWidth;
+        ctx.drawImage(img,sx,0,sw,img.naturalHeight,fx+x,fy+dy,strip+.6,fh);
+        ctx.fillStyle=slope>0?'rgba(255,255,255,'+(slope*.16).toFixed(3)+')':'rgba(0,0,0,'+(-slope*.28).toFixed(3)+')';
+        ctx.fillRect(fx+x,fy+dy,strip+.6,fh);
+      }
+    }
+    function loop(ms){ if(t0===null) t0=ms; draw(ms-t0); raf=(visible&&!document.hidden&&!still)?requestAnimationFrame(loop):0; }
+    function kick(){ if(!raf&&visible&&!document.hidden&&!still) raf=requestAnimationFrame(loop); }
+    img.onload=function(){ draw(0); kick(); };
+    if('IntersectionObserver' in window) new IntersectionObserver(function(es){ visible=es[0].isIntersecting; kick(); }).observe(canvas);
+    document.addEventListener('visibilitychange',kick);
+    window.addEventListener('resize',function(){ draw(0); });
+    draw(0);
   }
 
   /* ---- deadlines from MFL, not hand-typed (2026-09-23) ----

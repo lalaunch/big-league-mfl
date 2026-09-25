@@ -112,6 +112,7 @@
 .blsn-deadline-what{color:#d2e4eb;}
 .blsn-calendar-btn{display:block;margin-top:11px;padding:10px;text-align:center;border:1px solid #2bb4ec;border-radius:5px;background:linear-gradient(180deg,#0c5682,#073653);color:#fff !important;text-decoration:none !important;font-size:10px;font-weight:900;text-transform:uppercase;}
 .blsn-deadline-pic{display:block;width:100%;height:auto;margin-top:11px;border:1px solid #155b80;border-radius:5px;}
+.blsn-deadline-pic.blsn-flag{border:0;border-radius:0;} /* the waving flag draws its own edges */
 .blsn-calendar-btn:hover{background:var(--bl-gold);color:#041018 !important;border-color:var(--bl-gold);}
 .blsn-playoff-quote{margin:2px 4px 10px;color:var(--bl-gold);text-align:center;font-size:21px;font-weight:900;font-style:italic;letter-spacing:.025em;text-transform:uppercase;text-shadow:0 2px 4px #000;}
 
