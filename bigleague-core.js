@@ -1065,7 +1065,11 @@
       hall.parentNode.insertBefore(nr,hall);
       nr.appendChild(txWrap);
       nr.appendChild(around);
-      nr.appendChild(injury);
+      /* 2026-09-28: the injury report shares one box with the Power 5, under it, in the
+         standings row's right column; the news row is transactions + around the league */
+      var sideStack=document.querySelector('.blsn-power-main');
+      if(sideStack){ sideStack.classList.add('blsn-side-stack'); sideStack.appendChild(injury); }
+      else nr.appendChild(injury);
       var oldGrid=dashboard.querySelector('.blx-grid.blx-three');
       if(oldGrid) oldGrid.remove();
     }

@@ -128,8 +128,26 @@
 #body_home.blsn-mode #power_rank td.power_rank{font-size:17px !important;}
 #body_home.blsn-mode #power_rank td.franchisename:before{font-size:21px !important;}
 
+/* 2026-09-28: Power 5 + Injury Report share one box (core: .blsn-side-stack), and the standings
+   grow to the box's height — bigger crests, names and numbers, rows stretched to fill */
+.blsn-standings-power{align-items:stretch;}
+.blsn-power-main.blsn-side-stack{display:flex;flex-direction:column;border:1px solid #155b80;border-radius:8px;overflow:hidden;background:linear-gradient(180deg,#071720,#031018);box-shadow:0 8px 24px rgba(0,0,0,.30);}
+.blsn-side-stack #power_rank{border:0 !important;border-radius:0 !important;box-shadow:none !important;}
+.blsn-side-stack > .blx-card{margin:0 !important;border:0 !important;border-top:1px solid #155b80 !important;border-radius:0 !important;box-shadow:none !important;flex:1 1 auto;}
+.blsn-standings-main{display:flex;flex-direction:column;}
+.blsn-standings-main > .mobile-wrap{flex:1 1 auto;display:flex;flex-direction:column;}
+.blsn-standings-main #standings{flex:1 1 auto;height:100%;}
+#body_home.blsn-mode .blsn-standings-main #standings tbody{height:100%;grid-template-rows:auto auto repeat(5,minmax(62px,1fr)) !important;}
+#body_home.blsn-mode #standings tbody > tr{grid-template-columns:minmax(0,1fr) 76px 84px !important;}
+#body_home.blsn-mode #standings tbody > tr:nth-child(n+3):nth-child(-n+7),#body_home.blsn-mode #standings tbody > tr:nth-child(n+10):nth-child(-n+14){min-height:62px !important;}
+#body_home.blsn-mode #standings img.franchiseicon{width:60px !important;max-width:60px !important;margin-right:12px !important;}
+#body_home.blsn-mode #standings td.ficonname a{font-size:15px !important;}
+#body_home.blsn-mode #standings td.h2hwlt,#body_home.blsn-mode #standings td.pf{font-size:16px !important;}
+#body_home.blsn-mode #standings #division00:after,#body_home.blsn-mode #standings #division01:after{font-size:19px !important;}
+#body_home.blsn-mode #standings tbody > tr:nth-child(2) td,#body_home.blsn-mode #standings tbody > tr:nth-child(9) td{font-size:11px !important;}
+
 /* ------------------------- NEWS ROW ------------------------- */
-.blsn-news-row{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:11px;margin:0 4px 11px;align-items:stretch;}
+.blsn-news-row{display:grid;grid-template-columns:1.25fr 1fr;gap:11px;margin:0 4px 11px;align-items:stretch;} /* 2 columns since 2026-09-28: injury moved beside the Power 5 */
 .blsn-news-row > *{min-width:0;}
 .blsn-news-row .mobile-wrap:has(> #transactions){width:100% !important;}
 .blsn-news-row #transactions{margin:0 !important;height:100%;}
