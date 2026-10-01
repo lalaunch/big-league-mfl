@@ -306,6 +306,10 @@
   #body_home.blsn-mode .blsn-hero-shell{grid-template-columns:1fr;}
   #body_home.blsn-mode .blsn-champ-side{border-right:0;}
   #body_home.blsn-mode .blsn-callout-side{min-height:0;aspect-ratio:705/280;}
+  /* stacked, the panel height is fixed by aspect-ratio: Team of the Week copy (opponent on its own
+     line since 09-30) ran 16px into the clock at 720 wide. Clock down, copy up. */
+  #body_home.blsn-mode .blsn-tow .blsn-callout-clock{bottom:10px;}
+  #body_home.blsn-mode .blsn-tow-copy{top:16px;}
 }
 @media(max-width:650px){
   #body_home.blsn-mode .blsn-champ-side{grid-template-columns:1fr;text-align:center;padding:24px 18px;}
