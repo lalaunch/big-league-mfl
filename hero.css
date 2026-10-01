@@ -241,6 +241,9 @@
   position:absolute;right:-6px;bottom:-14px;z-index:1;
   height:auto;max-height:calc(100% + 32px);max-width:56%;object-fit:contain;
   filter:drop-shadow(0 14px 18px rgba(0,0,0,.65));
+  /* wide art (arms out) reaches under the copy: fade its left edge so the text reads on top */
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.35) 12%,#000 32%);
+  mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.35) 12%,#000 32%);
 }
 #body_home.blsn-mode .blsn-tow-tall .blsn-tow-art{max-height:180%;bottom:-73%;right:10%;}
 #body_home.blsn-mode .blsn-tow-copy{position:absolute;left:26px;top:26px;z-index:3;max-width:58%;}
@@ -251,8 +254,10 @@
 #body_home.blsn-mode .blsn-tow-namerow{display:flex;align-items:center;gap:12px;}
 #body_home.blsn-mode .blsn-tow-crest{width:56px;height:56px;object-fit:contain;filter:drop-shadow(0 6px 8px rgba(0,0,0,.7));}
 #body_home.blsn-mode .blsn-tow-name{
-  position:relative;display:inline-block;margin:0;padding-right:.12em;
-  color:#fff;font-family:Impact,'Arial Black',Arial,sans-serif;font-style:italic;font-size:40px;line-height:.9;font-weight:900;
+  position:relative;display:inline-block;margin:0;padding:0 .12em 0 0;
+  /* the league CSS (73086_use_css.css) gives every h2 a navy box, cyan text and a cyan underline, all !important */
+  background:none !important;border:0 !important;border-radius:0;box-shadow:none;
+  color:#fff !important;font-family:Impact,'Arial Black',Arial,sans-serif;font-style:italic;font-size:40px;line-height:.9;font-weight:900;
   letter-spacing:.015em;text-transform:uppercase;
   text-shadow:
     1px 1px 0 color-mix(in srgb,var(--t1) 70%,#fff),2px 2px 0 color-mix(in srgb,var(--t1) 88%,#fff),3px 3px 0 var(--t1),
@@ -264,15 +269,15 @@
   background:linear-gradient(180deg,#fff 0%,color-mix(in srgb,var(--t2) 30%,#fff) 30%,color-mix(in srgb,var(--t2) 85%,#fff) 47%,var(--t2) 52%,color-mix(in srgb,var(--t2) 70%,#000) 53%,color-mix(in srgb,var(--t2) 80%,#fff) 68%,#fff 100%);
   -webkit-background-clip:text;background-clip:text;text-shadow:none;-webkit-text-stroke:.8px color-mix(in srgb,var(--t1) 55%,#000);pointer-events:none;
 }
-#body_home.blsn-mode .blsn-tow-score{display:flex;align-items:baseline;gap:8px;margin-top:14px;color:#fff;}
+#body_home.blsn-mode .blsn-tow-score{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;margin-top:14px;color:#fff;}
 #body_home.blsn-mode .blsn-tow-score b{
   font-family:Impact,'Arial Black',Arial,sans-serif;font-size:34px;line-height:1;color:#ffe14d;font-variant-numeric:tabular-nums;
   text-shadow:0 2px 0 rgba(0,0,0,.6),0 0 14px rgba(255,225,77,.4);
 }
 #body_home.blsn-mode .blsn-tow-score small{font-size:10px;font-weight:900;letter-spacing:.14em;color:#8fd3ef;}
-#body_home.blsn-mode .blsn-tow-score span{margin-left:6px;font-size:11px;font-weight:700;color:#cfe6f2;letter-spacing:.04em;}
+#body_home.blsn-mode .blsn-tow-score span{flex-basis:100%;white-space:nowrap;font-size:11px;font-weight:700;color:#cfe6f2;letter-spacing:.04em;}
 #body_home.blsn-mode .blsn-tow-record{
-  margin-top:8px;font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#8fd3ef;text-shadow:0 2px 4px #000;
+  margin-top:8px;white-space:nowrap;font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#8fd3ef;text-shadow:0 2px 4px #000;
 }
 #body_home.blsn-mode .blsn-tow-record b{color:#fff;}
 #body_home.blsn-mode .blsn-tow-record small{font-size:9px;color:#5fa9c9;}
