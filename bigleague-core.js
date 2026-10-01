@@ -814,7 +814,7 @@
      BL_TOW_DEBUG('0003', 1, 142.35, 'Bristol Steampunks', 112.3) */
   function renderTeamOfWeek(fid,week,pts,oppName,oppPts,record){
     var side=document.querySelector('.blsn-callout-side'), t=TEAMS[fid]; if(!side||!t) return false;
-    side.classList.add('blsn-tow');
+    side.classList.add('blsn-tow'); side.setAttribute('data-tow',t.slug); /* per-team art nudges in hero.css */
     side.style.setProperty('--t1',t.t1); side.style.setProperty('--t2',t.t2);
     side.style.backgroundImage='none';
     var art=side.querySelector('.blsn-tow-art');
