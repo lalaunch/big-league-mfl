@@ -7,8 +7,9 @@
 (function(){
   'use strict';
 
-  var V='20260930b';
-  var DARTS=true; /* 2026-09-25, temporary: darts.js swaps the champion crest for the dart target. false = crest back */
+  var V='20260930c';
+  var DARTS=false; /* 2026-09-25, temporary: darts.js swaps the champion crest for the dart target. false = crest back (off 2026-09-30 for PANEL_PIC) */
+  var PANEL_PIC='assets/win-the-whole-thing.webp'; /* 2026-09-30, temporary: panel-pic.js fills the champion panel with this picture. '' = crest back */
   var YEAR=2026;
   var LEAGUE='73086';
   var BASE='https://www42.myfantasyleague.com/'+YEAR;
@@ -269,6 +270,7 @@
   addScript('bl-team-logos-script','team-logos.js');
   addScript('bl-core-script','bigleague-core.js',watch);
   if(DARTS && /\/home\//.test(location.pathname)) addScript('bl-darts-script','darts.js');
+  else if(PANEL_PIC && /\/home\//.test(location.pathname)){ window.BL_PANEL_PIC=PANEL_PIC; addScript('bl-pic-script','panel-pic.js'); }
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',watch);
   else watch();
