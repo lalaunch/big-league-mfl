@@ -147,6 +147,16 @@
 #body_home.blsn-mode #standings td.h2hwlt,#body_home.blsn-mode #standings td.pf{font-size:16px !important;}
 #body_home.blsn-mode #standings #division00:after,#body_home.blsn-mode #standings #division01:after{font-size:19px !important;}
 #body_home.blsn-mode #standings tbody > tr:nth-child(2) td,#body_home.blsn-mode #standings tbody > tr:nth-child(9) td{font-size:11px !important;}
+/* narrow screens (2026-10-04): with 60px crests the name column was 168px at the 720 phone width and
+   155px at 1000 desktop, cutting off up to 5 of 10 names (JERSEY JACKHAMMERS needs 191). Fine from 1200 up. */
+@media(max-width:1150px){
+  #body_home.blsn-mode #standings tbody > tr{grid-template-columns:minmax(0,1fr) 62px 70px !important;}
+  #body_home.blsn-mode #standings img.franchiseicon{width:48px !important;max-width:48px !important;margin-right:8px !important;}
+}
+/* tightest band, just above where the row stacks at 950: 163px at 960 still cut JERSEY JACKHAMMERS */
+@media(min-width:951px) and (max-width:1020px){
+  #body_home.blsn-mode #standings td.ficonname a{font-size:13px !important;}
+}
 
 /* ------------------------- NEWS ROW ------------------------- */
 .blsn-news-row{display:grid;grid-template-columns:1.25fr 1fr;gap:11px;margin:0 4px 11px;align-items:stretch;} /* 2 columns since 2026-09-28: injury moved beside the Power 5 */
