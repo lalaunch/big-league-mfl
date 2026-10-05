@@ -515,8 +515,9 @@
       '<a class="blsn-calendar-btn" href="'+BASE+'/options?L='+LEAGUE+'&O=123">View Full Calendar</a>'+
       /* 2026-09-23: fills the space the matchups row leaves under the button.
          2026-09-25: the picture is now a waving Brewers flag (was the 09/20/26 "Never Forget" image)
-         2026-10-04: the NLDS Game 1 graphic replaces the flag; startFlag stays below for the swap back */
-      '<img class="blsn-deadline-pic blsn-portrait" src="'+HOSTED+'assets/nlds-g1-2026.webp?v='+(window.BL_VERSION||'0')+'" alt="NLDS Game 1: Milwaukee 3, San Diego 2. Milwaukee leads 1-0"></div>';
+         2026-10-04: the NLDS Game 1 graphic replaces the flag; startFlag stays below for the swap back
+         2026-10-05: Game 2 final replaces Game 1 */
+      '<img class="blsn-deadline-pic blsn-portrait" src="'+HOSTED+'assets/nlds-g2-2026.webp?v='+(window.BL_VERSION||'0')+'" alt="NLDS Game 2 final: Milwaukee 4, San Diego 3. Milwaukee leads the series 2-0"></div>';
     fillDeadlines(div);
     return div;
   }
