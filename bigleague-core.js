@@ -517,8 +517,9 @@
          2026-09-25: the picture is now a waving Brewers flag (was the 09/20/26 "Never Forget" image)
          2026-10-04: the NLDS Game 1 graphic replaces the flag; startFlag stays below for the swap back
          2026-10-05: Game 2 final replaces Game 1
-         2026-10-08: the Brewers "ADVANCE" graphic replaces Game 2 */
-      '<img class="blsn-deadline-pic blsn-portrait" src="'+HOSTED+'assets/nlds-advance-2026.webp?v='+(window.BL_VERSION||'0')+'" alt="Brewers advance"></div>';
+         2026-10-08: the Brewers "ADVANCE" graphic replaces Game 2
+         2026-10-14: NLCS Game 2 final replaces ADVANCE */
+      '<img class="blsn-deadline-pic blsn-portrait" src="'+HOSTED+'assets/nlcs-g2-2026.webp?v='+(window.BL_VERSION||'0')+'" alt="NLCS Game 2 final: Milwaukee 7, Los Angeles 4. Milwaukee leads the series 2-0"></div>';
     fillDeadlines(div);
     return div;
   }
