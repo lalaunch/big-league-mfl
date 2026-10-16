@@ -518,8 +518,9 @@
          2026-10-04: the NLDS Game 1 graphic replaces the flag; startFlag stays below for the swap back
          2026-10-05: Game 2 final replaces Game 1
          2026-10-08: the Brewers "ADVANCE" graphic replaces Game 2
-         2026-10-14: NLCS Game 2 final replaces ADVANCE */
-      '<img class="blsn-deadline-pic blsn-portrait" src="'+HOSTED+'assets/nlcs-g2-2026.webp?v='+(window.BL_VERSION||'0')+'" alt="NLCS Game 2 final: Milwaukee 7, Los Angeles 4. Milwaukee leads the series 2-0"></div>';
+         2026-10-14: NLCS Game 2 final replaces ADVANCE
+         2026-10-16: the Brewers' National League Champions celebration replaces Game 2 (landscape; the portrait class keeps the height cap) */
+      '<img class="blsn-deadline-pic blsn-portrait" src="'+HOSTED+'assets/nl-champions-2026.webp?v='+(window.BL_VERSION||'0')+'" alt="The Milwaukee Brewers celebrate the 2026 National League championship"></div>';
     fillDeadlines(div);
     return div;
   }
