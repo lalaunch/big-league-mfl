@@ -473,10 +473,9 @@
           <div class="blx-news"><span class="blx-kicker">Trade Block</span><div class="blx-main">${esc(getTopic())}</div><div class="blx-sub">Latest message-board topic</div></div>
           <div class="blx-news"><span class="blx-kicker">Latest Move</span>${latestHtml()}</div>
         </div></section>
-        <section class="blx-card"><div class="blx-title">Injury Report</div><div class="blx-body">
-          <div class="blx-ir"><span class="blx-kicker">IR Money Back</span><div class="blx-main">$100k back for a $100k player • $200k back for a player at $200k or more.</div></div>
-          <div class="blx-ir"><span class="blx-kicker">Required Process</span><div class="blx-main">Place the player on IR, drop him, then notify the commissioner for the cap adjustment.</div></div>
-          <div class="blx-actions"><a class="blx-btn" href="${BASE}/injury?L=${LEAGUE}">NFL Injury Report</a><a class="blx-btn" href="${BASE}/home/${LEAGUE}#1">League Rules</a></div>
+        <section class="blx-card blx-fa-card"><div class="blx-title">Top Free Agents</div><div class="blx-body">
+          <div class="blx-fa-list"><div class="blx-sub">Loading free agents…</div></div>
+          <div class="blx-actions"><a class="blx-btn" href="${BASE}/add_drop?L=${LEAGUE}">Add / Drop</a></div>
         </div></section>
         <section class="blx-card"><div class="blx-title">Big League Deadlines</div><div class="blx-body">
           <div class="blx-deadline"><span class="blx-kicker">Waivers</span><div class="blx-main">Wednesday for Thursday games • Saturday night for Sunday games.</div></div>
@@ -487,7 +486,32 @@
       <section class="blx-card blx-hof-feature"><div class="blx-hof-header"><div class="blx-hof-eyebrow">★ BIG LEAGUE LEGACY ★</div><div class="blx-hof-title">CHAMPIONSHIP BANNERS</div><div class="blx-hof-subtitle">${FINALS.length} WORLD CHAMPIONS • ${FINALS[0][0]}–${FINALS[FINALS.length-1][0]}</div></div><div class="blx-body"><div class="blx-banner-rod"></div><div class="blx-banner-grid">${bannerCards()}</div><div class="blx-hof-footer"><span>${FINALS.length} seasons. ${FINALS.length} banners. One Big League.</span><a class="blx-btn blx-hof-btn" href="${BASE}/home/${LEAGUE}#3">View Full Championship History</a></div></div></section>
       <section class="blx-card blx-count-feature"><div class="blx-title">Championship Count — 1990 to 2025</div><div class="blx-body"><div class="blx-trophies blx-ring-grid">${trophyRows()}</div><div class="blx-note">${ringNote(ringRace(null))}</div></div></section>`;
     anchor.insertAdjacentElement('afterend',wrap);
+    fillFreeAgents(wrap.querySelector('.blx-fa-list'));
     return true;
+  }
+
+  /* ---- top free agents (2026-10-16, replaces the Injury Report card) ----
+     playerScores W=YTD with STATUS=freeagent = season points in this league's scoring for
+     players on no roster. Checked 10/16: 353 rows, the same 353 the unfiltered export flags
+     isAvailable=1, and the top 10 all sit in the freeAgents export. Names from loadPlayers. */
+  var FA_SHOW=8;
+  function fillFreeAgents(box){
+    if(!box) return;
+    fetch(BASE+'/export?L='+LEAGUE+'&JSON=1&TYPE=playerScores&W=YTD&STATUS=freeagent',{credentials:'same-origin'}).then(function(r){return r.json();}).then(function(j){
+      var rows=(j.playerScores&&j.playerScores.playerScore)||[];
+      if(!Array.isArray(rows)) rows=[rows];
+      rows=rows.filter(function(p){return p.isAvailable!=='0';}).sort(function(a,b){return parseFloat(b.score||0)-parseFloat(a.score||0);}).slice(0,FA_SHOW);
+      if(!rows.length){ box.innerHTML='<div class="blx-sub">No free agents with points yet.</div>'; return; }
+      loadPlayers(function(map){
+        box.innerHTML=rows.map(function(p,i){
+          var info=(map[p.id]||'||').split('|');
+          return '<a class="blx-fa-row" href="'+BASE+'/player?L='+LEAGUE+'&P='+esc(p.id)+'">'+
+            '<span class="blx-fa-rank">'+(i+1)+'</span>'+
+            '<span class="blx-fa-name">'+esc(info[0]||('#'+p.id))+'<small>'+esc(info[2])+(info[1]?' · '+esc(info[1]):'')+'</small></span>'+
+            '<span class="blx-fa-pts">'+parseFloat(p.score||0).toFixed(1)+'<small>pts</small></span></a>';
+        }).join('')+'<div class="blx-sub blx-fa-note">Season points, players on no roster</div>';
+      });
+    }).catch(function(){ box.innerHTML='<div class="blx-sub">Free agents unavailable right now.</div>'; });
   }
 
   function makeQuickLinks(){
@@ -1070,7 +1094,8 @@
       nr.appendChild(txWrap);
       nr.appendChild(around);
       /* 2026-09-28: the injury report shares one box with the Power 5, under it, in the
-         standings row's right column; the news row is transactions + around the league */
+         standings row's right column; the news row is transactions + around the league.
+         2026-10-16: that card is now Top Free Agents (variable name kept) */
       var sideStack=document.querySelector('.blsn-power-main');
       if(sideStack){ sideStack.classList.add('blsn-side-stack'); sideStack.appendChild(injury); }
       else nr.appendChild(injury);
