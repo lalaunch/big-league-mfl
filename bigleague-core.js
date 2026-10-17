@@ -505,10 +505,12 @@
       loadPlayers(function(map){
         box.innerHTML=rows.map(function(p,i){
           var info=(map[p.id]||'||').split('|');
-          return '<a class="blx-fa-row" href="'+BASE+'/player?L='+LEAGUE+'&P='+esc(p.id)+'">'+
+          /* the name, not the row, is the link: browser extensions (FantasyPros) insert an icon
+             right after each player link, and it has to land inside the name cell */
+          return '<div class="blx-fa-row">'+
             '<span class="blx-fa-rank">'+(i+1)+'</span>'+
-            '<span class="blx-fa-name">'+esc(info[0]||('#'+p.id))+'<small>'+esc(info[2])+(info[1]?' · '+esc(info[1]):'')+'</small></span>'+
-            '<span class="blx-fa-pts">'+parseFloat(p.score||0).toFixed(1)+'<small>pts</small></span></a>';
+            '<span class="blx-fa-name"><a href="'+BASE+'/player?L='+LEAGUE+'&P='+esc(p.id)+'">'+esc(info[0]||('#'+p.id))+'</a><small>'+esc(info[2])+(info[1]?' · '+esc(info[1]):'')+'</small></span>'+
+            '<span class="blx-fa-pts">'+parseFloat(p.score||0).toFixed(1)+'<small>pts</small></span></div>';
         }).join('')+'<div class="blx-sub blx-fa-note">Season points, players on no roster</div>';
       });
     }).catch(function(){ box.innerHTML='<div class="blx-sub">Free agents unavailable right now.</div>'; });

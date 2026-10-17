@@ -76,8 +76,10 @@
 }
 
 /* Top Free Agents (2026-10-16, replaces the Injury Report card) */
-.blx-fa-row{display:grid;grid-template-columns:18px 1fr auto;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #102f40;color:#e9f7fb;text-decoration:none;}
-.blx-fa-row:hover .blx-fa-name{color:#f4c745;}
+.blx-fa-row{display:grid;grid-template-columns:18px 1fr auto;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #102f40;color:#e9f7fb;}
+.blx-fa-name a{color:#e9f7fb;text-decoration:none;}
+.blx-fa-name a:hover{color:#f4c745;}
+.blx-fa-name .fp-icon__container{display:inline-block;margin-left:5px;vertical-align:middle;line-height:0;}
 .blx-fa-rank{color:#f4c745;font-size:10px;font-weight:900;text-align:center;}
 .blx-fa-name{font-size:11px;font-weight:800;line-height:1.2;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .blx-fa-name small{display:block;color:#7ea9ba;font-size:9px;font-weight:700;letter-spacing:.04em;}
