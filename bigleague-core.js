@@ -545,8 +545,9 @@
          2026-10-05: Game 2 final replaces Game 1
          2026-10-08: the Brewers "ADVANCE" graphic replaces Game 2
          2026-10-14: NLCS Game 2 final replaces ADVANCE
-         2026-10-16: the Brewers' National League Champions celebration replaces Game 2 (landscape; the portrait class keeps the height cap) */
-      '<img class="blsn-deadline-pic blsn-portrait" src="'+HOSTED+'assets/nl-champions-2026.webp?v='+(window.BL_VERSION||'0')+'" alt="The Milwaukee Brewers celebrate the 2026 National League championship"></div>';
+         2026-10-16: the Brewers' National League Champions celebration replaces Game 2 (landscape; the portrait class keeps the height cap)
+         2026-10-27: World Series Game 3 final (MIL 10, TB 1, MIL leads 3-0) replaces the NL Champions celebration */
+      '<img class="blsn-deadline-pic blsn-portrait" src="'+HOSTED+'assets/ws-g3-2026.webp?v='+(window.BL_VERSION||'0')+'" alt="Brewers one win away from history: World Series Game 3 final, Brewers 10, Rays 1, series lead 3-0"></div>';
     fillDeadlines(div);
     return div;
   }
