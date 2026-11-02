@@ -7,9 +7,9 @@
 (function(){
   'use strict';
 
-  var V='20261029a';
+  var V='20261102a';
   var DARTS=false; /* 2026-09-25, temporary: darts.js swaps the champion crest for the dart target. false = crest back (off 2026-09-30 for PANEL_PIC) */
-  var PANEL_PIC='assets/win-the-whole-thing.webp'; /* 2026-09-30, temporary: panel-pic.js fills the champion panel with this picture. '' = crest back */
+  var PANEL_PIC='assets/ws-champions-logo-2026.webp'; /* 2026-11-02: Brewers 2026 World Series Champions logo (was win-the-whole-thing.webp, 2026-09-30). Temporary: panel-pic.js fills the champion panel with this picture. '' = crest back */
   var YEAR=2026;
   var LEAGUE='73086';
   var BASE='https://www42.myfantasyleague.com/'+YEAR;
