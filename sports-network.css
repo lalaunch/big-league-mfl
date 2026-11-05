@@ -140,11 +140,12 @@
 .blsn-standings-main > .mobile-wrap{flex:1 1 auto;display:flex;flex-direction:column;}
 .blsn-standings-main #standings{flex:1 1 auto;height:100%;}
 #body_home.blsn-mode .blsn-standings-main #standings tbody{height:100%;grid-template-rows:auto auto repeat(5,minmax(62px,1fr)) !important;}
-#body_home.blsn-mode #standings tbody > tr{grid-template-columns:minmax(0,1fr) 76px 84px !important;}
+#body_home.blsn-mode #standings tbody > tr{grid-template-columns:minmax(0,1fr) 72px 84px 72px !important;}
+/* 2026-11-05: division record (MFL's Div W-L-T) shown after PF; the box keeps its size, the name column gives up the width */
 #body_home.blsn-mode #standings tbody > tr:nth-child(n+3):nth-child(-n+7),#body_home.blsn-mode #standings tbody > tr:nth-child(n+10):nth-child(-n+14){min-height:62px !important;}
 #body_home.blsn-mode #standings img.franchiseicon{width:60px !important;max-width:60px !important;margin-right:12px !important;}
 #body_home.blsn-mode #standings td.ficonname a{font-size:15px !important;}
-#body_home.blsn-mode #standings td.h2hwlt,#body_home.blsn-mode #standings td.pf{font-size:16px !important;}
+#body_home.blsn-mode #standings td.h2hwlt,#body_home.blsn-mode #standings td.pf,#body_home.blsn-mode #standings td.divwlt{font-size:16px !important;}
 #body_home.blsn-mode #standings #division00:after,#body_home.blsn-mode #standings #division01:after{font-size:19px !important;}
 #body_home.blsn-mode #standings tbody > tr:nth-child(2) td,#body_home.blsn-mode #standings tbody > tr:nth-child(9) td{font-size:11px !important;}
 /* narrow screens (2026-10-04): with 60px crests the name column was 168px at the 720 phone width and

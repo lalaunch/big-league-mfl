@@ -7,7 +7,7 @@
 (function(){
   'use strict';
 
-  var V='20261102b';
+  var V='20261105a';
   var DARTS=false; /* 2026-09-25, temporary: darts.js swaps the champion crest for the dart target. false = crest back (off 2026-09-30 for PANEL_PIC) */
   var PANEL_PIC='assets/ws-champions-celebration-2026.webp'; /* 2026-11-02: Brewers 2026 World Series celebration photo (replaced the watermarked logo, which replaced win-the-whole-thing.webp of 2026-09-30). Temporary: panel-pic.js fills the champion panel with this picture. '' = crest back */
   var YEAR=2026;

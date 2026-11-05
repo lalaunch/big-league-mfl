@@ -425,7 +425,7 @@ body{
 
 #body_home #standings tbody > tr{
   display:grid !important;
-  grid-template-columns:minmax(0,1fr) 58px 58px;
+  grid-template-columns:minmax(0,1fr) 58px 58px 58px;
   align-items:center;
   width:100% !important;
   box-sizing:border-box !important;
@@ -505,8 +505,7 @@ body{
 #body_home #standings .strk,
 #body_home #standings .avgpf,
 #body_home #standings .pa,
-#body_home #standings .avgpa,
-#body_home #standings .divwlt{display:none !important;}
+#body_home #standings .avgpa{display:none !important;}
 
 #body_home #standings td.ficonname{
   display:flex !important;
@@ -531,7 +530,8 @@ body{
 }
 
 #body_home #standings td.h2hwlt,
-#body_home #standings td.pf{
+#body_home #standings td.pf,
+#body_home #standings td.divwlt{
   text-align:center !important;
   color:#fff !important;
   font-weight:900 !important;
@@ -649,7 +649,7 @@ body{
   .bl-iconbar a{min-width:72px;width:auto;font-size:8px;}
   #body_home #next_weeks_fantasy_schedule tbody{grid-template-columns:repeat(2,minmax(0,1fr)) !important;display:grid !important;}
   #body_home #standings tbody{display:block !important;}
-  #body_home #standings tbody > tr{display:grid !important;grid-template-columns:minmax(0,1fr) 52px 52px !important;}
+  #body_home #standings tbody > tr{display:grid !important;grid-template-columns:minmax(0,1fr) 52px 52px 52px !important;}
   #body_home #standings tbody > tr:nth-child(8){margin-top:10px !important;}
   #body_home #homepagecolumn4 > div > .mobile-wrap:has(> #transactions),
   #body_home #homepagecolumn4 > div > .mobile-wrap:has(> #power_rank){width:100% !important;}
